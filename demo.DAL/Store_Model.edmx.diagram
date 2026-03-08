@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="7b8f02519bc6487eadf6dded197da68d" Name="Diagram1" ZoomLevel="88">
+        <EntityTypeShape EntityType="CUA_HANG_TIEN_LOIModel.CHI_TIET_HOA_DON" Width="1.5" PointX="5.25" PointY="3.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="CUA_HANG_TIEN_LOIModel.CHI_TIET_NHAP" Width="1.5" PointX="5.25" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="CUA_HANG_TIEN_LOIModel.DANH_MUC" Width="1.5" PointX="0.75" PointY="4" IsExpanded="true" />
+        <EntityTypeShape EntityType="CUA_HANG_TIEN_LOIModel.HOA_DON" Width="1.5" PointX="3" PointY="18.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="CUA_HANG_TIEN_LOIModel.KHACH_HANG" Width="1.5" PointX="0.75" PointY="18.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="CUA_HANG_TIEN_LOIModel.KHUYEN_MAI" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="CUA_HANG_TIEN_LOIModel.NHA_CUNG_CAP" Width="1.5" PointX="0.75" PointY="8" IsExpanded="true" />
+        <EntityTypeShape EntityType="CUA_HANG_TIEN_LOIModel.NHAN_VIEN" Width="1.5" PointX="0.75" PointY="10.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="CUA_HANG_TIEN_LOIModel.PHIEU_NHAP" Width="1.5" PointX="3" PointY="9.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="CUA_HANG_TIEN_LOIModel.SAN_PHAM" Width="1.5" PointX="3" PointY="3.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="CUA_HANG_TIEN_LOIModel.VAI_TRO" Width="1.5" PointX="1.5" PointY="15.5" IsExpanded="true" />
+        <AssociationConnector Association="CUA_HANG_TIEN_LOIModel.FK_CHI_TIET_HOA_DON_HOA_DON" ManuallyRouted="false" />
+        <AssociationConnector Association="CUA_HANG_TIEN_LOIModel.FK_CHI_TIET_HOA_DON_SAN_PHAM" ManuallyRouted="false" />
+        <AssociationConnector Association="CUA_HANG_TIEN_LOIModel.FK__CHI_TIET___MaPhi__7A672E12" ManuallyRouted="false" />
+        <AssociationConnector Association="CUA_HANG_TIEN_LOIModel.FK__CHI_TIET___MaSan__7B5B524B" ManuallyRouted="false" />
+        <AssociationConnector Association="CUA_HANG_TIEN_LOIModel.FK__SAN_PHAM__MaDanh__656C112C" ManuallyRouted="false" />
+        <AssociationConnector Association="CUA_HANG_TIEN_LOIModel.FK__HOA_DON__MaKhach__6D0D32F4" ManuallyRouted="false" />
+        <AssociationConnector Association="CUA_HANG_TIEN_LOIModel.FK__HOA_DON__MaNhanV__6C190EBB" ManuallyRouted="false" />
+        <AssociationConnector Association="CUA_HANG_TIEN_LOIModel.FK__PHIEU_NHA__MaNCC__778AC167" ManuallyRouted="false" />
+        <AssociationConnector Association="CUA_HANG_TIEN_LOIModel.FK__NHAN_VIEN__MaVai__5FB337D6" ManuallyRouted="false" />
+        <AssociationConnector Association="CUA_HANG_TIEN_LOIModel.FK__PHIEU_NHA__MaNha__76969D2E" ManuallyRouted="false" />
+        <AssociationConnector Association="CUA_HANG_TIEN_LOIModel.SAN_PHAM_KHUYEN_MAI" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>
