@@ -53,6 +53,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CA_LAM_VIEC.cs">
+      <DependentUpon>Store_Model.tt</DependentUpon>
+    </Compile>
     <Compile Include="CHI_TIET_HOA_DON.cs">
       <DependentUpon>Store_Model.tt</DependentUpon>
     </Compile>

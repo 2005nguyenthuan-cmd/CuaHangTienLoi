@@ -29,7 +29,9 @@ namespace demo.DAL
         public string MatKhau { get; set; }
         public Nullable<int> MaVaiTro { get; set; }
         public string HinhAnh { get; set; }
+        public Nullable<int> MaCa { get; set; }
     
+        public virtual CA_LAM_VIEC CA_LAM_VIEC { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<HOA_DON> HOA_DON { get; set; }
         public virtual VAI_TRO VAI_TRO { get; set; }

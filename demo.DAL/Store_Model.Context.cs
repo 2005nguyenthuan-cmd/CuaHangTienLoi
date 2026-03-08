@@ -25,6 +25,7 @@ namespace demo.DAL
             throw new UnintentionalCodeFirstException();
         }
     
+        public virtual DbSet<CA_LAM_VIEC> CA_LAM_VIEC { get; set; }
         public virtual DbSet<CHI_TIET_HOA_DON> CHI_TIET_HOA_DON { get; set; }
         public virtual DbSet<CHI_TIET_NHAP> CHI_TIET_NHAP { get; set; }
         public virtual DbSet<DANH_MUC> DANH_MUC { get; set; }
