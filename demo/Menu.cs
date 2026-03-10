@@ -16,5 +16,10 @@ namespace demo
         {
             InitializeComponent();
         }
+        // test git
+        private void panel_header_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
     }
 }
