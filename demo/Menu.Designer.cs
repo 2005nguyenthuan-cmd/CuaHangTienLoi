@@ -54,6 +54,7 @@
             this.panel_header.Name = "panel_header";
             this.panel_header.Size = new System.Drawing.Size(1022, 97);
             this.panel_header.TabIndex = 0;
+            this.panel_header.Paint += new System.Windows.Forms.PaintEventHandler(this.panel_header_Paint);
             // 
             // panel_Main
             // 
