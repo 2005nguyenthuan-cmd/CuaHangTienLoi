@@ -32,6 +32,7 @@
             this.lblUser = new System.Windows.Forms.Label();
             this.panel_Main = new System.Windows.Forms.Panel();
             this.panel_Menu = new System.Windows.Forms.Panel();
+            this.btn_exit = new System.Windows.Forms.Button();
             this.btn_lshd = new System.Windows.Forms.Button();
             this.btn_price_discount = new System.Windows.Forms.Button();
             this.btn_kh = new System.Windows.Forms.Button();
@@ -41,7 +42,6 @@
             this.btn_qlk = new System.Windows.Forms.Button();
             this.btn_dashboard = new System.Windows.Forms.Button();
             this.btn_ncc = new System.Windows.Forms.Button();
-            this.btn_exit = new System.Windows.Forms.Button();
             this.panel_header.SuspendLayout();
             this.panel_Menu.SuspendLayout();
             this.SuspendLayout();
@@ -70,9 +70,9 @@
             // panel_Main
             // 
             this.panel_Main.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel_Main.Location = new System.Drawing.Point(0, 97);
+            this.panel_Main.Location = new System.Drawing.Point(200, 97);
             this.panel_Main.Name = "panel_Main";
-            this.panel_Main.Size = new System.Drawing.Size(1022, 485);
+            this.panel_Main.Size = new System.Drawing.Size(822, 485);
             this.panel_Main.TabIndex = 1;
             // 
             // panel_Menu
@@ -93,6 +93,16 @@
             this.panel_Menu.Name = "panel_Menu";
             this.panel_Menu.Size = new System.Drawing.Size(200, 485);
             this.panel_Menu.TabIndex = 2;
+            // 
+            // btn_exit
+            // 
+            this.btn_exit.Location = new System.Drawing.Point(18, 418);
+            this.btn_exit.Name = "btn_exit";
+            this.btn_exit.Size = new System.Drawing.Size(135, 55);
+            this.btn_exit.TabIndex = 10;
+            this.btn_exit.Text = "Đăng Xuất";
+            this.btn_exit.UseVisualStyleBackColor = true;
+            this.btn_exit.Click += new System.EventHandler(this.btn_exit_Click);
             // 
             // btn_lshd
             // 
@@ -184,23 +194,13 @@
             this.btn_ncc.UseVisualStyleBackColor = true;
             this.btn_ncc.Click += new System.EventHandler(this.btn_ncc_Click);
             // 
-            // btn_exit
-            // 
-            this.btn_exit.Location = new System.Drawing.Point(18, 418);
-            this.btn_exit.Name = "btn_exit";
-            this.btn_exit.Size = new System.Drawing.Size(135, 55);
-            this.btn_exit.TabIndex = 10;
-            this.btn_exit.Text = "Đăng Xuất";
-            this.btn_exit.UseVisualStyleBackColor = true;
-            this.btn_exit.Click += new System.EventHandler(this.btn_exit_Click);
-            // 
             // Form_Menu
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1022, 582);
-            this.Controls.Add(this.panel_Menu);
             this.Controls.Add(this.panel_Main);
+            this.Controls.Add(this.panel_Menu);
             this.Controls.Add(this.panel_header);
             this.Name = "Form_Menu";
             this.Text = "CỬA HÀNG TIỆN LỢI";
