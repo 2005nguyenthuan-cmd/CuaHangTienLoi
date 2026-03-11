@@ -29,18 +29,19 @@
         private void InitializeComponent()
         {
             this.panel_header = new System.Windows.Forms.Panel();
+            this.lblUser = new System.Windows.Forms.Label();
             this.panel_Main = new System.Windows.Forms.Panel();
             this.panel_Menu = new System.Windows.Forms.Panel();
-            this.lblUser = new System.Windows.Forms.Label();
-            this.btn_dashboard = new System.Windows.Forms.Button();
-            this.btn_pos = new System.Windows.Forms.Button();
-            this.btn_sp = new System.Windows.Forms.Button();
-            this.btn_qlk = new System.Windows.Forms.Button();
-            this.btn_price_discount = new System.Windows.Forms.Button();
-            this.btn_ql = new System.Windows.Forms.Button();
-            this.btn_kh = new System.Windows.Forms.Button();
-            this.btn_ncc = new System.Windows.Forms.Button();
             this.btn_lshd = new System.Windows.Forms.Button();
+            this.btn_price_discount = new System.Windows.Forms.Button();
+            this.btn_kh = new System.Windows.Forms.Button();
+            this.btn_ql = new System.Windows.Forms.Button();
+            this.btn_sp = new System.Windows.Forms.Button();
+            this.btn_pos = new System.Windows.Forms.Button();
+            this.btn_qlk = new System.Windows.Forms.Button();
+            this.btn_dashboard = new System.Windows.Forms.Button();
+            this.btn_ncc = new System.Windows.Forms.Button();
+            this.btn_exit = new System.Windows.Forms.Button();
             this.panel_header.SuspendLayout();
             this.panel_Menu.SuspendLayout();
             this.SuspendLayout();
@@ -55,6 +56,17 @@
             this.panel_header.Size = new System.Drawing.Size(1022, 97);
             this.panel_header.TabIndex = 0;
             // 
+            // lblUser
+            // 
+            this.lblUser.AutoSize = true;
+            this.lblUser.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(192)))));
+            this.lblUser.Font = new System.Drawing.Font("Microsoft Sans Serif", 13.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblUser.Location = new System.Drawing.Point(44, 52);
+            this.lblUser.Name = "lblUser";
+            this.lblUser.Size = new System.Drawing.Size(71, 29);
+            this.lblUser.TabIndex = 0;
+            this.lblUser.Text = "label";
+            // 
             // panel_Main
             // 
             this.panel_Main.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -66,6 +78,7 @@
             // panel_Menu
             // 
             this.panel_Menu.BackColor = System.Drawing.Color.Green;
+            this.panel_Menu.Controls.Add(this.btn_exit);
             this.panel_Menu.Controls.Add(this.btn_lshd);
             this.panel_Menu.Controls.Add(this.btn_price_discount);
             this.panel_Menu.Controls.Add(this.btn_kh);
@@ -81,52 +94,15 @@
             this.panel_Menu.Size = new System.Drawing.Size(200, 485);
             this.panel_Menu.TabIndex = 2;
             // 
-            // lblUser
+            // btn_lshd
             // 
-            this.lblUser.AutoSize = true;
-            this.lblUser.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(192)))));
-            this.lblUser.Font = new System.Drawing.Font("Microsoft Sans Serif", 13.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblUser.Location = new System.Drawing.Point(44, 52);
-            this.lblUser.Name = "lblUser";
-            this.lblUser.Size = new System.Drawing.Size(71, 29);
-            this.lblUser.TabIndex = 0;
-            this.lblUser.Text = "label";
-            // 
-            // btn_dashboard
-            // 
-            this.btn_dashboard.Location = new System.Drawing.Point(17, 6);
-            this.btn_dashboard.Name = "btn_dashboard";
-            this.btn_dashboard.Size = new System.Drawing.Size(136, 39);
-            this.btn_dashboard.TabIndex = 1;
-            this.btn_dashboard.Text = "Tổng Quan";
-            this.btn_dashboard.UseVisualStyleBackColor = true;
-            // 
-            // btn_pos
-            // 
-            this.btn_pos.Location = new System.Drawing.Point(18, 51);
-            this.btn_pos.Name = "btn_pos";
-            this.btn_pos.Size = new System.Drawing.Size(136, 39);
-            this.btn_pos.TabIndex = 2;
-            this.btn_pos.Text = "Bán Hàng (POS)";
-            this.btn_pos.UseVisualStyleBackColor = true;
-            // 
-            // btn_sp
-            // 
-            this.btn_sp.Location = new System.Drawing.Point(17, 96);
-            this.btn_sp.Name = "btn_sp";
-            this.btn_sp.Size = new System.Drawing.Size(136, 39);
-            this.btn_sp.TabIndex = 3;
-            this.btn_sp.Text = "Sản Phẩm";
-            this.btn_sp.UseVisualStyleBackColor = true;
-            // 
-            // btn_qlk
-            // 
-            this.btn_qlk.Location = new System.Drawing.Point(17, 141);
-            this.btn_qlk.Name = "btn_qlk";
-            this.btn_qlk.Size = new System.Drawing.Size(136, 39);
-            this.btn_qlk.TabIndex = 4;
-            this.btn_qlk.Text = "Quản Lý Kho";
-            this.btn_qlk.UseVisualStyleBackColor = true;
+            this.btn_lshd.Location = new System.Drawing.Point(18, 373);
+            this.btn_lshd.Name = "btn_lshd";
+            this.btn_lshd.Size = new System.Drawing.Size(136, 39);
+            this.btn_lshd.TabIndex = 9;
+            this.btn_lshd.Text = "Lịch Sử Hóa Đơn";
+            this.btn_lshd.UseVisualStyleBackColor = true;
+            this.btn_lshd.Click += new System.EventHandler(this.btn_lshd_Click);
             // 
             // btn_price_discount
             // 
@@ -136,15 +112,7 @@
             this.btn_price_discount.TabIndex = 5;
             this.btn_price_discount.Text = "Giá _ Khuyến Mãi";
             this.btn_price_discount.UseVisualStyleBackColor = true;
-            // 
-            // btn_ql
-            // 
-            this.btn_ql.Location = new System.Drawing.Point(17, 231);
-            this.btn_ql.Name = "btn_ql";
-            this.btn_ql.Size = new System.Drawing.Size(136, 39);
-            this.btn_ql.TabIndex = 6;
-            this.btn_ql.Text = "Quản Lý Nhân Viên";
-            this.btn_ql.UseVisualStyleBackColor = true;
+            this.btn_price_discount.Click += new System.EventHandler(this.btn_price_discount_Click);
             // 
             // btn_kh
             // 
@@ -154,6 +122,57 @@
             this.btn_kh.TabIndex = 7;
             this.btn_kh.Text = "Khách Hàng";
             this.btn_kh.UseVisualStyleBackColor = true;
+            this.btn_kh.Click += new System.EventHandler(this.btn_kh_Click);
+            // 
+            // btn_ql
+            // 
+            this.btn_ql.Location = new System.Drawing.Point(17, 231);
+            this.btn_ql.Name = "btn_ql";
+            this.btn_ql.Size = new System.Drawing.Size(136, 39);
+            this.btn_ql.TabIndex = 6;
+            this.btn_ql.Text = "Quản Lý Nhân Viên";
+            this.btn_ql.UseVisualStyleBackColor = true;
+            this.btn_ql.Click += new System.EventHandler(this.btn_ql_Click);
+            // 
+            // btn_sp
+            // 
+            this.btn_sp.Location = new System.Drawing.Point(17, 96);
+            this.btn_sp.Name = "btn_sp";
+            this.btn_sp.Size = new System.Drawing.Size(136, 39);
+            this.btn_sp.TabIndex = 3;
+            this.btn_sp.Text = "Sản Phẩm";
+            this.btn_sp.UseVisualStyleBackColor = true;
+            this.btn_sp.Click += new System.EventHandler(this.btn_sp_Click);
+            // 
+            // btn_pos
+            // 
+            this.btn_pos.Location = new System.Drawing.Point(18, 51);
+            this.btn_pos.Name = "btn_pos";
+            this.btn_pos.Size = new System.Drawing.Size(136, 39);
+            this.btn_pos.TabIndex = 2;
+            this.btn_pos.Text = "Bán Hàng (POS)";
+            this.btn_pos.UseVisualStyleBackColor = true;
+            this.btn_pos.Click += new System.EventHandler(this.btn_pos_Click);
+            // 
+            // btn_qlk
+            // 
+            this.btn_qlk.Location = new System.Drawing.Point(17, 141);
+            this.btn_qlk.Name = "btn_qlk";
+            this.btn_qlk.Size = new System.Drawing.Size(136, 39);
+            this.btn_qlk.TabIndex = 4;
+            this.btn_qlk.Text = "Quản Lý Kho";
+            this.btn_qlk.UseVisualStyleBackColor = true;
+            this.btn_qlk.Click += new System.EventHandler(this.btn_qlk_Click);
+            // 
+            // btn_dashboard
+            // 
+            this.btn_dashboard.Location = new System.Drawing.Point(17, 6);
+            this.btn_dashboard.Name = "btn_dashboard";
+            this.btn_dashboard.Size = new System.Drawing.Size(136, 39);
+            this.btn_dashboard.TabIndex = 1;
+            this.btn_dashboard.Text = "Tổng Quan";
+            this.btn_dashboard.UseVisualStyleBackColor = true;
+            this.btn_dashboard.Click += new System.EventHandler(this.btn_dashboard_Click);
             // 
             // btn_ncc
             // 
@@ -163,15 +182,17 @@
             this.btn_ncc.TabIndex = 8;
             this.btn_ncc.Text = "Nhà Cung Cấp";
             this.btn_ncc.UseVisualStyleBackColor = true;
+            this.btn_ncc.Click += new System.EventHandler(this.btn_ncc_Click);
             // 
-            // btn_lshd
+            // btn_exit
             // 
-            this.btn_lshd.Location = new System.Drawing.Point(18, 373);
-            this.btn_lshd.Name = "btn_lshd";
-            this.btn_lshd.Size = new System.Drawing.Size(136, 39);
-            this.btn_lshd.TabIndex = 9;
-            this.btn_lshd.Text = "Lịch Sử Hóa Đơn";
-            this.btn_lshd.UseVisualStyleBackColor = true;
+            this.btn_exit.Location = new System.Drawing.Point(18, 418);
+            this.btn_exit.Name = "btn_exit";
+            this.btn_exit.Size = new System.Drawing.Size(135, 55);
+            this.btn_exit.TabIndex = 10;
+            this.btn_exit.Text = "Đăng Xuất";
+            this.btn_exit.UseVisualStyleBackColor = true;
+            this.btn_exit.Click += new System.EventHandler(this.btn_exit_Click);
             // 
             // Form_Menu
             // 
@@ -206,6 +227,7 @@
         private System.Windows.Forms.Button btn_lshd;
         private System.Windows.Forms.Button btn_ncc;
         private System.Windows.Forms.Button btn_kh;
+        private System.Windows.Forms.Button btn_exit;
     }
 }
 

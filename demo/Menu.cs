@@ -30,5 +30,55 @@ namespace demo
             lblUser.Text = "Xin chào: " + UserSession.TenNhanVien
                  + " (" + UserSession.VaiTro + ")";
         }
+
+        private void btn_dashboard_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btn_pos_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btn_sp_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btn_qlk_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btn_price_discount_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btn_ql_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btn_kh_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btn_ncc_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btn_lshd_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btn_exit_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }
