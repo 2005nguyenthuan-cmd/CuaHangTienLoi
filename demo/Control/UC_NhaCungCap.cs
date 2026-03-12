@@ -38,5 +38,15 @@ namespace demo.Control
                 flowSuppliers.Controls.Add(card);
             }
         }
+
+        private void btnThemNCC_Click(object sender, EventArgs e)
+        {
+            Form_NhaCungCap f = new Form_NhaCungCap();
+
+            if (f.ShowDialog() == DialogResult.OK)
+            {
+                LoadSuppliers();
+            }
+        }
     }
 }
