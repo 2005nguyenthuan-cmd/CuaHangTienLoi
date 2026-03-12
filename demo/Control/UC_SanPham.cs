@@ -63,21 +63,21 @@ namespace demo.Control
 
         private void dgvSanPham_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
-            if (e.RowIndex < 0) return;
+            if (e.RowIndex < 0 || e.ColumnIndex < 0) return;
 
             int maSP = Convert.ToInt32(dgvSanPham.Rows[e.RowIndex].Cells[0].Value);
 
-
+            // sửa
             if (dgvSanPham.Columns[e.ColumnIndex].Name == "btnEdit")
             {
                 Form_ThemSanPham f = new Form_ThemSanPham(maSP);
-
                 f.ShowDialog();
 
                 LoadSanPham();
                 LoadThongKe();
             }
 
+            // xóa
             if (dgvSanPham.Columns[e.ColumnIndex].Name == "btnDelete")
             {
                 var confirm = MessageBox.Show(
