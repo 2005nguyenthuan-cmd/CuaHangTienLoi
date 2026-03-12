@@ -17,6 +17,7 @@ namespace demo.Control
         public UC_LSHoaDon()
         {
             InitializeComponent();
+            LoadHoaDon();
         }
 
         private void LoadHoaDon()

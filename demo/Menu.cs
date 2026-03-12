@@ -1,4 +1,5 @@
 ﻿using demo.BLL.Service;
+using demo.Control;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -68,17 +69,21 @@ namespace demo
 
         private void btn_ncc_Click(object sender, EventArgs e)
         {
-
+            UC_NhaCungCap uc = new UC_NhaCungCap();
+            OpenControl(uc);
         }
 
         private void btn_lshd_Click(object sender, EventArgs e)
         {
-
+            UC_LSHoaDon uc = new UC_LSHoaDon();
+            OpenControl(uc);
         }
 
         private void btn_exit_Click(object sender, EventArgs e)
         {
 
         }
+
+
     }
 }
