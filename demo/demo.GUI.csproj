@@ -58,6 +58,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Control\UC_KhachHang.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="Form_Login.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -72,6 +75,9 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="Control\UC_KhachHang.resx">
+      <DependentUpon>UC_KhachHang.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Form_Login.resx">
       <DependentUpon>Form_Login.cs</DependentUpon>
     </EmbeddedResource>
@@ -86,6 +92,7 @@
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
     </Compile>
     <None Include="..\db.config">
       <Link>db.config</Link>
@@ -116,8 +123,25 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Control\" />
-    <Folder Include="Resources\" />
+    <None Include="Resources\star_favourite_15499.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\systemusers_104569.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\systemusers_1045691.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\systemusers_1045692.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\269561_upward-trend-icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\12200crown_109565.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\xmag_search_find_export_locate_5984.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
