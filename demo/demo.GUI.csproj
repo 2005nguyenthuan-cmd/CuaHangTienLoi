@@ -43,7 +43,9 @@
       <HintPath>..\packages\EntityFramework.6.5.1\lib\net45\EntityFramework.SqlServer.dll</HintPath>
     </Reference>
     <Reference Include="System">
+
       <HintPath>C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.7.2\System.dll</HintPath>
+
     </Reference>
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
@@ -58,11 +60,19 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+
     <Compile Include="Control\UC_LSHoaDon.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Control\UC_LSHoaDon.Designer.cs">
       <DependentUpon>UC_LSHoaDon.cs</DependentUpon>
+	</Compile>
+    <Compile Include="Control\UC_SanPham.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Control\UC_SanPham.Designer.cs">
+      <DependentUpon>UC_SanPham.cs</DependentUpon>
+
     </Compile>
     <Compile Include="Form_NhaCungCap.cs">
       <SubType>Form</SubType>
@@ -88,6 +98,12 @@
     <Compile Include="Form_Login.Designer.cs">
       <DependentUpon>Form_Login.cs</DependentUpon>
     </Compile>
+    <Compile Include="Form_ThemSanPham.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Form_ThemSanPham.Designer.cs">
+      <DependentUpon>Form_ThemSanPham.cs</DependentUpon>
+    </Compile>
     <Compile Include="Menu.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -96,11 +112,28 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="Control\UC_LSHoaDon.resx">
-      <DependentUpon>UC_LSHoaDon.cs</DependentUpon>
+
+	  <EmbeddedResource Include="Control\UC_LSHoaDon.resx">
+		  <DependentUpon>UC_LSHoaDon.cs</DependentUpon>
+	  </EmbeddedResource>
+    <EmbeddedResource Include="Control\UC_SanPham.resx">
+      <DependentUpon>UC_SanPham.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Form_NhaCungCap.resx">
+      <DependentUpon>Form_NhaCungCap.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Control\UC_NhaCungCap.resx">
+      <DependentUpon>UC_NhaCungCap.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Control\UC_SupplierCard.resx">
+      <DependentUpon>UC_SupplierCard.cs</DependentUpon>
+
     </EmbeddedResource>
     <EmbeddedResource Include="Form_Login.resx">
       <DependentUpon>Form_Login.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Form_ThemSanPham.resx">
+      <DependentUpon>Form_ThemSanPham.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Menu.resx">
       <DependentUpon>Menu.cs</DependentUpon>

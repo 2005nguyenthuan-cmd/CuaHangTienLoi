@@ -44,7 +44,8 @@ namespace demo
 
         private void btn_sp_Click(object sender, EventArgs e)
         {
-
+            UC_SanPham uc = new UC_SanPham();
+            OpenControl(uc);
         }
 
         private void btn_qlk_Click(object sender, EventArgs e)
