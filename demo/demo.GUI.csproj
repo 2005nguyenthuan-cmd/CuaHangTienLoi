@@ -61,6 +61,12 @@
     <Compile Include="Control\UC_KhachHang.cs">
       <SubType>UserControl</SubType>
     </Compile>
+    <Compile Include="Control\UC_KhachHangCard.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Control\UC_KhachHangCard.Designer.cs">
+      <DependentUpon>UC_KhachHangCard.cs</DependentUpon>
+    </Compile>
     <Compile Include="Form_Login.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -77,6 +83,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Control\UC_KhachHang.resx">
       <DependentUpon>UC_KhachHang.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Control\UC_KhachHangCard.resx">
+      <DependentUpon>UC_KhachHangCard.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Form_Login.resx">
       <DependentUpon>Form_Login.cs</DependentUpon>

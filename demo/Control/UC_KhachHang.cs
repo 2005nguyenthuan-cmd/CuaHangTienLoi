@@ -7,13 +7,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Linq;
+using demo.BLL.Service;
 using demo.DAL;
 
 namespace demo.Control
 {
     public partial class UC_KhachHang : UserControl
     {
+        private readonly CustomerService customerService;
         private Panel pnHeader;
         private Label label2;
         private Label label1;
@@ -38,10 +39,13 @@ namespace demo.Control
         private TextBox textBox1;
         private PictureBox pictureBox5;
         private Button btnThemKH;
+        private FlowLayoutPanel flowLayoutPanel1;
         CUA_HANG_TIEN_LOI_Entities db = new CUA_HANG_TIEN_LOI_Entities();
         public UC_KhachHang()
         {
             InitializeComponent();
+            customerService = new CustomerService();
+            loaddata();
         }
 
         private void panelheader_Paint(object sender, PaintEventArgs e)
@@ -64,7 +68,17 @@ namespace demo.Control
                              .Take(3)
                              .ToList();
 
-            dgvKhachHang.DataSource = topKhach;
+        }
+        private void loaddata()
+        {
+            var list = customerService.GetALL();
+            flowLayoutPanel1.Controls.Clear();
+            foreach (var item in list) 
+            {
+                UC_KhachHangCard Card = new UC_KhachHangCard();
+                Card.setdata(item);
+                flowLayoutPanel1.Controls.Add(Card);
+            }
         }
 
         private void InitializeComponent()
@@ -93,6 +107,7 @@ namespace demo.Control
             this.pictureBox2 = new System.Windows.Forms.PictureBox();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.btnThemKH = new System.Windows.Forms.Button();
+            this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
             this.pnHeader.SuspendLayout();
             this.panelStats.SuspendLayout();
             this.panel2.SuspendLayout();
@@ -155,6 +170,7 @@ namespace demo.Control
             // 
             // panel2
             // 
+            this.panel2.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.panel2.Controls.Add(this.pictureBox1);
             this.panel2.Controls.Add(this.label4);
             this.panel2.Controls.Add(this.label3);
@@ -187,6 +203,7 @@ namespace demo.Control
             // 
             // panel1
             // 
+            this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.panel1.Controls.Add(this.pictureBox2);
             this.panel1.Controls.Add(this.label5);
             this.panel1.Controls.Add(this.label6);
@@ -218,6 +235,7 @@ namespace demo.Control
             // 
             // panel3
             // 
+            this.panel3.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.panel3.Controls.Add(this.pictureBox3);
             this.panel3.Controls.Add(this.label7);
             this.panel3.Controls.Add(this.label8);
@@ -249,6 +267,7 @@ namespace demo.Control
             // 
             // panel4
             // 
+            this.panel4.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.panel4.Controls.Add(this.pictureBox4);
             this.panel4.Controls.Add(this.label9);
             this.panel4.Controls.Add(this.label10);
@@ -362,9 +381,18 @@ namespace demo.Control
             this.btnThemKH.Text = "+ Thêm khách hàng";
             this.btnThemKH.UseVisualStyleBackColor = false;
             // 
+            // flowLayoutPanel1
+            // 
+            this.flowLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.flowLayoutPanel1.Location = new System.Drawing.Point(0, 290);
+            this.flowLayoutPanel1.Name = "flowLayoutPanel1";
+            this.flowLayoutPanel1.Size = new System.Drawing.Size(1200, 410);
+            this.flowLayoutPanel1.TabIndex = 3;
+            // 
             // UC_KhachHang
             // 
             this.BackColor = System.Drawing.Color.WhiteSmoke;
+            this.Controls.Add(this.flowLayoutPanel1);
             this.Controls.Add(this.panel5);
             this.Controls.Add(this.panelStats);
             this.Controls.Add(this.pnHeader);
