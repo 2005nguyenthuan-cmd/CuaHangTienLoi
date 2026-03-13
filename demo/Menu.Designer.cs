@@ -70,9 +70,11 @@
             // panel_Main
             // 
             this.panel_Main.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel_Main.Location = new System.Drawing.Point(181, 97);
+
+            this.panel_Main.Location = new System.Drawing.Point(200, 97);
             this.panel_Main.Name = "panel_Main";
-            this.panel_Main.Size = new System.Drawing.Size(841, 485);
+            this.panel_Main.Size = new System.Drawing.Size(822, 485);
+
             this.panel_Main.TabIndex = 1;
             // 
             // panel_Menu

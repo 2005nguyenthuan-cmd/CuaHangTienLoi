@@ -70,7 +70,8 @@ namespace demo
 
         private void btn_ncc_Click(object sender, EventArgs e)
         {
-
+            UC_NhaCungCap uc = new UC_NhaCungCap();
+            OpenControl(uc);
         }
 
         private void btn_lshd_Click(object sender, EventArgs e)
@@ -82,5 +83,7 @@ namespace demo
         {
 
         }
+
+
     }
 }

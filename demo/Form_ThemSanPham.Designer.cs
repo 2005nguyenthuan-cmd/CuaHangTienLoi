@@ -153,6 +153,7 @@
             this.btnThem.TabIndex = 11;
             this.btnThem.Text = "Thêm";
             this.btnThem.UseVisualStyleBackColor = true;
+
             // 
             // btnXoa
             // 
