@@ -73,9 +73,29 @@ namespace demo.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap _1497619669_androidmobile_phone_85137__1_ {
+            get {
+                object obj = ResourceManager.GetObject("1497619669-androidmobile-phone_85137 (1)", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap _269561_upward_trend_icon {
             get {
                 object obj = ResourceManager.GetObject("269561_upward-trend-icon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap filesystems_favorite_favorite_star_660 {
+            get {
+                object obj = ResourceManager.GetObject("filesystems_favorite_favorite_star_660", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

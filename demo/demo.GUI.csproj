@@ -152,6 +152,12 @@
   <ItemGroup>
     <None Include="Resources\xmag_search_find_export_locate_5984.png" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\1497619669-androidmobile-phone_85137 %281%29.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\filesystems_favorite_favorite_star_660.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
