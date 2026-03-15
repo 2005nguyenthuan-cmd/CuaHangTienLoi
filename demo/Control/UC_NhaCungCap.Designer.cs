@@ -52,6 +52,7 @@
             // 
             // flowSuppliers
             // 
+            this.flowSuppliers.AutoScroll = true;
             this.flowSuppliers.BackColor = System.Drawing.Color.Purple;
             this.flowSuppliers.Controls.Add(this.flowSupplier);
             this.flowSuppliers.Dock = System.Windows.Forms.DockStyle.Fill;

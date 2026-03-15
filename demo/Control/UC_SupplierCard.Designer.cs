@@ -67,6 +67,7 @@
             this.ptb_ha.Location = new System.Drawing.Point(274, 3);
             this.ptb_ha.Name = "ptb_ha";
             this.ptb_ha.Size = new System.Drawing.Size(203, 214);
+            this.ptb_ha.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.ptb_ha.TabIndex = 3;
             this.ptb_ha.TabStop = false;
             // 

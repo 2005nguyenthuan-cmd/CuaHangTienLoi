@@ -9,6 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.IO;
 
 namespace demo.Control
 {
@@ -28,6 +29,24 @@ namespace demo.Control
             lblSdt.Text = ncc.SoDienThoai;
             lblDiachi.Text = ncc.DiaChi;
 
+            string folder = Path.Combine(Application.StartupPath, "Resources");
+
+            string imgPath = "";
+
+            if (!string.IsNullOrEmpty(ncc.HinhAnh))
+            {
+                imgPath = Path.Combine(folder, ncc.HinhAnh);
+            }
+
+            if (!File.Exists(imgPath))
+            {
+                imgPath = Path.Combine(folder, "no-image.png");
+            }
+
+            using (var img = Image.FromFile(imgPath))
+            {
+                ptb_ha.Image = new Bitmap(img);
+            }
         }
     }
 }

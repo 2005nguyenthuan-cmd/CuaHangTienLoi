@@ -9,6 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.IO;
 
 namespace demo
 {
@@ -31,9 +32,22 @@ namespace demo
 
             if (ofd.ShowDialog() == DialogResult.OK)
             {
-                pathImage = ofd.FileName;
+                string folder = Path.Combine(Application.StartupPath, "Resources");
 
-                picHinhAnh.ImageLocation = pathImage;
+                if (!Directory.Exists(folder))
+                {
+                    Directory.CreateDirectory(folder);
+                }
+
+                string fileName = Guid.NewGuid().ToString() + Path.GetExtension(ofd.FileName);
+
+                string newPath = Path.Combine(folder, fileName);
+
+                File.Copy(ofd.FileName, newPath, true);
+
+                pathImage = fileName; // chỉ lưu tên file
+
+                picHinhAnh.ImageLocation = newPath;
             }
         }
 
@@ -94,7 +108,14 @@ namespace demo
 
             pathImage = ncc.HinhAnh;
 
-            picHinhAnh.ImageLocation = pathImage;
+            if (!string.IsNullOrEmpty(ncc.HinhAnh) && File.Exists(ncc.HinhAnh))
+            {
+                picHinhAnh.Image = Image.FromFile(ncc.HinhAnh);
+            }
+            else
+            {
+                picHinhAnh.Image = null; // hoặc ảnh mặc định
+            }
         }
 
         private void btn_exit_Click(object sender, EventArgs e)
