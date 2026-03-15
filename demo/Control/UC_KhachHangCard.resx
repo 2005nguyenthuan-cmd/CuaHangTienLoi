@@ -117,37 +117,4 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-
-  <data name="supplier_icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\supplier_icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="star_favourite_15499" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\star_favourite_15499.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="xmag_search_find_export_locate_5984" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\xmag_search_find_export_locate_5984.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="12200crown_109565" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\12200crown_109565.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="269561_upward-trend-icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\269561_upward-trend-icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="systemusers_1045692" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\systemusers_1045692.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="1497619669-androidmobile-phone_85137 (1)" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\1497619669-androidmobile-phone_85137 (1).png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="systemusers_104569" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\systemusers_104569.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="systemusers_1045691" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\systemusers_1045691.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="filesystems_favorite_favorite_star_660" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\filesystems_favorite_favorite_star_660.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-
-  </data>
 </root>

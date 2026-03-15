@@ -1,5 +1,6 @@
 ﻿using demo.BLL.Service;
 using demo.Control;
+using demo.DAL;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -14,6 +15,7 @@ namespace demo
 {
     public partial class Form_Menu : Form
     {
+        CUA_HANG_TIEN_LOI_Entities CH = new CUA_HANG_TIEN_LOI_Entities();
         public Form_Menu()
         {
             InitializeComponent();
@@ -65,7 +67,8 @@ namespace demo
 
         private void btn_kh_Click(object sender, EventArgs e)
         {
-
+            UC_KhachHang uc = new UC_KhachHang();
+            OpenControl(uc);
         }
 
         private void btn_ncc_Click(object sender, EventArgs e)

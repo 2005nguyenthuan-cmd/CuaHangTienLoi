@@ -43,7 +43,7 @@
       <HintPath>..\packages\EntityFramework.6.5.1\lib\net45\EntityFramework.SqlServer.dll</HintPath>
     </Reference>
     <Reference Include="System">
-      <HintPath>C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.7.2\System.dll</HintPath>
+      <HintPath>..\..\..\..\..\..\..\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.7.2\System.dll</HintPath>
     </Reference>
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
@@ -88,6 +88,15 @@
     <Compile Include="Control\UC_SupplierCard.Designer.cs">
       <DependentUpon>UC_SupplierCard.cs</DependentUpon>
     </Compile>
+    <Compile Include="Control\UC_KhachHang.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Control\UC_KhachHangCard.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Control\UC_KhachHangCard.Designer.cs">
+      <DependentUpon>UC_KhachHangCard.cs</DependentUpon>
+    </Compile>
     <Compile Include="Form_Login.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -99,6 +108,12 @@
     </Compile>
     <Compile Include="Form_ThemSanPham.Designer.cs">
       <DependentUpon>Form_ThemSanPham.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frm_ThemKhachHang.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frm_ThemKhachHang.Designer.cs">
+      <DependentUpon>frm_ThemKhachHang.cs</DependentUpon>
     </Compile>
     <Compile Include="Menu.cs">
       <SubType>Form</SubType>
@@ -123,11 +138,20 @@
     <EmbeddedResource Include="Control\UC_SupplierCard.resx">
       <DependentUpon>UC_SupplierCard.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Control\UC_KhachHang.resx">
+      <DependentUpon>UC_KhachHang.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Control\UC_KhachHangCard.resx">
+      <DependentUpon>UC_KhachHangCard.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Form_Login.resx">
       <DependentUpon>Form_Login.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Form_ThemSanPham.resx">
       <DependentUpon>Form_ThemSanPham.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_ThemKhachHang.resx">
+      <DependentUpon>frm_ThemKhachHang.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Menu.resx">
       <DependentUpon>Menu.cs</DependentUpon>
@@ -178,6 +202,31 @@
     <Content Include="Resources\supplier_icon.png" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\star_favourite_15499.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\systemusers_104569.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\systemusers_1045691.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\systemusers_1045692.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\269561_upward-trend-icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\12200crown_109565.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\xmag_search_find_export_locate_5984.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\1497619669-androidmobile-phone_85137 %281%29.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\filesystems_favorite_favorite_star_660.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

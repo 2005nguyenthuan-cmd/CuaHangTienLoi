@@ -63,9 +63,99 @@ namespace demo.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap _12200crown_109565 {
+            get {
+                object obj = ResourceManager.GetObject("12200crown_109565", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap _1497619669_androidmobile_phone_85137__1_ {
+            get {
+                object obj = ResourceManager.GetObject("1497619669-androidmobile-phone_85137 (1)", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap _269561_upward_trend_icon {
+            get {
+                object obj = ResourceManager.GetObject("269561_upward-trend-icon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap filesystems_favorite_favorite_star_660 {
+            get {
+                object obj = ResourceManager.GetObject("filesystems_favorite_favorite_star_660", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap star_favourite_15499 {
+            get {
+                object obj = ResourceManager.GetObject("star_favourite_15499", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap supplier_icon {
             get {
                 object obj = ResourceManager.GetObject("supplier_icon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap systemusers_104569 {
+            get {
+                object obj = ResourceManager.GetObject("systemusers_104569", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap systemusers_1045691 {
+            get {
+                object obj = ResourceManager.GetObject("systemusers_1045691", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap systemusers_1045692 {
+            get {
+                object obj = ResourceManager.GetObject("systemusers_1045692", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap xmag_search_find_export_locate_5984 {
+            get {
+                object obj = ResourceManager.GetObject("xmag_search_find_export_locate_5984", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
