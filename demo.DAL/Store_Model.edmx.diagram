@@ -34,6 +34,7 @@
         <EntityTypeShape EntityType="CUA_HANG_TIEN_LOIModel.CA_LAM_VIEC" Width="1.5" PointX="8" PointY="8.125" />
         <AssociationConnector Association="CUA_HANG_TIEN_LOIModel.FK_NHAN_VIEN_CA_LAM_VIEC" />
       </Diagram>
-    </edmx:Diagrams>
+    
+      </edmx:Diagrams>
   </edmx:Designer>
 </edmx:Edmx>
