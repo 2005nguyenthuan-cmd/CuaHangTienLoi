@@ -32,11 +32,13 @@ namespace demo
         {
             lblUser.Text = "Xin chào: " + UserSession.TenNhanVien
                  + " (" + UserSession.VaiTro + ")";
+            OpenControl(new UC_TongQuan());
         }
 
         private void btn_dashboard_Click(object sender, EventArgs e)
         {
-
+            UC_TongQuan uc = new UC_TongQuan();
+            OpenControl(uc);
         }
 
         private void btn_pos_Click(object sender, EventArgs e)
@@ -52,6 +54,8 @@ namespace demo
 
         private void btn_qlk_Click(object sender, EventArgs e)
         {
+            UC_QuanLyKho uc = new UC_QuanLyKho();
+            OpenControl(uc);
 
         }
 

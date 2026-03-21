@@ -47,6 +47,7 @@
     </Reference>
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Windows.Forms.DataVisualization" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -64,11 +65,23 @@
     <Compile Include="Control\UC_LSHoaDon.Designer.cs">
       <DependentUpon>UC_LSHoaDon.cs</DependentUpon>
     </Compile>
+    <Compile Include="Control\UC_QuanLyKho.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Control\UC_QuanLyKho.Designer.cs">
+      <DependentUpon>UC_QuanLyKho.cs</DependentUpon>
+    </Compile>
     <Compile Include="Control\UC_SanPham.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Control\UC_SanPham.Designer.cs">
       <DependentUpon>UC_SanPham.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Control\UC_TongQuan.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Control\UC_TongQuan.Designer.cs">
+      <DependentUpon>UC_TongQuan.cs</DependentUpon>
     </Compile>
     <Compile Include="Form_NhaCungCap.cs">
       <SubType>Form</SubType>
@@ -126,8 +139,14 @@
     <EmbeddedResource Include="Control\UC_LSHoaDon.resx">
       <DependentUpon>UC_LSHoaDon.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Control\UC_QuanLyKho.resx">
+      <DependentUpon>UC_QuanLyKho.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Control\UC_SanPham.resx">
       <DependentUpon>UC_SanPham.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Control\UC_TongQuan.resx">
+      <DependentUpon>UC_TongQuan.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Form_NhaCungCap.resx">
       <DependentUpon>Form_NhaCungCap.cs</DependentUpon>
