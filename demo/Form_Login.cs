@@ -41,6 +41,7 @@ namespace demo
                 UserSession.TenNhanVien = user.TenNhanVien;
                 UserSession.TenDangNhap = user.TenDangNhap;
                 UserSession.VaiTro = user.VAI_TRO?.TenVaiTro;
+                UserSession.MaVaiTro = user.MaVaiTro;
 
                 MessageBox.Show("Đăng nhập thành công!");
 

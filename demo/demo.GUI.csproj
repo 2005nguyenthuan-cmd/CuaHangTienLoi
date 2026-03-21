@@ -58,6 +58,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Control\UC_CaLamViec.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Control\UC_CaLamViec.Designer.cs">
+      <DependentUpon>UC_CaLamViec.cs</DependentUpon>
+    </Compile>
     <Compile Include="Control\UC_LSHoaDon.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -103,6 +109,12 @@
     <Compile Include="Form_Login.Designer.cs">
       <DependentUpon>Form_Login.cs</DependentUpon>
     </Compile>
+    <Compile Include="Form_NhanVien.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Form_NhanVien.Designer.cs">
+      <DependentUpon>Form_NhanVien.cs</DependentUpon>
+    </Compile>
     <Compile Include="Form_ThemSanPham.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -123,6 +135,9 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="Control\UC_CaLamViec.resx">
+      <DependentUpon>UC_CaLamViec.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Control\UC_LSHoaDon.resx">
       <DependentUpon>UC_LSHoaDon.cs</DependentUpon>
     </EmbeddedResource>
@@ -146,6 +161,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Form_Login.resx">
       <DependentUpon>Form_Login.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Form_NhanVien.resx">
+      <DependentUpon>Form_NhanVien.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Form_ThemSanPham.resx">
       <DependentUpon>Form_ThemSanPham.cs</DependentUpon>

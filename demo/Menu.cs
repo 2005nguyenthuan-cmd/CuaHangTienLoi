@@ -32,6 +32,30 @@ namespace demo
         {
             lblUser.Text = "Xin chào: " + UserSession.TenNhanVien
                  + " (" + UserSession.VaiTro + ")";
+            authority();
+
+        }
+
+        private void authority()
+        {
+            if(UserSession.MaVaiTro == 1)
+            {
+                btn_clv.Visible = false;
+                btn_bcc.Visible = false;
+            }
+
+            if (UserSession.MaVaiTro == 2)
+            {
+                // Nhân viên
+                btn_dashboard.Visible = false;
+                btn_sp.Visible = false;
+                btn_kh.Visible = false;
+                btn_ncc.Visible = false;
+                btn_ql.Visible = false;
+                btn_qlk.Visible = false;
+                btn_lshd.Visible = false;
+                btn_price_discount.Visible = false;
+            }
         }
 
         private void btn_dashboard_Click(object sender, EventArgs e)
@@ -88,6 +112,14 @@ namespace demo
 
         }
 
+        private void btn_bcc_Click(object sender, EventArgs e)
+        {
 
+        }
+
+        private void btn_clv_Click(object sender, EventArgs e)
+        {
+            OpenControl(new UC_CaLamViec());
+        }
     }
 }
