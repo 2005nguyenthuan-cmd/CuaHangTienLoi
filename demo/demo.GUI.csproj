@@ -58,6 +58,30 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Control\UC_NhanVienCard.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Control\UC_NhanVienCard.Designer.cs">
+      <DependentUpon>UC_NhanVienCard.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Control\UC_NhanVienDanhSach.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Control\UC_NhanVienDanhSach.Designer.cs">
+      <DependentUpon>UC_NhanVienDanhSach.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Control\UC_LichLamNhanVien.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Control\UC_LichLamNhanVien.Designer.cs">
+      <DependentUpon>UC_LichLamNhanVien.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Control\UC_QLNV.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Control\UC_QLNV.Designer.cs">
+      <DependentUpon>UC_QLNV.cs</DependentUpon>
+    </Compile>
     <Compile Include="Control\UC_SanPham.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -102,6 +126,18 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="Control\UC_NhanVienCard.resx">
+      <DependentUpon>UC_NhanVienCard.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Control\UC_NhanVienDanhSach.resx">
+      <DependentUpon>UC_NhanVienDanhSach.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Control\UC_LichLamNhanVien.resx">
+      <DependentUpon>UC_LichLamNhanVien.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Control\UC_QLNV.resx">
+      <DependentUpon>UC_QLNV.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Control\UC_SanPham.resx">
       <DependentUpon>UC_SanPham.cs</DependentUpon>
     </EmbeddedResource>
