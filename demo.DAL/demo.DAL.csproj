@@ -62,6 +62,9 @@
     <Compile Include="CHI_TIET_NHAP.cs">
       <DependentUpon>Store_Model.tt</DependentUpon>
     </Compile>
+    <Compile Include="CONG_VIEC.cs">
+      <DependentUpon>Store_Model.tt</DependentUpon>
+    </Compile>
     <Compile Include="DANH_MUC.cs">
       <DependentUpon>Store_Model.tt</DependentUpon>
     </Compile>
@@ -72,6 +75,12 @@
       <DependentUpon>Store_Model.tt</DependentUpon>
     </Compile>
     <Compile Include="KHUYEN_MAI.cs">
+      <DependentUpon>Store_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="LICH_LAM_CONG_VIEC.cs">
+      <DependentUpon>Store_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="LICH_LAM_VIEC.cs">
       <DependentUpon>Store_Model.tt</DependentUpon>
     </Compile>
     <Compile Include="NHAN_VIEN.cs">
@@ -102,6 +111,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Store_Model.edmx</DependentUpon>
     </Compile>
+    <Compile Include="Store_Model1.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Store_Model.edmx</DependentUpon>
+    </Compile>
     <Compile Include="VAI_TRO.cs">
       <DependentUpon>Store_Model.tt</DependentUpon>
     </Compile>
@@ -115,11 +129,8 @@
     <None Include="packages.config" />
     <EntityDeploy Include="Store_Model.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
-      <LastGenOutput>Store_Model.Designer.cs</LastGenOutput>
+      <LastGenOutput>Store_Model1.Designer.cs</LastGenOutput>
     </EntityDeploy>
-    <None Include="Store_Model.edmx.diagram">
-      <DependentUpon>Store_Model.edmx</DependentUpon>
-    </None>
   </ItemGroup>
   <ItemGroup>
     <Content Include="Store_Model.Context.tt">

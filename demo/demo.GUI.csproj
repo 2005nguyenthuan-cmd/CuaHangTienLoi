@@ -58,6 +58,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Control\UC_KhuyenMai.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="Control\UC_NhanVienCard.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -111,6 +114,18 @@
     </Compile>
     <Compile Include="Form_Login.Designer.cs">
       <DependentUpon>Form_Login.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Form_KhuyenMai.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Form_ChinhSuaLichLam.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Form_NhanVien.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Form_PhanCongCongViec.cs">
+      <SubType>Form</SubType>
     </Compile>
     <Compile Include="Form_ThemSanPham.cs">
       <SubType>Form</SubType>

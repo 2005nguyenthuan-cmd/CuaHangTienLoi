@@ -51,7 +51,6 @@
             this.cbDanhMuc = new System.Windows.Forms.ComboBox();
             this.txtSearch = new System.Windows.Forms.TextBox();
             this.dgvSanPham = new System.Windows.Forms.DataGridView();
-            this.label10 = new System.Windows.Forms.Label();
             this.MaSP = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.TenSanPham = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.DanhMuc = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -59,6 +58,7 @@
             this.TonKho = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.btnEdit = new System.Windows.Forms.DataGridViewButtonColumn();
             this.btnDelete = new System.Windows.Forms.DataGridViewButtonColumn();
+            this.label10 = new System.Windows.Forms.Label();
             this.panelTongSP.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.panel1.SuspendLayout();
@@ -254,7 +254,7 @@
             // 
             // btnThemSanPham
             // 
-            this.btnThemSanPham.Location = new System.Drawing.Point(726, 29);
+            this.btnThemSanPham.Location = new System.Drawing.Point(737, 29);
             this.btnThemSanPham.Name = "btnThemSanPham";
             this.btnThemSanPham.Size = new System.Drawing.Size(163, 37);
             this.btnThemSanPham.TabIndex = 2;
@@ -268,8 +268,9 @@
             this.cbDanhMuc.FormattingEnabled = true;
             this.cbDanhMuc.Location = new System.Drawing.Point(588, 29);
             this.cbDanhMuc.Name = "cbDanhMuc";
-            this.cbDanhMuc.Size = new System.Drawing.Size(121, 37);
+            this.cbDanhMuc.Size = new System.Drawing.Size(143, 37);
             this.cbDanhMuc.TabIndex = 1;
+            this.cbDanhMuc.SelectedIndexChanged += new System.EventHandler(this.cbDanhMuc_SelectedIndexChanged);
             // 
             // txtSearch
             // 
@@ -278,6 +279,7 @@
             this.txtSearch.Name = "txtSearch";
             this.txtSearch.Size = new System.Drawing.Size(565, 38);
             this.txtSearch.TabIndex = 0;
+            this.txtSearch.TextChanged += new System.EventHandler(this.txtSearch_TextChanged);
             // 
             // dgvSanPham
             // 
@@ -297,16 +299,6 @@
             this.dgvSanPham.Size = new System.Drawing.Size(920, 322);
             this.dgvSanPham.TabIndex = 6;
             this.dgvSanPham.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvSanPham_CellContentClick);
-            // 
-            // label10
-            // 
-            this.label10.AutoSize = true;
-            this.label10.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label10.Location = new System.Drawing.Point(31, 333);
-            this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(207, 25);
-            this.label10.TabIndex = 7;
-            this.label10.Text = "Danh Sách Sản Phẩm";
             // 
             // MaSP
             // 
@@ -357,6 +349,16 @@
             this.btnDelete.MinimumWidth = 6;
             this.btnDelete.Name = "btnDelete";
             this.btnDelete.Width = 125;
+            // 
+            // label10
+            // 
+            this.label10.AutoSize = true;
+            this.label10.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label10.Location = new System.Drawing.Point(31, 333);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(207, 25);
+            this.label10.TabIndex = 7;
+            this.label10.Text = "Danh Sách Sản Phẩm";
             // 
             // UC_SanPham
             // 

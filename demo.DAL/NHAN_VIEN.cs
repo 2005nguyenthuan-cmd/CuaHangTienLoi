@@ -19,6 +19,8 @@ namespace demo.DAL
         {
             this.HOA_DON = new HashSet<HOA_DON>();
             this.PHIEU_NHAP = new HashSet<PHIEU_NHAP>();
+            this.LICH_LAM_VIEC = new HashSet<LICH_LAM_VIEC>();
+            this.LICH_LAM_VIEC_CAP_NHAT = new HashSet<LICH_LAM_VIEC>();
         }
     
         public int MaNhanVien { get; set; }
@@ -37,5 +39,9 @@ namespace demo.DAL
         public virtual VAI_TRO VAI_TRO { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<PHIEU_NHAP> PHIEU_NHAP { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<LICH_LAM_VIEC> LICH_LAM_VIEC { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<LICH_LAM_VIEC> LICH_LAM_VIEC_CAP_NHAT { get; set; }
     }
 }
