@@ -28,10 +28,13 @@ namespace demo.DAL
         public virtual DbSet<CA_LAM_VIEC> CA_LAM_VIEC { get; set; }
         public virtual DbSet<CHI_TIET_HOA_DON> CHI_TIET_HOA_DON { get; set; }
         public virtual DbSet<CHI_TIET_NHAP> CHI_TIET_NHAP { get; set; }
+        public virtual DbSet<CONG_VIEC> CONG_VIEC { get; set; }
         public virtual DbSet<DANH_MUC> DANH_MUC { get; set; }
         public virtual DbSet<HOA_DON> HOA_DON { get; set; }
         public virtual DbSet<KHACH_HANG> KHACH_HANG { get; set; }
         public virtual DbSet<KHUYEN_MAI> KHUYEN_MAI { get; set; }
+        public virtual DbSet<LICH_LAM_CONG_VIEC> LICH_LAM_CONG_VIEC { get; set; }
+        public virtual DbSet<LICH_LAM_VIEC> LICH_LAM_VIEC { get; set; }
         public virtual DbSet<NHA_CUNG_CAP> NHA_CUNG_CAP { get; set; }
         public virtual DbSet<NHAN_VIEN> NHAN_VIEN { get; set; }
         public virtual DbSet<PHIEU_NHAP> PHIEU_NHAP { get; set; }

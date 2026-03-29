@@ -114,7 +114,7 @@ namespace demo
 
         private void btn_bcc_Click(object sender, EventArgs e)
         {
-
+            OpenControl(new UC_BaoCaoCa());
         }
 
         private void btn_clv_Click(object sender, EventArgs e)
