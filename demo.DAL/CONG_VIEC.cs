@@ -12,27 +12,20 @@ namespace demo.DAL
     using System;
     using System.Collections.Generic;
     
-    public partial class CA_LAM_VIEC
+    public partial class CONG_VIEC
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public CA_LAM_VIEC()
+        public CONG_VIEC()
         {
-            this.NHAN_VIEN = new HashSet<NHAN_VIEN>();
-            this.LICH_LAM_VIEC = new HashSet<LICH_LAM_VIEC>();
+            this.LICH_LAM_CONG_VIEC = new HashSet<LICH_LAM_CONG_VIEC>();
         }
     
-        public int MaCa { get; set; }
-        public string TenCa { get; set; }
-        public Nullable<System.TimeSpan> GioBatDau { get; set; }
-        public Nullable<System.TimeSpan> GioKetThuc { get; set; }
-        public string LoaiCa { get; set; }
-        public Nullable<decimal> SoGioChuan { get; set; }
-        public bool ChoPhepTangCa { get; set; }
+        public int MaCongViec { get; set; }
+        public string TenCongViec { get; set; }
         public string MoTa { get; set; }
+        public bool TrangThai { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<NHAN_VIEN> NHAN_VIEN { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<LICH_LAM_VIEC> LICH_LAM_VIEC { get; set; }
+        public virtual ICollection<LICH_LAM_CONG_VIEC> LICH_LAM_CONG_VIEC { get; set; }
     }
 }

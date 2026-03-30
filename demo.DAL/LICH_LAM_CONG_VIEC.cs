@@ -12,15 +12,17 @@ namespace demo.DAL
     using System;
     using System.Collections.Generic;
     
-    public partial class CHI_TIET_NHAP
+    public partial class LICH_LAM_CONG_VIEC
     {
-        public int MaPhieuNhap { get; set; }
-        public int MaSanPham { get; set; }
-        public Nullable<int> SoLuong { get; set; }
-        public Nullable<decimal> GiaNhap { get; set; }
-        public Nullable<System.DateTime> HanSuDung { get; set; }
+        public int MaLichCongViec { get; set; }
+        public int MaLich { get; set; }
+        public int MaCongViec { get; set; }
+        public Nullable<System.TimeSpan> TuGio { get; set; }
+        public Nullable<System.TimeSpan> DenGio { get; set; }
+        public int UuTien { get; set; }
+        public string GhiChu { get; set; }
     
-        public virtual PHIEU_NHAP PHIEU_NHAP { get; set; }
-        public virtual SAN_PHAM SAN_PHAM { get; set; }
+        public virtual CONG_VIEC CONG_VIEC { get; set; }
+        public virtual LICH_LAM_VIEC LICH_LAM_VIEC { get; set; }
     }
 }

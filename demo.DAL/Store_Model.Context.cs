@@ -37,5 +37,8 @@ namespace demo.DAL
         public virtual DbSet<PHIEU_NHAP> PHIEU_NHAP { get; set; }
         public virtual DbSet<SAN_PHAM> SAN_PHAM { get; set; }
         public virtual DbSet<VAI_TRO> VAI_TRO { get; set; }
+        public virtual DbSet<CONG_VIEC> CONG_VIEC { get; set; }
+        public virtual DbSet<LICH_LAM_CONG_VIEC> LICH_LAM_CONG_VIEC { get; set; }
+        public virtual DbSet<LICH_LAM_VIEC> LICH_LAM_VIEC { get; set; }
     }
 }

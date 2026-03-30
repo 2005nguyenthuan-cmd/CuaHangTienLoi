@@ -5,7 +5,7 @@
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
 <<<<<<< HEAD
-      <Diagram DiagramId="7b8f02519bc6487eadf6dded197da68d" Name="Diagram1" ZoomLevel="11">
+      <Diagram DiagramId="7b8f02519bc6487eadf6dded197da68d" Name="Diagram1" ZoomLevel="43">
 =======
       <Diagram DiagramId="7b8f02519bc6487eadf6dded197da68d" Name="Diagram1" ZoomLevel="59">
 >>>>>>> 284929565c9d8b162207e9a787ad2735bf88337a
@@ -58,6 +58,14 @@
         <AssociationConnector Association="CUA_HANG_TIEN_LOIModel.SAN_PHAM_KHUYEN_MAI" />
         <EntityTypeShape EntityType="CUA_HANG_TIEN_LOIModel.VAI_TRO" Width="1.5" PointX="8.8170495838006246" PointY="18.001820274629548" />
         <AssociationConnector Association="CUA_HANG_TIEN_LOIModel.FK__NHAN_VIEN__MaVai__5FB337D6" />
+        <EntityTypeShape EntityType="CUA_HANG_TIEN_LOIModel.CONG_VIEC" Width="1.5" PointX="9.9698318661981418" PointY="20.896889532402572" />
+        <EntityTypeShape EntityType="CUA_HANG_TIEN_LOIModel.LICH_LAM_CONG_VIEC" Width="1.5" PointX="11.501818354940889" PointY="6.5719307095613" />
+        <EntityTypeShape EntityType="CUA_HANG_TIEN_LOIModel.LICH_LAM_VIEC" Width="1.5" PointX="5.74266812658993" PointY="27.71888740161382" />
+        <AssociationConnector Association="CUA_HANG_TIEN_LOIModel.FK_LLV_CA" />
+        <AssociationConnector Association="CUA_HANG_TIEN_LOIModel.FK_LLCV_CV" />
+        <AssociationConnector Association="CUA_HANG_TIEN_LOIModel.FK_LLCV_LICH" />
+        <AssociationConnector Association="CUA_HANG_TIEN_LOIModel.FK_LLV_NGUOICAPNHAT" />
+        <AssociationConnector Association="CUA_HANG_TIEN_LOIModel.FK_LLV_NV" />
     </edmx:Diagrams>
   </edmx:Designer>
 </edmx:Edmx>
