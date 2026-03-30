@@ -29,6 +29,17 @@
           <Property Name="DonGia" Type="decimal" Precision="10" Scale="2" />
           <Property Name="ThanhTien" Type="decimal" Precision="12" Scale="2" />
         </EntityType>
+        <EntityType Name="CHI_TIET_KIEM_KE">
+          <Key>
+            <PropertyRef Name="MaKiemKe" />
+            <PropertyRef Name="MaSanPham" />
+          </Key>
+          <Property Name="MaKiemKe" Type="int" Nullable="false" />
+          <Property Name="MaSanPham" Type="int" Nullable="false" />
+          <Property Name="SoLuongHeThong" Type="int" />
+          <Property Name="SoLuongThucTe" Type="int" />
+          <Property Name="ChenhLech" Type="int" />
+        </EntityType>
         <EntityType Name="CHI_TIET_NHAP">
           <Key>
             <PropertyRef Name="MaPhieuNhap" />
@@ -38,6 +49,7 @@
           <Property Name="MaSanPham" Type="int" Nullable="false" />
           <Property Name="SoLuong" Type="int" />
           <Property Name="GiaNhap" Type="decimal" Precision="10" Scale="2" />
+          <Property Name="HanSuDung" Type="datetime" />
         </EntityType>
         <EntityType Name="CONG_VIEC">
           <Key>
@@ -74,6 +86,15 @@
           <Property Name="TenKhachHang" Type="nvarchar" MaxLength="100" />
           <Property Name="SoDienThoai" Type="varchar" MaxLength="15" />
           <Property Name="DiemTichLuy" Type="int" />
+        </EntityType>
+        <EntityType Name="KIEM_KE">
+          <Key>
+            <PropertyRef Name="MaKiemKe" />
+          </Key>
+          <Property Name="MaKiemKe" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="NgayKiemKe" Type="datetime" />
+          <Property Name="MaNhanVien" Type="int" />
+          <Property Name="GhiChu" Type="nvarchar" MaxLength="255" />
         </EntityType>
         <EntityType Name="KHUYEN_MAI">
           <Key>
@@ -160,6 +181,8 @@
           <Property Name="MaDanhMuc" Type="int" />
           <Property Name="MoTa" Type="nvarchar" MaxLength="255" />
           <Property Name="HinhAnh" Type="nvarchar" MaxLength="255" />
+          <Property Name="TonToiThieu" Type="int" />
+          <Property Name="HanSuDung" Type="date" />
         </EntityType>
         <EntityType Name="SAN_PHAM_KHUYEN_MAI">
           <Key>
@@ -201,6 +224,30 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_CHI_TIET_KIEM_KE_KIEM_KE">
+          <End Role="KIEM_KE" Type="Self.KIEM_KE" Multiplicity="1" />
+          <End Role="CHI_TIET_KIEM_KE" Type="Self.CHI_TIET_KIEM_KE" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="KIEM_KE">
+              <PropertyRef Name="MaKiemKe" />
+            </Principal>
+            <Dependent Role="CHI_TIET_KIEM_KE">
+              <PropertyRef Name="MaKiemKe" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CHI_TIET_KIEM_KE_SAN_PHAM">
+          <End Role="SAN_PHAM" Type="Self.SAN_PHAM" Multiplicity="1" />
+          <End Role="CHI_TIET_KIEM_KE" Type="Self.CHI_TIET_KIEM_KE" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SAN_PHAM">
+              <PropertyRef Name="MaSanPham" />
+            </Principal>
+            <Dependent Role="CHI_TIET_KIEM_KE">
+              <PropertyRef Name="MaSanPham" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK__HOA_DON__MaKhach__6D0D32F4">
           <End Role="KHACH_HANG" Type="Self.KHACH_HANG" Multiplicity="0..1" />
           <End Role="HOA_DON" Type="Self.HOA_DON" Multiplicity="*" />
@@ -221,6 +268,18 @@
               <PropertyRef Name="MaNhanVien" />
             </Principal>
             <Dependent Role="HOA_DON">
+              <PropertyRef Name="MaNhanVien" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_KIEM_KE_NHAN_VIEN">
+          <End Role="NHAN_VIEN" Type="Self.NHAN_VIEN" Multiplicity="0..1" />
+          <End Role="KIEM_KE" Type="Self.KIEM_KE" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="NHAN_VIEN">
+              <PropertyRef Name="MaNhanVien" />
+            </Principal>
+            <Dependent Role="KIEM_KE">
               <PropertyRef Name="MaNhanVien" />
             </Dependent>
           </ReferentialConstraint>
@@ -396,11 +455,13 @@
         <EntityContainer Name="CUA_HANG_TIEN_LOIModelStoreContainer">
           <EntitySet Name="CA_LAM_VIEC" EntityType="Self.CA_LAM_VIEC" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CHI_TIET_HOA_DON" EntityType="Self.CHI_TIET_HOA_DON" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CHI_TIET_KIEM_KE" EntityType="Self.CHI_TIET_KIEM_KE" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CHI_TIET_NHAP" EntityType="Self.CHI_TIET_NHAP" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CONG_VIEC" EntityType="Self.CONG_VIEC" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="DANH_MUC" EntityType="Self.DANH_MUC" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="HOA_DON" EntityType="Self.HOA_DON" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="KHACH_HANG" EntityType="Self.KHACH_HANG" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="KIEM_KE" EntityType="Self.KIEM_KE" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="KHUYEN_MAI" EntityType="Self.KHUYEN_MAI" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="LICH_LAM_CONG_VIEC" EntityType="Self.LICH_LAM_CONG_VIEC" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="LICH_LAM_VIEC" EntityType="Self.LICH_LAM_VIEC" Schema="dbo" store:Type="Tables" />
@@ -418,6 +479,14 @@
             <End Role="SAN_PHAM" EntitySet="SAN_PHAM" />
             <End Role="CHI_TIET_NHAP" EntitySet="CHI_TIET_NHAP" />
           </AssociationSet>
+          <AssociationSet Name="FK_CHI_TIET_KIEM_KE_KIEM_KE" Association="Self.FK_CHI_TIET_KIEM_KE_KIEM_KE">
+            <End Role="KIEM_KE" EntitySet="KIEM_KE" />
+            <End Role="CHI_TIET_KIEM_KE" EntitySet="CHI_TIET_KIEM_KE" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CHI_TIET_KIEM_KE_SAN_PHAM" Association="Self.FK_CHI_TIET_KIEM_KE_SAN_PHAM">
+            <End Role="SAN_PHAM" EntitySet="SAN_PHAM" />
+            <End Role="CHI_TIET_KIEM_KE" EntitySet="CHI_TIET_KIEM_KE" />
+          </AssociationSet>
           <AssociationSet Name="FK__HOA_DON__MaKhach__6D0D32F4" Association="Self.FK__HOA_DON__MaKhach__6D0D32F4">
             <End Role="KHACH_HANG" EntitySet="KHACH_HANG" />
             <End Role="HOA_DON" EntitySet="HOA_DON" />
@@ -425,6 +494,10 @@
           <AssociationSet Name="FK__HOA_DON__MaNhanV__6C190EBB" Association="Self.FK__HOA_DON__MaNhanV__6C190EBB">
             <End Role="NHAN_VIEN" EntitySet="NHAN_VIEN" />
             <End Role="HOA_DON" EntitySet="HOA_DON" />
+          </AssociationSet>
+          <AssociationSet Name="FK_KIEM_KE_NHAN_VIEN" Association="Self.FK_KIEM_KE_NHAN_VIEN">
+            <End Role="NHAN_VIEN" EntitySet="NHAN_VIEN" />
+            <End Role="KIEM_KE" EntitySet="KIEM_KE" />
           </AssociationSet>
           <AssociationSet Name="FK__NHAN_VIEN__MaVai__5FB337D6" Association="Self.FK__NHAN_VIEN__MaVai__5FB337D6">
             <End Role="VAI_TRO" EntitySet="VAI_TRO" />
@@ -490,11 +563,13 @@
         <EntityContainer Name="CUA_HANG_TIEN_LOI_Entities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="CA_LAM_VIEC" EntityType="CUA_HANG_TIEN_LOIModel.CA_LAM_VIEC" />
           <EntitySet Name="CHI_TIET_HOA_DON" EntityType="CUA_HANG_TIEN_LOIModel.CHI_TIET_HOA_DON" />
+          <EntitySet Name="CHI_TIET_KIEM_KE" EntityType="CUA_HANG_TIEN_LOIModel.CHI_TIET_KIEM_KE" />
           <EntitySet Name="CHI_TIET_NHAP" EntityType="CUA_HANG_TIEN_LOIModel.CHI_TIET_NHAP" />
           <EntitySet Name="CONG_VIEC" EntityType="CUA_HANG_TIEN_LOIModel.CONG_VIEC" />
           <EntitySet Name="DANH_MUC" EntityType="CUA_HANG_TIEN_LOIModel.DANH_MUC" />
           <EntitySet Name="HOA_DON" EntityType="CUA_HANG_TIEN_LOIModel.HOA_DON" />
           <EntitySet Name="KHACH_HANG" EntityType="CUA_HANG_TIEN_LOIModel.KHACH_HANG" />
+          <EntitySet Name="KIEM_KE" EntityType="CUA_HANG_TIEN_LOIModel.KIEM_KE" />
           <EntitySet Name="KHUYEN_MAI" EntityType="CUA_HANG_TIEN_LOIModel.KHUYEN_MAI" />
           <EntitySet Name="LICH_LAM_CONG_VIEC" EntityType="CUA_HANG_TIEN_LOIModel.LICH_LAM_CONG_VIEC" />
           <EntitySet Name="LICH_LAM_VIEC" EntityType="CUA_HANG_TIEN_LOIModel.LICH_LAM_VIEC" />
@@ -535,6 +610,14 @@
             <End Role="SAN_PHAM" EntitySet="SAN_PHAM" />
             <End Role="CHI_TIET_HOA_DON" EntitySet="CHI_TIET_HOA_DON" />
           </AssociationSet>
+          <AssociationSet Name="FK_CHI_TIET_KIEM_KE_KIEM_KE" Association="CUA_HANG_TIEN_LOIModel.FK_CHI_TIET_KIEM_KE_KIEM_KE">
+            <End Role="KIEM_KE" EntitySet="KIEM_KE" />
+            <End Role="CHI_TIET_KIEM_KE" EntitySet="CHI_TIET_KIEM_KE" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CHI_TIET_KIEM_KE_SAN_PHAM" Association="CUA_HANG_TIEN_LOIModel.FK_CHI_TIET_KIEM_KE_SAN_PHAM">
+            <End Role="SAN_PHAM" EntitySet="SAN_PHAM" />
+            <End Role="CHI_TIET_KIEM_KE" EntitySet="CHI_TIET_KIEM_KE" />
+          </AssociationSet>
           <AssociationSet Name="FK__CHI_TIET___MaPhi__7A672E12" Association="CUA_HANG_TIEN_LOIModel.FK__CHI_TIET___MaPhi__7A672E12">
             <End Role="PHIEU_NHAP" EntitySet="PHIEU_NHAP" />
             <End Role="CHI_TIET_NHAP" EntitySet="CHI_TIET_NHAP" />
@@ -554,6 +637,10 @@
           <AssociationSet Name="FK__HOA_DON__MaNhanV__6C190EBB" Association="CUA_HANG_TIEN_LOIModel.FK__HOA_DON__MaNhanV__6C190EBB">
             <End Role="NHAN_VIEN" EntitySet="NHAN_VIEN" />
             <End Role="HOA_DON" EntitySet="HOA_DON" />
+          </AssociationSet>
+          <AssociationSet Name="FK_KIEM_KE_NHAN_VIEN" Association="CUA_HANG_TIEN_LOIModel.FK_KIEM_KE_NHAN_VIEN">
+            <End Role="NHAN_VIEN" EntitySet="NHAN_VIEN" />
+            <End Role="KIEM_KE" EntitySet="KIEM_KE" />
           </AssociationSet>
           <AssociationSet Name="FK__PHIEU_NHA__MaNCC__778AC167" Association="CUA_HANG_TIEN_LOIModel.FK__PHIEU_NHA__MaNCC__778AC167">
             <End Role="NHA_CUNG_CAP" EntitySet="NHA_CUNG_CAP" />
@@ -600,6 +687,19 @@
           <NavigationProperty Name="HOA_DON" Relationship="CUA_HANG_TIEN_LOIModel.FK_CHI_TIET_HOA_DON_HOA_DON" FromRole="CHI_TIET_HOA_DON" ToRole="HOA_DON" />
           <NavigationProperty Name="SAN_PHAM" Relationship="CUA_HANG_TIEN_LOIModel.FK_CHI_TIET_HOA_DON_SAN_PHAM" FromRole="CHI_TIET_HOA_DON" ToRole="SAN_PHAM" />
         </EntityType>
+        <EntityType Name="CHI_TIET_KIEM_KE">
+          <Key>
+            <PropertyRef Name="MaKiemKe" />
+            <PropertyRef Name="MaSanPham" />
+          </Key>
+          <Property Name="MaKiemKe" Type="Int32" Nullable="false" />
+          <Property Name="MaSanPham" Type="Int32" Nullable="false" />
+          <Property Name="SoLuongHeThong" Type="Int32" />
+          <Property Name="SoLuongThucTe" Type="Int32" />
+          <Property Name="ChenhLech" Type="Int32" />
+          <NavigationProperty Name="KIEM_KE" Relationship="CUA_HANG_TIEN_LOIModel.FK_CHI_TIET_KIEM_KE_KIEM_KE" FromRole="CHI_TIET_KIEM_KE" ToRole="KIEM_KE" />
+          <NavigationProperty Name="SAN_PHAM" Relationship="CUA_HANG_TIEN_LOIModel.FK_CHI_TIET_KIEM_KE_SAN_PHAM" FromRole="CHI_TIET_KIEM_KE" ToRole="SAN_PHAM" />
+        </EntityType>
         <EntityType Name="CHI_TIET_NHAP">
           <Key>
             <PropertyRef Name="MaPhieuNhap" />
@@ -609,6 +709,7 @@
           <Property Name="MaSanPham" Type="Int32" Nullable="false" />
           <Property Name="SoLuong" Type="Int32" />
           <Property Name="GiaNhap" Type="Decimal" Precision="10" Scale="2" />
+          <Property Name="HanSuDung" Type="DateTime" Precision="3" />
           <NavigationProperty Name="PHIEU_NHAP" Relationship="CUA_HANG_TIEN_LOIModel.FK__CHI_TIET___MaPhi__7A672E12" FromRole="CHI_TIET_NHAP" ToRole="PHIEU_NHAP" />
           <NavigationProperty Name="SAN_PHAM" Relationship="CUA_HANG_TIEN_LOIModel.FK__CHI_TIET___MaSan__7B5B524B" FromRole="CHI_TIET_NHAP" ToRole="SAN_PHAM" />
         </EntityType>
@@ -653,6 +754,17 @@
           <Property Name="SoDienThoai" Type="String" MaxLength="15" FixedLength="false" Unicode="false" />
           <Property Name="DiemTichLuy" Type="Int32" />
           <NavigationProperty Name="HOA_DON" Relationship="CUA_HANG_TIEN_LOIModel.FK__HOA_DON__MaKhach__6D0D32F4" FromRole="KHACH_HANG" ToRole="HOA_DON" />
+        </EntityType>
+        <EntityType Name="KIEM_KE">
+          <Key>
+            <PropertyRef Name="MaKiemKe" />
+          </Key>
+          <Property Name="MaKiemKe" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="NgayKiemKe" Type="DateTime" Precision="3" />
+          <Property Name="MaNhanVien" Type="Int32" />
+          <Property Name="GhiChu" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="CHI_TIET_KIEM_KE" Relationship="CUA_HANG_TIEN_LOIModel.FK_CHI_TIET_KIEM_KE_KIEM_KE" FromRole="KIEM_KE" ToRole="CHI_TIET_KIEM_KE" />
+          <NavigationProperty Name="NHAN_VIEN" Relationship="CUA_HANG_TIEN_LOIModel.FK_KIEM_KE_NHAN_VIEN" FromRole="KIEM_KE" ToRole="NHAN_VIEN" />
         </EntityType>
         <EntityType Name="KHUYEN_MAI">
           <Key>
@@ -728,6 +840,7 @@
           <Property Name="MaCa" Type="Int32" />
           <NavigationProperty Name="CA_LAM_VIEC" Relationship="CUA_HANG_TIEN_LOIModel.FK_NHAN_VIEN_CA_LAM_VIEC" FromRole="NHAN_VIEN" ToRole="CA_LAM_VIEC" />
           <NavigationProperty Name="HOA_DON" Relationship="CUA_HANG_TIEN_LOIModel.FK__HOA_DON__MaNhanV__6C190EBB" FromRole="NHAN_VIEN" ToRole="HOA_DON" />
+          <NavigationProperty Name="KIEM_KE" Relationship="CUA_HANG_TIEN_LOIModel.FK_KIEM_KE_NHAN_VIEN" FromRole="NHAN_VIEN" ToRole="KIEM_KE" />
           <NavigationProperty Name="VAI_TRO" Relationship="CUA_HANG_TIEN_LOIModel.FK__NHAN_VIEN__MaVai__5FB337D6" FromRole="NHAN_VIEN" ToRole="VAI_TRO" />
           <NavigationProperty Name="PHIEU_NHAP" Relationship="CUA_HANG_TIEN_LOIModel.FK__PHIEU_NHA__MaNha__76969D2E" FromRole="NHAN_VIEN" ToRole="PHIEU_NHAP" />
           <NavigationProperty Name="LICH_LAM_VIEC" Relationship="CUA_HANG_TIEN_LOIModel.FK_LLV_NV" FromRole="NHAN_VIEN" ToRole="LICH_LAM_VIEC" />
@@ -756,6 +869,9 @@
           <Property Name="MaDanhMuc" Type="Int32" />
           <Property Name="MoTa" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
           <Property Name="HinhAnh" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="TonToiThieu" Type="Int32" />
+          <Property Name="HanSuDung" Type="DateTime" Precision="0" />
+          <NavigationProperty Name="CHI_TIET_KIEM_KE" Relationship="CUA_HANG_TIEN_LOIModel.FK_CHI_TIET_KIEM_KE_SAN_PHAM" FromRole="SAN_PHAM" ToRole="CHI_TIET_KIEM_KE" />
           <NavigationProperty Name="CHI_TIET_HOA_DON" Relationship="CUA_HANG_TIEN_LOIModel.FK_CHI_TIET_HOA_DON_SAN_PHAM" FromRole="SAN_PHAM" ToRole="CHI_TIET_HOA_DON" />
           <NavigationProperty Name="CHI_TIET_NHAP" Relationship="CUA_HANG_TIEN_LOIModel.FK__CHI_TIET___MaSan__7B5B524B" FromRole="SAN_PHAM" ToRole="CHI_TIET_NHAP" />
           <NavigationProperty Name="DANH_MUC" Relationship="CUA_HANG_TIEN_LOIModel.FK__SAN_PHAM__MaDanh__656C112C" FromRole="SAN_PHAM" ToRole="DANH_MUC" />
@@ -890,6 +1006,30 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_CHI_TIET_KIEM_KE_KIEM_KE">
+          <End Type="CUA_HANG_TIEN_LOIModel.KIEM_KE" Role="KIEM_KE" Multiplicity="1" />
+          <End Type="CUA_HANG_TIEN_LOIModel.CHI_TIET_KIEM_KE" Role="CHI_TIET_KIEM_KE" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="KIEM_KE">
+              <PropertyRef Name="MaKiemKe" />
+            </Principal>
+            <Dependent Role="CHI_TIET_KIEM_KE">
+              <PropertyRef Name="MaKiemKe" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CHI_TIET_KIEM_KE_SAN_PHAM">
+          <End Type="CUA_HANG_TIEN_LOIModel.SAN_PHAM" Role="SAN_PHAM" Multiplicity="1" />
+          <End Type="CUA_HANG_TIEN_LOIModel.CHI_TIET_KIEM_KE" Role="CHI_TIET_KIEM_KE" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SAN_PHAM">
+              <PropertyRef Name="MaSanPham" />
+            </Principal>
+            <Dependent Role="CHI_TIET_KIEM_KE">
+              <PropertyRef Name="MaSanPham" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK__SAN_PHAM__MaDanh__656C112C">
           <End Type="CUA_HANG_TIEN_LOIModel.DANH_MUC" Role="DANH_MUC" Multiplicity="0..1" />
           <End Type="CUA_HANG_TIEN_LOIModel.SAN_PHAM" Role="SAN_PHAM" Multiplicity="*" />
@@ -922,6 +1062,18 @@
               <PropertyRef Name="MaNhanVien" />
             </Principal>
             <Dependent Role="HOA_DON">
+              <PropertyRef Name="MaNhanVien" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_KIEM_KE_NHAN_VIEN">
+          <End Type="CUA_HANG_TIEN_LOIModel.NHAN_VIEN" Role="NHAN_VIEN" Multiplicity="0..1" />
+          <End Type="CUA_HANG_TIEN_LOIModel.KIEM_KE" Role="KIEM_KE" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="NHAN_VIEN">
+              <PropertyRef Name="MaNhanVien" />
+            </Principal>
+            <Dependent Role="KIEM_KE">
               <PropertyRef Name="MaNhanVien" />
             </Dependent>
           </ReferentialConstraint>
@@ -997,9 +1149,21 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="CHI_TIET_KIEM_KE">
+            <EntityTypeMapping TypeName="CUA_HANG_TIEN_LOIModel.CHI_TIET_KIEM_KE">
+              <MappingFragment StoreEntitySet="CHI_TIET_KIEM_KE">
+                <ScalarProperty Name="ChenhLech" ColumnName="ChenhLech" />
+                <ScalarProperty Name="SoLuongThucTe" ColumnName="SoLuongThucTe" />
+                <ScalarProperty Name="SoLuongHeThong" ColumnName="SoLuongHeThong" />
+                <ScalarProperty Name="MaSanPham" ColumnName="MaSanPham" />
+                <ScalarProperty Name="MaKiemKe" ColumnName="MaKiemKe" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="CHI_TIET_NHAP">
             <EntityTypeMapping TypeName="CUA_HANG_TIEN_LOIModel.CHI_TIET_NHAP">
               <MappingFragment StoreEntitySet="CHI_TIET_NHAP">
+                <ScalarProperty Name="HanSuDung" ColumnName="HanSuDung" />
                 <ScalarProperty Name="GiaNhap" ColumnName="GiaNhap" />
                 <ScalarProperty Name="SoLuong" ColumnName="SoLuong" />
                 <ScalarProperty Name="MaSanPham" ColumnName="MaSanPham" />
@@ -1044,6 +1208,16 @@
                 <ScalarProperty Name="SoDienThoai" ColumnName="SoDienThoai" />
                 <ScalarProperty Name="TenKhachHang" ColumnName="TenKhachHang" />
                 <ScalarProperty Name="MaKhachHang" ColumnName="MaKhachHang" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="KIEM_KE">
+            <EntityTypeMapping TypeName="CUA_HANG_TIEN_LOIModel.KIEM_KE">
+              <MappingFragment StoreEntitySet="KIEM_KE">
+                <ScalarProperty Name="GhiChu" ColumnName="GhiChu" />
+                <ScalarProperty Name="MaNhanVien" ColumnName="MaNhanVien" />
+                <ScalarProperty Name="NgayKiemKe" ColumnName="NgayKiemKe" />
+                <ScalarProperty Name="MaKiemKe" ColumnName="MaKiemKe" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -1130,6 +1304,8 @@
           <EntitySetMapping Name="SAN_PHAM">
             <EntityTypeMapping TypeName="CUA_HANG_TIEN_LOIModel.SAN_PHAM">
               <MappingFragment StoreEntitySet="SAN_PHAM">
+                <ScalarProperty Name="HanSuDung" ColumnName="HanSuDung" />
+                <ScalarProperty Name="TonToiThieu" ColumnName="TonToiThieu" />
                 <ScalarProperty Name="HinhAnh" ColumnName="HinhAnh" />
                 <ScalarProperty Name="MoTa" ColumnName="MoTa" />
                 <ScalarProperty Name="MaDanhMuc" ColumnName="MaDanhMuc" />
@@ -1182,11 +1358,13 @@
       <Diagram DiagramId="94368d41949544359857da1fe809816f" Name="Diagram1" ZoomLevel="40">
         <EntityTypeShape EntityType="CUA_HANG_TIEN_LOIModel.CA_LAM_VIEC" Width="1.5" PointX="3.125" PointY="16.25" IsExpanded="true" />
         <EntityTypeShape EntityType="CUA_HANG_TIEN_LOIModel.CHI_TIET_HOA_DON" Width="1.5" PointX="5.25" PointY="3.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="CUA_HANG_TIEN_LOIModel.CHI_TIET_KIEM_KE" Width="1.75" PointX="5.25" PointY="6.375" IsExpanded="true" />
         <EntityTypeShape EntityType="CUA_HANG_TIEN_LOIModel.CHI_TIET_NHAP" Width="1.5" PointX="5.25" PointY="0.75" IsExpanded="true" />
         <EntityTypeShape EntityType="CUA_HANG_TIEN_LOIModel.CONG_VIEC" Width="1.5" PointX="7.25" PointY="18.125" IsExpanded="true" />
         <EntityTypeShape EntityType="CUA_HANG_TIEN_LOIModel.DANH_MUC" Width="1.5" PointX="0.75" PointY="4" IsExpanded="true" />
         <EntityTypeShape EntityType="CUA_HANG_TIEN_LOIModel.HOA_DON" Width="1.5" PointX="3" PointY="21.5" IsExpanded="true" />
         <EntityTypeShape EntityType="CUA_HANG_TIEN_LOIModel.KHACH_HANG" Width="1.5" PointX="0.75" PointY="21.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="CUA_HANG_TIEN_LOIModel.KIEM_KE" Width="1.5" PointX="3" PointY="7" IsExpanded="true" />
         <EntityTypeShape EntityType="CUA_HANG_TIEN_LOIModel.KHUYEN_MAI" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
         <EntityTypeShape EntityType="CUA_HANG_TIEN_LOIModel.LICH_LAM_CONG_VIEC" Width="1.75" PointX="10.25" PointY="14.625" IsExpanded="true" />
         <EntityTypeShape EntityType="CUA_HANG_TIEN_LOIModel.LICH_LAM_VIEC" Width="1.75" PointX="7.375" PointY="10.875" IsExpanded="true" />
@@ -1203,11 +1381,14 @@
         <AssociationConnector Association="CUA_HANG_TIEN_LOIModel.FK_LLV_NV" ManuallyRouted="false" />
         <AssociationConnector Association="CUA_HANG_TIEN_LOIModel.FK_CHI_TIET_HOA_DON_HOA_DON" ManuallyRouted="false" />
         <AssociationConnector Association="CUA_HANG_TIEN_LOIModel.FK_CHI_TIET_HOA_DON_SAN_PHAM" ManuallyRouted="false" />
+        <AssociationConnector Association="CUA_HANG_TIEN_LOIModel.FK_CHI_TIET_KIEM_KE_KIEM_KE" ManuallyRouted="false" />
+        <AssociationConnector Association="CUA_HANG_TIEN_LOIModel.FK_CHI_TIET_KIEM_KE_SAN_PHAM" ManuallyRouted="false" />
         <AssociationConnector Association="CUA_HANG_TIEN_LOIModel.FK__CHI_TIET___MaPhi__7A672E12" ManuallyRouted="false" />
         <AssociationConnector Association="CUA_HANG_TIEN_LOIModel.FK__CHI_TIET___MaSan__7B5B524B" ManuallyRouted="false" />
         <AssociationConnector Association="CUA_HANG_TIEN_LOIModel.FK__SAN_PHAM__MaDanh__656C112C" ManuallyRouted="false" />
         <AssociationConnector Association="CUA_HANG_TIEN_LOIModel.FK__HOA_DON__MaKhach__6D0D32F4" ManuallyRouted="false" />
         <AssociationConnector Association="CUA_HANG_TIEN_LOIModel.FK__HOA_DON__MaNhanV__6C190EBB" ManuallyRouted="false" />
+        <AssociationConnector Association="CUA_HANG_TIEN_LOIModel.FK_KIEM_KE_NHAN_VIEN" ManuallyRouted="false" />
         <AssociationConnector Association="CUA_HANG_TIEN_LOIModel.FK__PHIEU_NHA__MaNCC__778AC167" ManuallyRouted="false" />
         <AssociationConnector Association="CUA_HANG_TIEN_LOIModel.FK__NHAN_VIEN__MaVai__5FB337D6" ManuallyRouted="false" />
         <AssociationConnector Association="CUA_HANG_TIEN_LOIModel.FK__PHIEU_NHA__MaNha__76969D2E" ManuallyRouted="false" />

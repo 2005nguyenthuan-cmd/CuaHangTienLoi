@@ -59,6 +59,9 @@
     <Compile Include="CHI_TIET_HOA_DON.cs">
       <DependentUpon>Store_Model.tt</DependentUpon>
     </Compile>
+    <Compile Include="CHI_TIET_KIEM_KE.cs">
+      <DependentUpon>Store_Model.tt</DependentUpon>
+    </Compile>
     <Compile Include="CHI_TIET_NHAP.cs">
       <DependentUpon>Store_Model.tt</DependentUpon>
     </Compile>
@@ -72,6 +75,9 @@
       <DependentUpon>Store_Model.tt</DependentUpon>
     </Compile>
     <Compile Include="KHACH_HANG.cs">
+      <DependentUpon>Store_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="KIEM_KE.cs">
       <DependentUpon>Store_Model.tt</DependentUpon>
     </Compile>
     <Compile Include="KHUYEN_MAI.cs">

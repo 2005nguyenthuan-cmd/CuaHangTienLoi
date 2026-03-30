@@ -17,6 +17,7 @@ namespace demo.DAL
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public SAN_PHAM()
         {
+            this.CHI_TIET_KIEM_KE = new HashSet<CHI_TIET_KIEM_KE>();
             this.CHI_TIET_HOA_DON = new HashSet<CHI_TIET_HOA_DON>();
             this.CHI_TIET_NHAP = new HashSet<CHI_TIET_NHAP>();
             this.KHUYEN_MAI = new HashSet<KHUYEN_MAI>();
@@ -29,7 +30,11 @@ namespace demo.DAL
         public Nullable<int> MaDanhMuc { get; set; }
         public string MoTa { get; set; }
         public string HinhAnh { get; set; }
+        public Nullable<int> TonToiThieu { get; set; }
+        public Nullable<System.DateTime> HanSuDung { get; set; }
     
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<CHI_TIET_KIEM_KE> CHI_TIET_KIEM_KE { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<CHI_TIET_HOA_DON> CHI_TIET_HOA_DON { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
