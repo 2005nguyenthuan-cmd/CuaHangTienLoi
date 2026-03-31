@@ -32,8 +32,8 @@
             this.panel2 = new System.Windows.Forms.Panel();
             this.label5 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
-            this.button2 = new System.Windows.Forms.Button();
-            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.btnApDung = new System.Windows.Forms.Button();
+            this.txtMaGiamGia = new System.Windows.Forms.TextBox();
             this.lbl_TamTinh = new System.Windows.Forms.Label();
             this.dgvDonHang = new System.Windows.Forms.DataGridView();
             this.Column1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -46,10 +46,11 @@
             this.lbl_Sum = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.pnlTop = new System.Windows.Forms.Panel();
+            this.txtTimKiem = new System.Windows.Forms.TextBox();
             this.label4 = new System.Windows.Forms.Label();
             this.flpProducts = new System.Windows.Forms.FlowLayoutPanel();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
-            this.txtTimKiem = new System.Windows.Forms.TextBox();
+            this.lblGiamGia = new System.Windows.Forms.Label();
             this.pnlCart.SuspendLayout();
             this.panel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvDonHang)).BeginInit();
@@ -75,10 +76,11 @@
             // 
             // panel2
             // 
+            this.panel2.Controls.Add(this.lblGiamGia);
             this.panel2.Controls.Add(this.label5);
             this.panel2.Controls.Add(this.label2);
-            this.panel2.Controls.Add(this.button2);
-            this.panel2.Controls.Add(this.textBox1);
+            this.panel2.Controls.Add(this.btnApDung);
+            this.panel2.Controls.Add(this.txtMaGiamGia);
             this.panel2.Controls.Add(this.lbl_TamTinh);
             this.panel2.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.panel2.Location = new System.Drawing.Point(0, 390);
@@ -107,29 +109,31 @@
             this.label2.TabIndex = 2;
             this.label2.Text = "Tạm tính";
             // 
-            // button2
+            // btnApDung
             // 
-            this.button2.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(60)))), ((int)(((byte)(80)))));
-            this.button2.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button2.Font = new System.Drawing.Font("Times New Roman", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button2.ForeColor = System.Drawing.Color.White;
-            this.button2.Location = new System.Drawing.Point(442, 6);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(120, 31);
-            this.button2.TabIndex = 1;
-            this.button2.Text = "Áp dụng ";
-            this.button2.UseVisualStyleBackColor = true;
+            this.btnApDung.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(60)))), ((int)(((byte)(80)))));
+            this.btnApDung.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnApDung.Font = new System.Drawing.Font("Times New Roman", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnApDung.ForeColor = System.Drawing.Color.White;
+            this.btnApDung.Location = new System.Drawing.Point(442, 6);
+            this.btnApDung.Name = "btnApDung";
+            this.btnApDung.Size = new System.Drawing.Size(120, 31);
+            this.btnApDung.TabIndex = 1;
+            this.btnApDung.Text = "Áp dụng ";
+            this.btnApDung.UseVisualStyleBackColor = true;
+            this.btnApDung.Click += new System.EventHandler(this.btnApDung_Click);
             // 
-            // textBox1
+            // txtMaGiamGia
             // 
-            this.textBox1.BackColor = System.Drawing.SystemColors.Menu;
-            this.textBox1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.textBox1.ForeColor = System.Drawing.Color.Silver;
-            this.textBox1.Location = new System.Drawing.Point(17, 12);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(419, 22);
-            this.textBox1.TabIndex = 0;
-            this.textBox1.Text = "Mã Giảm Giá";
+            this.txtMaGiamGia.BackColor = System.Drawing.SystemColors.Menu;
+            this.txtMaGiamGia.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.txtMaGiamGia.ForeColor = System.Drawing.Color.Silver;
+            this.txtMaGiamGia.Location = new System.Drawing.Point(17, 12);
+            this.txtMaGiamGia.Name = "txtMaGiamGia";
+            this.txtMaGiamGia.Size = new System.Drawing.Size(419, 22);
+            this.txtMaGiamGia.TabIndex = 0;
+            this.txtMaGiamGia.Text = "Mã Giảm Giá";
+            this.txtMaGiamGia.TextChanged += new System.EventHandler(this.txtMaGiamGia_TextChanged);
             // 
             // lbl_TamTinh
             // 
@@ -254,6 +258,16 @@
             this.pnlTop.TabIndex = 1;
             this.pnlTop.Paint += new System.Windows.Forms.PaintEventHandler(this.pnlTop_Paint);
             // 
+            // txtTimKiem
+            // 
+            this.txtTimKiem.AccessibleDescription = "";
+            this.txtTimKiem.ForeColor = System.Drawing.SystemColors.ScrollBar;
+            this.txtTimKiem.Location = new System.Drawing.Point(301, 58);
+            this.txtTimKiem.Name = "txtTimKiem";
+            this.txtTimKiem.Size = new System.Drawing.Size(349, 22);
+            this.txtTimKiem.TabIndex = 1;
+            this.txtTimKiem.TextChanged += new System.EventHandler(this.txtTimKiem_TextChanged);
+            // 
             // label4
             // 
             this.label4.AutoSize = true;
@@ -288,15 +302,16 @@
             this.dataGridView1.Size = new System.Drawing.Size(700, 0);
             this.dataGridView1.TabIndex = 0;
             // 
-            // txtTimKiem
+            // lblGiamGia
             // 
-            this.txtTimKiem.AccessibleDescription = "";
-            this.txtTimKiem.ForeColor = System.Drawing.SystemColors.ScrollBar;
-            this.txtTimKiem.Location = new System.Drawing.Point(301, 58);
-            this.txtTimKiem.Name = "txtTimKiem";
-            this.txtTimKiem.Size = new System.Drawing.Size(349, 22);
-            this.txtTimKiem.TabIndex = 1;
-            this.txtTimKiem.TextChanged += new System.EventHandler(this.txtTimKiem_TextChanged);
+            this.lblGiamGia.AutoSize = true;
+            this.lblGiamGia.Font = new System.Drawing.Font("Microsoft YaHei", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblGiamGia.ForeColor = System.Drawing.Color.Gold;
+            this.lblGiamGia.Location = new System.Drawing.Point(474, 64);
+            this.lblGiamGia.Name = "lblGiamGia";
+            this.lblGiamGia.Size = new System.Drawing.Size(32, 24);
+            this.lblGiamGia.TabIndex = 5;
+            this.lblGiamGia.Text = "0đ";
             // 
             // UC_BanHang
             // 
@@ -341,11 +356,12 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn Column3;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column4;
         private System.Windows.Forms.Panel panel2;
-        private System.Windows.Forms.TextBox textBox1;
-        private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.TextBox txtMaGiamGia;
+        private System.Windows.Forms.Button btnApDung;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.TextBox txtTimKiem;
+        private System.Windows.Forms.Label lblGiamGia;
     }
 }

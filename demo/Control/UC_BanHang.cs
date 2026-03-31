@@ -226,32 +226,35 @@ namespace demo.Control
         }
         private void TinhTongTien()
         {
-            decimal tongTien = 0;
+            decimal tamTinh = 0; // KHAI BÁO BIẾN TẠM TÍNH
 
-            // Duyệt qua từng dòng trong bảng dgvDonHang của bạn
+            // 1. Quét giỏ hàng để cộng dồn tiền các món
             foreach (DataGridViewRow row in dgvDonHang.Rows)
             {
-                // Kiểm tra xem dòng đó có dữ liệu không (tránh dòng trống dưới cùng)
                 if (!row.IsNewRow && row.Cells[3].Value != null)
                 {
-                    // Lấy chuỗi tiền ở cột số 3 (cột Thành tiền)
                     string chuoiTien = row.Cells[3].Value.ToString();
-
-                    // Dọn dẹp rác: Xóa chữ " đ", xóa dấu chấm để thành số nguyên chất (VD: "25.000 đ" -> "25000")
+                    // Dọn dẹp rác để lấy số
                     chuoiTien = chuoiTien.Replace(" đ", "").Replace(".", "").Replace(",", "").Trim();
 
-                    // Ép sang kiểu số và cộng dồn vào tổng
-                    if (decimal.TryParse(chuoiTien, out decimal tienCuaMonNay))
+                    if (decimal.TryParse(chuoiTien, out decimal tienMonNay))
                     {
-                        tongTien += tienCuaMonNay;
+                        tamTinh += tienMonNay;
                     }
                 }
             }
 
-            // Gắn kết quả lên 2 cái Label Tạm tính & Tổng cộng
-            // LƯU Ý: Chỗ này bạn click vào 2 cái chữ màu vàng trên giao diện xem Name nó là gì thì thay vào chữ lblTamTinh và lblTongCong nhé!
-            lbl_TamTinh.Text = tongTien.ToString("N0") + " đ";
-            lbl_Sum.Text = tongTien.ToString("N0") + " đ";
+            // 2. KHAI BÁO BIẾN GIẢM GIÁ VÀ TÍNH TOÁN (Để ngoài vòng lặp)
+            decimal phanTramGiam = txtMaGiamGia.Tag != null ? Convert.ToDecimal(txtMaGiamGia.Tag) : 0;
+            decimal giamGia = tamTinh * phanTramGiam;
+
+            // 3. Tính Tổng cộng
+            decimal tongCong = tamTinh - giamGia;
+
+            // 4. Gắn kết quả lên Label (Nhớ đổi tên Label cho đúng với Name của bạn nhé)
+            lbl_TamTinh.Text = tamTinh.ToString("N0") + " đ";
+            lblGiamGia.Text = "-" + giamGia.ToString("N0") + " đ";
+            lbl_Sum.Text = tongCong.ToString("N0") + " đ";
         }
 
         private void HienThiSanPhamTheoMoTa(string tuKhoa)
@@ -369,6 +372,77 @@ namespace demo.Control
                     MessageBox.Show("Có lỗi xảy ra khi thanh toán: " + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
+        }
+
+        
+
+        private void btnApDung_Click(object sender, EventArgs e)
+        {
+            string maNhap = txtMaGiamGia.Text.Trim();
+
+            if (string.IsNullOrEmpty(maNhap))
+            {
+                MessageBox.Show("Vui lòng nhập tên khuyến mãi!");
+                return;
+            }
+
+            // Gọi hàm bạn vừa viết để lấy % giảm từ DB
+            decimal phanTram = LayPhanTramGiamTuDB(maNhap);
+
+            if (phanTram > 0)
+            {
+                MessageBox.Show($"Áp dụng thành công! Giảm {(phanTram * 100):N0}%", "Thông báo");
+                // LƯU Ý: Cất con số decimal này vào Tag để hàm TinhTongTien dùng
+                txtMaGiamGia.Tag = phanTram;
+            }
+            else
+            {
+                MessageBox.Show("Mã khuyến mãi không tồn tại hoặc đã hết hạn!", "Lỗi");
+                txtMaGiamGia.Tag = 0m; // Reset về 0 nếu sai
+            }
+
+            // Sau khi áp mã xong thì phải tính lại tiền ngay
+            TinhTongTien();
+        }
+
+        private decimal LayPhanTramGiamTuDB(string tenMa)
+        {
+            decimal phanTram = 0;
+            // Nhớ kiểm tra lại Data Source cho đúng tên máy (Kiet_PC)
+            string connectionString = @"Data Source=Kiet_PC;Initial Catalog=CUA_HANG_TIEN_LOI;Integrated Security=True";
+
+            // Câu lệnh SQL: Tìm mã khớp tên VÀ ngày hiện tại phải nằm trong khoảng Bắt đầu -> Kết thúc
+            string query = "SELECT PhanTramGiam FROM KHUYEN_MAI " +
+               "WHERE TenKhuyenMai = @tenMa " +
+               // CAST sang DATE để bỏ qua phần giờ phút giây
+               "AND CAST(GETDATE() AS DATE) BETWEEN NgayBatDau AND NgayKetThuc";
+
+            using (SqlConnection conn = new SqlConnection(connectionString))
+            {
+                try
+                {
+                    conn.Open();
+                    SqlCommand cmd = new SqlCommand(query, conn);
+                    cmd.Parameters.AddWithValue("@tenMa", tenMa);
+
+                    object result = cmd.ExecuteScalar(); // Lấy giá trị đầu tiên tìm được
+
+                    if (result != null)
+                    {
+                        phanTram = Convert.ToDecimal(result) / 100; // Ví dụ trong DB là 10 thì đổi thành 0.1
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Lỗi check mã: " + ex.Message);
+                }
+            }
+            return phanTram;
+        }
+
+        private void txtMaGiamGia_TextChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }
