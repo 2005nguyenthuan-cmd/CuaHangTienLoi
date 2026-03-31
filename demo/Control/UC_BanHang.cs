@@ -88,13 +88,31 @@ namespace demo.Control
             card.Controls.Add(lblDM);
             card.Controls.Add(lblGia);
 
-            if (System.IO.File.Exists(duongDanHinh))
+            try
             {
-                pic.Image = Image.FromFile(duongDanHinh);
+                if (!string.IsNullOrEmpty(duongDanHinh))
+                {
+                    string path = System.IO.Path.Combine(Application.StartupPath, "Resources", duongDanHinh);
+
+                    // BẬT TẠM DÒNG NÀY LÊN ĐỂ XEM MÁY TÍNH TÌM ẢNH Ở ĐÂU:
+                    // MessageBox.Show("Đang tìm ảnh tại: \n" + path);
+
+                    if (System.IO.File.Exists(path))
+                    {
+                        pic.Image = Image.FromFile(path);
+                    }
+                    else
+                    {
+                        // Nếu không thấy file, nó sẽ in ra cái bảng nhỏ cho mình biết
+                        // MessageBox.Show("Không tìm thấy file tại đường dẫn này!"); 
+                        pic.BackColor = Color.FromArgb(50, 50, 60);
+                    }
+                }
             }
-            else
+            catch (Exception ex)
             {
-                pic.BackColor = Color.Gray; // Màu dự phòng nếu không tìm thấy hình
+                MessageBox.Show("Lỗi load ảnh: " + ex.Message);
+                pic.BackColor = Color.DimGray;
             }
 
             card.Tag = new string[] { ten, gia };
@@ -330,46 +348,100 @@ namespace demo.Control
 
         private void btnThanhToan_Click(object sender, EventArgs e)
         {
-            // 1. CHẶN LỖI: Kiểm tra xem giỏ hàng có đang trống không?
-            // Nếu bảng dgvDonHang không có dòng nào (hoặc chỉ có 1 dòng trắng mặc định) thì báo lỗi
+            // 1. KIỂM TRA GIỎ HÀNG
             if (dgvDonHang.Rows.Count == 0 || (dgvDonHang.Rows.Count == 1 && dgvDonHang.Rows[0].IsNewRow))
             {
                 MessageBox.Show("Giỏ hàng đang trống! Vui lòng chọn món trước khi thanh toán.", "Nhắc nhở", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return; // Dừng lại, không làm các bước dưới nữa
+                return;
             }
 
-            // 2. XÁC NHẬN: Lấy số tiền ở ô Tổng Cộng ra để hỏi lại thu ngân cho chắc ăn
+            // 2. XÁC NHẬN THANH TOÁN
             string soTienCanThu = lbl_Sum.Text;
-            DialogResult xacNhan = MessageBox.Show("Thu của khách: " + soTienCanThu + "\n\nBạn có chắc chắn muốn thanh toán đơn hàng này?", "Xác nhận thanh toán", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-
-            if (xacNhan == DialogResult.Yes)
+            if (MessageBox.Show("Thu của khách: " + soTienCanThu + "\n\nBạn có chắc chắn muốn thanh toán?", "Xác nhận", MessageBoxButtons.YesNo, MessageBoxIcon.Question) != DialogResult.Yes)
             {
+                return;
+            }
+
+            string tongTienStr = soTienCanThu.Replace("đ", "").Replace(".", "").Replace(",", "").Trim();
+            decimal tongTienThucTe = 0;
+            decimal.TryParse(tongTienStr, out tongTienThucTe);
+
+            // =========================================================================
+            // CHÚ Ý CHỖ NÀY: SỬA LẠI TÊN SERVER CHO ĐÚNG VỚI TRONG HÌNH CỦA BẠN
+            // Ví dụ: @"Data Source=Kiet_PC\kingo;Initial Catalog..."
+            // =========================================================================
+            string strConn = @"Data Source=Kiet_PC;Initial Catalog=CUA_HANG_TIEN_LOI;Integrated Security=True";
+
+            using (SqlConnection conn = new SqlConnection(strConn))
+            {
+                conn.Open();
+                SqlTransaction transaction = conn.BeginTransaction();
+
                 try
                 {
-                    // =========================================================================
-                    // LƯU Ý CHO ĐỒ ÁN: CHỖ NÀY SAU NÀY SẼ VIẾT CODE LƯU VÀO DATABASE (HOA_DON)
-                    // Tạm thời mình cho hiển thị thành công trước nhé.
-                    // =========================================================================
+                    // BƯỚC 1: LƯU HÓA ĐƠN
+                    string sqlInsertHD = "INSERT INTO HOA_DON (NgayLap, TongTien) OUTPUT INSERTED.MaHoaDon VALUES (GETDATE(), @TongTien)";
+                    SqlCommand cmdHD = new SqlCommand(sqlInsertHD, conn, transaction);
+                    cmdHD.Parameters.AddWithValue("@TongTien", tongTienThucTe);
 
-                    // 3. THÔNG BÁO THÀNH CÔNG
-                    MessageBox.Show("Thanh toán thành công! Đã in hóa đơn.", "Hoàn tất", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    int maHoaDonMoi = Convert.ToInt32(cmdHD.ExecuteScalar());
 
-                    // 4. DỌN DẸP BÀN LÀM VIỆC ĐỂ ĐÓN KHÁCH MỚI
-                    // Quét sạch mâm giỏ hàng
+                    // BƯỚC 2 & 3: LƯU CHI TIẾT VÀ TRỪ TỒN KHO
+                    foreach (DataGridViewRow row in dgvDonHang.Rows)
+                    {
+                        if (!row.IsNewRow && row.Cells[0].Value != null)
+                        {
+                            string tenSP = row.Cells[0].Value.ToString();
+                            int soLuongMua = Convert.ToInt32(row.Cells[1].Value);
+
+                            string giaStr = row.Cells[2].Value.ToString().Replace("đ", "").Replace(".", "").Replace(",", "").Trim();
+                            decimal donGia = Convert.ToDecimal(giaStr);
+
+                            // Tính luôn thành tiền để đưa vào DB
+                            decimal thanhTienCT = soLuongMua * donGia;
+
+                            // --- Lưu CHI_TIET_HOA_DON (Đã thêm cột ThanhTien) ---
+                            string sqlInsertChiTiet = "INSERT INTO CHI_TIET_HOA_DON (MaHoaDon, MaSanPham, SoLuong, DonGia, ThanhTien) " +
+                                                      "VALUES (@MaHD, (SELECT TOP 1 MaSanPham FROM SAN_PHAM WHERE TenSanPham = @TenSP), @SL, @Gia, @ThanhTienCT)";
+                            SqlCommand cmdCT = new SqlCommand(sqlInsertChiTiet, conn, transaction);
+                            cmdCT.Parameters.AddWithValue("@MaHD", maHoaDonMoi);
+                            cmdCT.Parameters.Add("@TenSP", SqlDbType.NVarChar).Value = tenSP; // Fix lỗi tiếng Việt
+                            cmdCT.Parameters.AddWithValue("@SL", soLuongMua);
+                            cmdCT.Parameters.AddWithValue("@Gia", donGia);
+                            cmdCT.Parameters.AddWithValue("@ThanhTienCT", thanhTienCT);
+                            cmdCT.ExecuteNonQuery();
+
+                            // --- Trừ kho SAN_PHAM ---
+                            string sqlUpdateKho = "UPDATE SAN_PHAM SET SoLuongTon = SoLuongTon - @SLMua WHERE TenSanPham = @TenSPKho";
+                            SqlCommand cmdKho = new SqlCommand(sqlUpdateKho, conn, transaction);
+                            cmdKho.Parameters.AddWithValue("@SLMua", soLuongMua);
+                            cmdKho.Parameters.Add("@TenSPKho", SqlDbType.NVarChar).Value = tenSP; // Fix lỗi tiếng Việt
+                            cmdKho.ExecuteNonQuery();
+                        }
+                    }
+
+                    // HOÀN TẤT GIAO DỊCH
+                    transaction.Commit();
+                    MessageBox.Show("Thanh toán thành công! Mã hóa đơn: " + maHoaDonMoi, "Hoàn tất", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                    // Dọn giao diện
                     dgvDonHang.Rows.Clear();
-
-                    // Trả các con số tiền về lại số 0 tròn trĩnh
-                    // (Nhớ thay đúng tên các Label của bạn nha)
                     lbl_TamTinh.Text = "0 đ";
-                    //lblGiamGia.Text = "-0 đ";
                     lbl_Sum.Text = "0 đ";
 
-                    // Xóa trắng ô mã giảm giá luôn (Nếu bạn có đặt tên ô đó là txtMaGiamGia)
-                    // txtMaGiamGia.Text = ""; 
+                    if (this.Controls.Find("lbl_GiamGia", true).Length > 0)
+                        this.Controls.Find("lbl_GiamGia", true)[0].Text = "-0 đ";
+
+                    txtMaGiamGia.Text = "";
+                    txtMaGiamGia.Tag = 0.0m;
+
+                    // Nạp lại sản phẩm
+                    LoadSanPhamTuDatabase();
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show("Có lỗi xảy ra khi thanh toán: " + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    transaction.Rollback();
+                    MessageBox.Show("Lỗi hệ thống khi lưu hóa đơn.\nChi tiết: " + ex.Message, "Lỗi Nghiêm Trọng", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
         }
