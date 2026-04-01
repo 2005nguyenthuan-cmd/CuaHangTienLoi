@@ -40,5 +40,7 @@ namespace demo.DAL
         public virtual DbSet<CONG_VIEC> CONG_VIEC { get; set; }
         public virtual DbSet<LICH_LAM_CONG_VIEC> LICH_LAM_CONG_VIEC { get; set; }
         public virtual DbSet<LICH_LAM_VIEC> LICH_LAM_VIEC { get; set; }
+        public virtual DbSet<CHI_TIET_KIEM_KE> CHI_TIET_KIEM_KE { get; set; }
+        public virtual DbSet<KIEM_KE> KIEM_KE { get; set; }
     }
 }

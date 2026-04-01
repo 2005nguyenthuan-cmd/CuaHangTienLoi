@@ -14,87 +14,129 @@ namespace demo.Control
 {
     public partial class UC_TongQuan : UserControl
     {
-        DashboardService dashboard = new DashboardService();
+        DashboardService dashboardService = new DashboardService();
         public UC_TongQuan()
         {
             InitializeComponent();
-
-            LoadCards();
-            LoadChartDoanhThu();
-            LoadChartDanhMuc();
+            
         }
-        void LoadCards()
+
+        private void UC_TongQuan_Load(object sender, EventArgs e)
         {
-            flowTop.Controls.Clear();
+            this.BackColor = Color.FromArgb(245, 246, 250);
+            dgvTopProducts.BorderStyle = BorderStyle.None;
+            dgvTopProducts.EnableHeadersVisualStyles = false;
+            dgvTopProducts.ColumnHeadersDefaultCellStyle.BackColor = Color.LightGray;
+            dgvTopProducts.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            dgvLowStock.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            dgvExpiry.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
 
-            flowTop.Controls.Add(CreateCard("Doanh thu hôm nay",
-                dashboard.GetDoanhThuHomNay().ToString("N0") + "đ"));
+            dgvTopProducts.ReadOnly = true;
+            dgvLowStock.ReadOnly = true;
+            dgvExpiry.ReadOnly = true;
 
-            flowTop.Controls.Add(CreateCard("Đơn hàng hôm nay",
-                dashboard.GetDonHangHomNay().ToString()));
-
-            flowTop.Controls.Add(CreateCard("Khách hàng mới",
-                dashboard.GetKhachMoi().ToString()));
-
-            flowTop.Controls.Add(CreateCard("Sản phẩm tồn",
-                dashboard.GetTongSanPham().ToString()));
+            LoadDashboard();
         }
-        Panel CreateCard(string title, string value)
+
+        
+        private void LoadDashboard()
         {
-            Panel p = new Panel();
-            p.Width = 250;
-            p.Height = 100;
-            p.BackColor = Color.White;
-            p.Margin = new Padding(10);
+            DateTime from = dtFrom.Value.Date;
+            DateTime to = dtTo.Value.Date.AddDays(1).AddTicks(-1);
 
-            Label lblTitle = new Label();
-            lblTitle.Text = title;
-            lblTitle.Location = new Point(10, 10);
-            lblTitle.AutoSize = true;
+            var data = dashboardService.GetDashboard(from, to);
 
-            Label lblValue = new Label();
-            lblValue.Text = value;
-            lblValue.Font = new Font("Segoe UI", 16, FontStyle.Bold);
-            lblValue.Location = new Point(10, 40);
-            lblValue.AutoSize = true;
+            // KPI
+            cardRevenue.SetTitle("Doanh thu");
+            cardRevenue.SetValue(data.TotalRevenue.ToString("N0"));
+            cardOrders.SetTitle("Đơn hàng");
+            cardOrders.SetValue(data.TotalOrders.ToString());
+            cardProfit.SetTitle("Lợi nhuận");
+            cardProfit.SetValue(data.TotalProfit.ToString("N0"));
+            cardStock.SetTitle("Tồn kho");
+            cardStock.SetValue(data.TotalProducts.ToString());
 
-            p.Controls.Add(lblTitle);
-            p.Controls.Add(lblValue);
 
-            return p;
+
+            // GRID
+            dgvTopProducts.DataSource = data.TopProducts;
+            dgvLowStock.DataSource = data.LowStocks;
+            dgvExpiry.DataSource = data.Expiries;
+
+            //Chart
+            RenderChart(data.TopProducts);
+
+
+            Highlight();
         }
-        void LoadChartDoanhThu()
+        private void Highlight()
         {
-            chart1.Series.Clear();
-
-            var s = new Series("Doanh thu");
-            s.ChartType = SeriesChartType.Line;
-            s.BorderWidth = 3;
-
-            var data = dashboard.GetDoanhThu7Ngay();
-
-            foreach (var item in data)
+            foreach (DataGridViewRow row in dgvLowStock.Rows)
             {
-                s.Points.AddXY(item.Ngay, item.GiaTri);
+                if (row.Cells["SoLuongTon"].Value != null)
+                {
+                    int ton = Convert.ToInt32(row.Cells["SoLuongTon"].Value);
+                    if (ton <= 10)
+                        row.DefaultCellStyle.BackColor = Color.LightCoral;
+                }
             }
 
-            chart1.Series.Add(s);
-        }
-        void LoadChartDanhMuc()
-        {
-            chart2.Series.Clear();
-
-            var s = new Series("Danh mục");
-            s.ChartType = SeriesChartType.Doughnut;
-
-            var data = dashboard.GetDanhMucSanPham();
-
-            foreach (var item in data)
+            foreach (DataGridViewRow row in dgvExpiry.Rows)
             {
-                s.Points.AddXY(item.Ngay, item.GiaTri);
-            }
+                if (row.Cells["HanSuDung"].Value != null)
+                {
+                    DateTime hsd = Convert.ToDateTime(row.Cells["HanSuDung"].Value);
+                    int days = (hsd - DateTime.Now).Days;
 
-            chart2.Series.Add(s);
+                    if (days <= 3)
+                        row.DefaultCellStyle.BackColor = Color.LightCoral; // đỏ
+                    else if (days <= 7)
+                        row.DefaultCellStyle.BackColor = Color.Khaki; // vàng
+                }
+            }
+        }
+        private void LoadChart()
+        {
+            DateTime from = dtFrom.Value.Date;
+            DateTime to = dtTo.Value.Date.AddDays(1).AddTicks(-1);
+
+            var data = dashboardService.GetDashboard(from, to);
+
+            chartRevenue.Series.Clear();
+
+            var series = chartRevenue.Series.Add("Doanh thu");
+            series.ChartType = SeriesChartType.Column;
+
+            series.IsValueShownAsLabel = true; // hiện số
+            series.LabelFormat = "N0"; // format tiền
+
+            foreach (var item in data.TopProducts)
+            {
+                series.Points.AddXY(item.TenSanPham, item.DoanhThu);
+            }
+        }
+        private void RenderChart(List<TopProductDTO> list)
+        {
+            chartRevenue.Series.Clear();
+
+            var series = chartRevenue.Series.Add("Doanh thu");
+            series.ChartType = SeriesChartType.Column;
+            series.IsValueShownAsLabel = true;
+            series.LabelFormat = "N0";
+
+            foreach (var item in list)
+            {
+                series.Points.AddXY(item.TenSanPham, item.DoanhThu);
+            }
+        }
+        private void dtFrom_ValueChanged(object sender, EventArgs e)
+        {
+            LoadDashboard();
+        }
+
+        private void dtTo_ValueChanged(object sender, EventArgs e)
+        {
+            LoadDashboard();
         }
     }
 }

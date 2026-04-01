@@ -16,87 +16,101 @@ namespace demo.BLL.Service
             db = new CUA_HANG_TIEN_LOI_Entities();
         }
 
-        // 1. Doanh thu hôm nay
-        public decimal GetDoanhThuHomNay()
+        public DashboardDTO GetDashboard(DateTime from, DateTime to)
         {
-            var today = DateTime.Today;
-            var tomorrow = today.AddDays(1);
+            var data = new DashboardDTO();
 
-            return db.HOA_DON
-                .Where(x => x.NgayLap >= today && x.NgayLap < tomorrow)
-                .Sum(x => (decimal?)x.TongTien) ?? 0;
-        }
+            // 1. Doanh thu + đơn hàng
+            to = to.AddDays(1);
 
-        //  2. Đơn hàng hôm nay
-        public int GetDonHangHomNay()
-        {
-            var today = DateTime.Today;
-            var tomorrow = today.AddDays(1);
+            var hoaDons = db.HOA_DON
+                .Where(x => x.NgayLap >= from && x.NgayLap < to);
 
-            return db.HOA_DON
-                .Count(x => x.NgayLap >= today && x.NgayLap < tomorrow);
-        }
+            data.TotalRevenue = hoaDons.Sum(x => (decimal?)x.TongTien) ?? 0;
+            data.TotalOrders = hoaDons.Count();
 
-        //  3. Khách hàng mới (5 người gần nhất)
-        public int GetKhachMoi()
-        {
-            int maxId = db.KHACH_HANG.Max(x => x.MaKhachHang);
+            // 2. Lợi nhuận (tạm tính = doanh thu * 20%)
+            data.TotalProfit = data.TotalRevenue * 0.2m;
 
-            return db.KHACH_HANG
-                .Count(x => x.MaKhachHang >= maxId - 5);
-        }
+            // 3. Tổng sản phẩm tồn
+            data.TotalProducts = db.SAN_PHAM.Sum(x => (int?)x.SoLuongTon) ?? 0;
 
-        //  4. Tổng sản phẩm tồn
-        public int GetTongSanPham()
-        {
-            return db.SAN_PHAM.Sum(x => (int?)x.SoLuongTon) ?? 0;
-        }
-
-        //  5. Doanh thu 7 ngày (Line chart)
-        public List<ChartData> GetDoanhThu7Ngay()
-        {
-            var today = DateTime.Today;
-
-            var data = Enumerable.Range(0, 7)
-                .Select(i => today.AddDays(-i))
-                .OrderBy(d => d)
-                .Select(d =>
+            // 4. Top sản phẩm
+            data.TopProducts = db.CHI_TIET_HOA_DON
+                .Where(x => x.HOA_DON.NgayLap >= from && x.HOA_DON.NgayLap < to)
+                .GroupBy(x => x.SAN_PHAM.TenSanPham)
+                .Select(g => new TopProductDTO
                 {
-                    var start = d;
-                    var end = d.AddDays(1);
+                    TenSanPham = g.Key,
+                    SoLuongBan = g.Sum(x => (int?)x.SoLuong) ?? 0,
+                    DoanhThu = g.Sum(x => (decimal?)x.ThanhTien) ?? 0
+                })
+                .OrderByDescending(x => x.SoLuongBan)
+                .Take(5)
+                .ToList();
 
-                    return new ChartData
-                    {
-                        Ngay = d.ToString("dd/MM"),
-                        GiaTri = db.HOA_DON
-                            .Where(x => x.NgayLap >= start && x.NgayLap < end)
-                            .Sum(x => (decimal?)x.TongTien) ?? 0
-                    };
-                }).ToList();
+            // 5. Tồn thấp
+            data.LowStocks = db.SAN_PHAM
+                .Where(x => (x.SoLuongTon ?? 0) <= 10)
+                .Select(x => new LowStockDTO
+                {
+                    TenSanPham = x.TenSanPham,
+                    SoLuongTon = x.SoLuongTon ?? 0
+                })
+                .OrderBy(x => x.SoLuongTon)
+                .ToList();
+
+            // 6. Sắp hết hạn (30 ngày)
+            DateTime now = DateTime.Now;
+            DateTime future = now.AddDays(30);
+
+            data.Expiries = db.CHI_TIET_NHAP
+                .Where(x => x.HanSuDung != null
+                    && x.SoLuongCon > 0
+                    && x.HanSuDung >= now
+                    && x.HanSuDung <= future)
+                .GroupBy(x => x.SAN_PHAM.TenSanPham)
+                .Select(g => new ExpiryDTO
+                {
+                    TenSanPham = g.Key,
+                    HanSuDung = g.Min(x => x.HanSuDung.Value) // lấy hạn gần nhất
+                })
+                .OrderBy(x => x.HanSuDung)
+                .ToList();
 
             return data;
         }
 
-        //  6. Phân loại sản phẩm (Pie chart)
-        public List<ChartData> GetDanhMucSanPham()
-        {
-            var data = db.SAN_PHAM
-                .GroupBy(x => x.DANH_MUC.TenDanhMuc)
-                .Select(g => new ChartData
-                {
-                    Ngay = g.Key, 
-                    GiaTri = g.Count()
-                }).ToList();
-
-            return data;
-        }
     }
 
-    //  Class dùng cho chart
-    public class ChartData
+    public class DashboardDTO
     {
-        public string Ngay { get; set; }
-        public decimal GiaTri { get; set; }
+        public decimal TotalRevenue { get; set; }
+        public int TotalOrders { get; set; }
+        public decimal TotalProfit { get; set; }
+        public int TotalProducts { get; set; }
+
+        public List<TopProductDTO> TopProducts { get; set; }
+        public List<LowStockDTO> LowStocks { get; set; }
+        public List<ExpiryDTO> Expiries { get; set; }
+    }
+    public class TopProductDTO
+    {
+        public string TenSanPham { get; set; }
+        public int SoLuongBan { get; set; }
+        public decimal DoanhThu { get; set; }
+    }
+
+    public class LowStockDTO
+    {
+        public string TenSanPham { get; set; }
+        public int SoLuongTon { get; set; }
+    }
+
+    public class ExpiryDTO
+    {
+        public string TenSanPham { get; set; }
+        public DateTime HanSuDung { get; set; }
     }
 
 }

@@ -59,6 +59,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Control\UC_Card_KPI.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Control\UC_Card_KPI.Designer.cs">
+      <DependentUpon>UC_Card_KPI.cs</DependentUpon>
+    </Compile>
     <Compile Include="Control\UC_LSHoaDon.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -136,6 +142,9 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="Control\UC_Card_KPI.resx">
+      <DependentUpon>UC_Card_KPI.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Control\UC_LSHoaDon.resx">
       <DependentUpon>UC_LSHoaDon.cs</DependentUpon>
     </EmbeddedResource>
