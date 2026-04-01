@@ -1,6 +1,7 @@
 ﻿using demo.DAL;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -78,6 +79,31 @@ namespace demo.BLL.Service
                 .OrderBy(x => x.HanSuDung)
                 .ToList();
 
+            // 7. Doanh thu theo ngày
+            data.RevenueByDates = db.HOA_DON
+            .Where(x => x.NgayLap >= from && x.NgayLap < to)
+            .GroupBy(x => DbFunctions.TruncateTime(x.NgayLap))
+            .Select(g => new RevenueByDateDTO
+            {
+                Ngay = g.Key.Value,
+                DoanhThu = g.Sum(x => (decimal?)x.TongTien) ?? 0
+            })
+            .OrderBy(x => x.Ngay)
+            .ToList();
+
+            // 8. Doanh thu theo danh mục
+            data.Categories = db.CHI_TIET_HOA_DON
+            .Where(x => x.HOA_DON.NgayLap >= from && x.HOA_DON.NgayLap < to)
+            .GroupBy(x => x.SAN_PHAM.DANH_MUC.TenDanhMuc)
+            .Select(g => new CategoryDTO
+            {
+                TenDanhMuc = g.Key,
+                DoanhThu = g.Sum(x => (decimal?)x.ThanhTien) ?? 0
+            })
+            .OrderByDescending(x => x.DoanhThu)
+            .ToList();
+
+
             return data;
         }
 
@@ -93,6 +119,9 @@ namespace demo.BLL.Service
         public List<TopProductDTO> TopProducts { get; set; }
         public List<LowStockDTO> LowStocks { get; set; }
         public List<ExpiryDTO> Expiries { get; set; }
+
+        public List<RevenueByDateDTO> RevenueByDates { get; set; }
+        public List<CategoryDTO> Categories { get; set; }
     }
     public class TopProductDTO
     {
@@ -111,6 +140,18 @@ namespace demo.BLL.Service
     {
         public string TenSanPham { get; set; }
         public DateTime HanSuDung { get; set; }
+    }
+
+    public class RevenueByDateDTO
+    {
+        public DateTime Ngay { get; set; }
+        public decimal DoanhThu { get; set; }
+    }
+
+    public class CategoryDTO
+    {
+        public string TenDanhMuc { get; set; }
+        public decimal DoanhThu { get; set; }
     }
 
 }

@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Windows.Forms.DataVisualization.Charting;
+using System.IO;
 
 namespace demo.Control
 {
@@ -18,6 +19,7 @@ namespace demo.Control
         public UC_TongQuan()
         {
             InitializeComponent();
+
             
         }
 
@@ -64,7 +66,10 @@ namespace demo.Control
             dgvExpiry.DataSource = data.Expiries;
 
             //Chart
-            RenderChart(data.TopProducts);
+            RenderRevenue(data.RevenueByDates);
+            RenderCategory(data.Categories);
+
+            LoadChart();
 
 
             Highlight();
@@ -76,8 +81,13 @@ namespace demo.Control
                 if (row.Cells["SoLuongTon"].Value != null)
                 {
                     int ton = Convert.ToInt32(row.Cells["SoLuongTon"].Value);
-                    if (ton <= 10)
-                        row.DefaultCellStyle.BackColor = Color.LightCoral;
+                    if (ton <= 5)
+                        row.DefaultCellStyle.BackColor = Color.Coral; // đỏ
+                    else if (ton <= 10)
+                        row.DefaultCellStyle.BackColor = Color.LightCoral; // đỏ nhạt
+                    else
+                    if (ton <= 20)
+                        row.DefaultCellStyle.BackColor = Color.LightYellow; // vàng
                 }
             }
 
@@ -92,6 +102,8 @@ namespace demo.Control
                         row.DefaultCellStyle.BackColor = Color.LightCoral; // đỏ
                     else if (days <= 7)
                         row.DefaultCellStyle.BackColor = Color.Khaki; // vàng
+                    else if (days <= 30)
+                        row.DefaultCellStyle.BackColor = Color.LightYellow; // vàng nhạt
                 }
             }
         }
@@ -102,9 +114,9 @@ namespace demo.Control
 
             var data = dashboardService.GetDashboard(from, to);
 
-            chartRevenue.Series.Clear();
+            chartRevenueByDate.Series.Clear();
 
-            var series = chartRevenue.Series.Add("Doanh thu");
+            var series = chartRevenueByDate.Series.Add("Doanh thu");
             series.ChartType = SeriesChartType.Column;
 
             series.IsValueShownAsLabel = true; // hiện số
@@ -115,20 +127,51 @@ namespace demo.Control
                 series.Points.AddXY(item.TenSanPham, item.DoanhThu);
             }
         }
-        private void RenderChart(List<TopProductDTO> list)
+        private void RenderRevenue(List<RevenueByDateDTO> list)
         {
-            chartRevenue.Series.Clear();
+            chartRevenueByDate.Series.Clear();
 
-            var series = chartRevenue.Series.Add("Doanh thu");
-            series.ChartType = SeriesChartType.Column;
+            var series = chartRevenueByDate.Series.Add("Doanh thu theo ngày");
+            series.ChartType = SeriesChartType.Line;
             series.IsValueShownAsLabel = true;
-            series.LabelFormat = "N0";
 
             foreach (var item in list)
             {
-                series.Points.AddXY(item.TenSanPham, item.DoanhThu);
+                series.Points.AddXY(item.Ngay.ToString("dd/MM"), item.DoanhThu);
             }
         }
+        private void RenderCategory(List<CategoryDTO> list)
+        {
+            chartCategory.Series.Clear();
+            chartCategory.Titles.Clear();
+
+            // Title
+            chartCategory.Titles.Add("Doanh thu theo danh mục");
+
+            var series = chartCategory.Series.Add("Danh mục");
+            series.ChartType = SeriesChartType.Pie;
+
+            // Hiển thị label %
+            series.Label = "#PERCENT";
+            series.LegendText = "#VALX";
+
+            // Style
+            chartCategory.Palette = ChartColorPalette.BrightPastel;
+            chartCategory.BackColor = Color.White;
+            chartCategory.BorderlineDashStyle = ChartDashStyle.Solid;
+            chartCategory.BorderlineColor = Color.LightGray;
+
+            series.IsValueShownAsLabel = true;
+
+            foreach (var item in list)
+            {
+                series.Points.AddXY(item.TenDanhMuc, item.DoanhThu);
+            }
+
+            // Style đẹp hơn
+            chartCategory.Legends[0].Docking = Docking.Right;
+        }
+
         private void dtFrom_ValueChanged(object sender, EventArgs e)
         {
             LoadDashboard();
@@ -137,6 +180,73 @@ namespace demo.Control
         private void dtTo_ValueChanged(object sender, EventArgs e)
         {
             LoadDashboard();
+        }
+
+        private void btnExport_Click(object sender, EventArgs e)
+        {
+            DateTime from = dtFrom.Value.Date;
+            DateTime to = dtTo.Value.Date.AddDays(1).AddTicks(-1);
+
+            SaveFileDialog sfd = new SaveFileDialog();
+            sfd.Filter = "Excel Files (*.xlsx)|*.xlsx";
+            sfd.FileName = "BaoCaoDashboard.xlsx";
+
+            if (sfd.ShowDialog() == DialogResult.OK)
+            {
+                var data = dashboardService.GetDashboard(dtFrom.Value, dtTo.Value);
+
+                ReportService reportService = new ReportService();
+                reportService.ExportDashboard(data, sfd.FileName);
+
+                MessageBox.Show("Xuất báo cáo thành công!");
+            }
+        }
+
+        private void btnToday_Click(object sender, EventArgs e)
+        {
+            SetActiveButton(btnToday);
+            dtFrom.Value = DateTime.Today;
+            dtTo.Value = DateTime.Today;
+
+            LoadDashboard();
+        }
+
+        private void btn7Days_Click(object sender, EventArgs e)
+        {
+            SetActiveButton(btn7Days);
+            dtFrom.Value = DateTime.Today.AddDays(-7);
+            dtTo.Value = DateTime.Today;
+
+            LoadDashboard();
+        }
+
+        private void btn30Days_Click(object sender, EventArgs e)
+        {
+            SetActiveButton(btn30Days);
+            dtFrom.Value = DateTime.Today.AddDays(-30);
+            dtTo.Value = DateTime.Today;
+
+            LoadDashboard();
+        }
+        private void StyleButton(Button btn)
+        {
+            btn.BackColor = Color.White;
+            btn.FlatStyle = FlatStyle.Flat;
+            btn.FlatAppearance.BorderColor = Color.Gray;
+            btn.FlatAppearance.BorderSize = 1;
+            btn.Height = 30;
+        }
+        private void SetActiveButton(Button activeBtn)
+        {
+            foreach (System.Windows.Forms.Control c in this.Controls)
+            {
+                if (c is Button btn && btn.Tag?.ToString() == "filter")
+                {
+                    btn.BackColor = Color.White;
+                }
+            }
+
+            activeBtn.BackColor = Color.LightBlue;
         }
     }
 }
