@@ -103,6 +103,59 @@ namespace demo.BLL.Service
             .OrderByDescending(x => x.DoanhThu)
             .ToList();
 
+            // 9. Doanh thu kỳ trước
+            var days = (to.Date - from.Date).Days;
+
+            var prevFrom = from.AddDays(-days);
+            var prevTo = from;
+
+            var prevRevenue = db.HOA_DON
+                .Where(x => x.NgayLap >= prevFrom && x.NgayLap < prevTo)
+                .Sum(x => (decimal?)x.TongTien) ?? 0;
+
+            data.RevenueLastPeriod = prevRevenue;
+
+            // 10. Tăng trưởng doanh thu
+            if (prevRevenue > 0)
+            {
+                data.GrowthRevenuePercent =
+                    (double)((data.TotalRevenue - prevRevenue) / prevRevenue * 100);
+            }
+
+            data.TotalCost = db.CHI_TIET_HOA_DON
+            .Where(x => x.HOA_DON.NgayLap >= from && x.HOA_DON.NgayLap < to)
+            .Sum(x => (decimal?)x.SoLuong * x.SAN_PHAM.GiaBan) ?? 0;
+
+            // 11. Biên lợi nhuận
+            if (data.TotalRevenue > 0)
+            {
+                data.ProfitMargin = (double)(data.TotalProfit / data.TotalRevenue * 100);
+            }
+            // 12. Insight
+            if (data.GrowthRevenuePercent > 0)
+            {
+                data.Insights.Add($"Doanh thu tăng {data.GrowthRevenuePercent:N1}% so với kỳ trước");
+            }
+            else
+            {
+                data.Insights.Add($"Doanh thu giảm {Math.Abs(data.GrowthRevenuePercent):N1}%");
+            }
+
+            var topCategory = data.Categories.OrderByDescending(x => x.DoanhThu).FirstOrDefault();
+            if (topCategory != null)
+            {
+                data.Insights.Add($"Danh mục {topCategory.TenDanhMuc} đang bán tốt nhất");
+            }
+
+            if (data.LowStocks.Count > 0)
+            {
+                data.Insights.Add($"Có {data.LowStocks.Count} sản phẩm tồn thấp");
+            }
+
+            if (data.Expiries.Count > 0)
+            {
+                data.Insights.Add($"Có {data.Expiries.Count} sản phẩm sắp hết hạn");
+            }
 
             return data;
         }
@@ -122,6 +175,15 @@ namespace demo.BLL.Service
 
         public List<RevenueByDateDTO> RevenueByDates { get; set; }
         public List<CategoryDTO> Categories { get; set; }
+
+        public decimal RevenueLastPeriod { get; set; }
+        public double GrowthRevenuePercent { get; set; }
+
+        public decimal TotalCost { get; set; } // giá vốn
+        public double ProfitMargin { get; set; }
+
+        // Insight
+        public List<string> Insights { get; set; } = new List<string>();
     }
     public class TopProductDTO
     {

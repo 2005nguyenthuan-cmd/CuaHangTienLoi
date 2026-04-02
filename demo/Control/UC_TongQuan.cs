@@ -50,11 +50,18 @@ namespace demo.Control
 
             // KPI
             cardRevenue.SetTitle("Doanh thu");
-            cardRevenue.SetValue(data.TotalRevenue.ToString("N0"));
+            string growthText = data.GrowthRevenuePercent >= 0
+            ? $"↑ {data.GrowthRevenuePercent:N1}%"
+            : $"↓ {Math.Abs(data.GrowthRevenuePercent):N1}%";
+
+            cardRevenue.SetValue($"{data.TotalRevenue:N0}\n{growthText}");
+
             cardOrders.SetTitle("Đơn hàng");
             cardOrders.SetValue(data.TotalOrders.ToString());
+
             cardProfit.SetTitle("Lợi nhuận");
             cardProfit.SetValue(data.TotalProfit.ToString("N0"));
+
             cardStock.SetTitle("Tồn kho");
             cardStock.SetValue(data.TotalProducts.ToString());
 
@@ -69,7 +76,7 @@ namespace demo.Control
             RenderRevenue(data.RevenueByDates);
             RenderCategory(data.Categories);
 
-            LoadChart();
+            LoadChart(data);
 
 
             Highlight();
@@ -107,12 +114,11 @@ namespace demo.Control
                 }
             }
         }
-        private void LoadChart()
+        private void LoadChart(DashboardDTO data)
         {
             DateTime from = dtFrom.Value.Date;
-            DateTime to = dtTo.Value.Date.AddDays(1).AddTicks(-1);
+            DateTime to = dtTo.Value.Date;
 
-            var data = dashboardService.GetDashboard(from, to);
 
             chartRevenueByDate.Series.Clear();
 
@@ -196,7 +202,7 @@ namespace demo.Control
                 var data = dashboardService.GetDashboard(dtFrom.Value, dtTo.Value);
 
                 ReportService reportService = new ReportService();
-                reportService.ExportDashboard(data, sfd.FileName);
+                reportService.ExportDashboard(data, sfd.FileName, from, to);
 
                 MessageBox.Show("Xuất báo cáo thành công!");
             }
@@ -235,18 +241,27 @@ namespace demo.Control
             btn.FlatAppearance.BorderColor = Color.Gray;
             btn.FlatAppearance.BorderSize = 1;
             btn.Height = 30;
+            btn.Cursor = Cursors.Hand;
         }
         private void SetActiveButton(Button activeBtn)
         {
-            foreach (System.Windows.Forms.Control c in this.Controls)
+            ResetButtonColor(this); // quét toàn bộ UI
+            activeBtn.BackColor = Color.LightBlue;
+        }
+        private void ResetButtonColor(System.Windows.Forms.Control parent)
+        {
+            foreach (System.Windows.Forms.Control c in parent.Controls)
             {
                 if (c is Button btn && btn.Tag?.ToString() == "filter")
                 {
                     btn.BackColor = Color.White;
                 }
-            }
 
-            activeBtn.BackColor = Color.LightBlue;
+                if (c.HasChildren)
+                {
+                    ResetButtonColor(c); // đi sâu xuống
+                }
+            }
         }
     }
 }
