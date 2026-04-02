@@ -5,7 +5,7 @@
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
 <<<<<<< HEAD
-      <Diagram DiagramId="7b8f02519bc6487eadf6dded197da68d" Name="Diagram1" ZoomLevel="33">
+      <Diagram DiagramId="7b8f02519bc6487eadf6dded197da68d" Name="Diagram1" ZoomLevel="66">
 =======
       <Diagram DiagramId="7b8f02519bc6487eadf6dded197da68d" Name="Diagram1" ZoomLevel="59">
 >>>>>>> 284929565c9d8b162207e9a787ad2735bf88337a
@@ -66,6 +66,10 @@
         <AssociationConnector Association="CUA_HANG_TIEN_LOIModel.FK__NHAN_VIEN__MaVai__5FB337D6" />
         <AssociationConnector Association="CUA_HANG_TIEN_LOIModel.FK__PHIEU_NHA__MaNha__76969D2E" />
         <AssociationConnector Association="CUA_HANG_TIEN_LOIModel.SAN_PHAM_KHUYEN_MAI" />
+        <EntityTypeShape EntityType="CUA_HANG_TIEN_LOIModel.CHI_TIET_KIEM_KE" Width="1.5" PointX="3.3260687362989731" PointY="26.139555734647232" />
+        <EntityTypeShape EntityType="CUA_HANG_TIEN_LOIModel.KIEM_KE" Width="1.5" PointX="6.6715721668077492" PointY="26.611736354702963" />
+        <AssociationConnector Association="CUA_HANG_TIEN_LOIModel.FK__CHI_TIET___MaKie__19DFD96B" />
+        <AssociationConnector Association="CUA_HANG_TIEN_LOIModel.FK__CHI_TIET___MaSan__1AD3FDA4" />
         </edmx:Diagrams>
   </edmx:Designer>
 </edmx:Edmx>
