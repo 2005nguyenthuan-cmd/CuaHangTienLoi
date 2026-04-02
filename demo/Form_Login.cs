@@ -40,7 +40,7 @@ namespace demo
                 UserSession.MaNhanVien = user.MaNhanVien;
                 UserSession.TenNhanVien = user.TenNhanVien;
                 UserSession.TenDangNhap = user.TenDangNhap;
-                UserSession.VaiTro = user.VAI_TRO?.TenVaiTro;
+                UserSession.VaiTro = user.VAI_TRO != null ? user.VAI_TRO.TenVaiTro : null;
 
                 MessageBox.Show("Đăng nhập thành công!");
 

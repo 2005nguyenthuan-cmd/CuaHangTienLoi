@@ -62,12 +62,14 @@ namespace demo
 
         private void btn_price_discount_Click(object sender, EventArgs e)
         {
-
+            UC_KhuyenMai uc = new UC_KhuyenMai();
+            OpenControl(uc);
         }
 
         private void btn_ql_Click(object sender, EventArgs e)
         {
-
+            UC_QLNV uc = new UC_QLNV();
+            OpenControl(uc);
         }
 
         private void btn_kh_Click(object sender, EventArgs e)

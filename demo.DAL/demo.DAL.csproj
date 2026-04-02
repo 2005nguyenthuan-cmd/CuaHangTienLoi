@@ -184,6 +184,9 @@
     <Compile Include="CHI_TIET_NHAP.cs">
       <DependentUpon>Store_Model.tt</DependentUpon>
     </Compile>
+    <Compile Include="CONG_VIEC.cs">
+      <DependentUpon>Store_Model.tt</DependentUpon>
+    </Compile>
     <Compile Include="DANH_MUC.cs">
       <DependentUpon>Store_Model.tt</DependentUpon>
     </Compile>
@@ -194,6 +197,12 @@
       <DependentUpon>Store_Model.tt</DependentUpon>
     </Compile>
     <Compile Include="KHUYEN_MAI.cs">
+      <DependentUpon>Store_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="LICH_LAM_CONG_VIEC.cs">
+      <DependentUpon>Store_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="LICH_LAM_VIEC.cs">
       <DependentUpon>Store_Model.tt</DependentUpon>
     </Compile>
     <Compile Include="NHAN_VIEN.cs">
@@ -244,6 +253,9 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup>
     <Content Include="Store_Model.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <DependentUpon>Store_Model.edmx</DependentUpon>
@@ -254,9 +266,6 @@
       <DependentUpon>Store_Model.edmx</DependentUpon>
       <LastGenOutput>Store_Model.cs</LastGenOutput>
     </Content>
-  </ItemGroup>
-  <ItemGroup>
-    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
