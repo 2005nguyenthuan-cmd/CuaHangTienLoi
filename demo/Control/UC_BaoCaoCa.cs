@@ -1,4 +1,6 @@
 ﻿using demo.DAL;
+using demo.BLL.Service;
+using System.Data.Entity;
 using DocumentFormat.OpenXml;
 using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Wordprocessing;
@@ -16,11 +18,13 @@ using System.Xml.Linq;
 using static System.Net.Mime.MediaTypeNames;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.Tab;
 using DW = DocumentFormat.OpenXml.Wordprocessing;
-
+using DrawingFont = System.Drawing.Font;
 using PDF = iText.Layout;
 using PDFE = iText.Layout.Element;
 using iText.Layout;
 using iText.Layout.Element;
+using DrawingColor = System.Drawing.Color; // Thêm dòng này
+
 
 
 
@@ -29,7 +33,11 @@ namespace demo.Control
 {
     public partial class UC_BaoCaoCa : UserControl
     {
-        CUA_HANG_TIEN_LOI_Entities db = new CUA_HANG_TIEN_LOI_Entities();
+        CUA_HANG_TIEN_LOI_Entities db = new CUA_HANG_TIEN_LOI_Entities();//
+        HoaDonService hoaDonService = new HoaDonService();
+        DateTime tuNgay = DateTime.Now.AddDays(-7);
+        DateTime denNgay = DateTime.Now;
+
         public UC_BaoCaoCa()
         {
             InitializeComponent();
@@ -37,73 +45,20 @@ namespace demo.Control
 
         private void UC_BaoCaoCa_Load(object sender, EventArgs e)
         {
+            // Cấu hình giao diện
             lblDoanhThu.Left = pnlBanner.Width - lblDoanhThu.PreferredWidth - 20;
-            lblTong.Left = pnlBanner.Width - lblTong.Width - 20;
-            LoadData(DateTime.Now.AddDays(-7), DateTime.Now);
-            int maNhanVien = 1;
+            flpTopSP.AutoScroll = true;
+            flpTopSP.BackColor = DrawingColor.FromArgb(28, 32, 57); // Dùng DrawingColor ở đây
 
-            //loadlichsuca 
-            LoadLichSuCa();
-            //top san pham
-            LoadTopSanPham();
+            FormatGridUI();
+            dgvHoaDon.CellFormatting += dgvHoaDon_CellFormatting;
 
-            // ===== DỮ LIỆU HIỆN TẠI =====
-            int tongDon = db.HOA_DON
-                .Where(x => x.MaNhanVien == maNhanVien)
-                .Count();
+            // CHỈ CẦN GỌI DÒNG NÀY LÀ ĐỦ (Nó sẽ tự tính tổng và load bảng)
+            RefreshBaoCao(DateTime.Now.AddDays(-7), DateTime.Now);
 
-            decimal doanhThu = db.HOA_DON
-                .Where(x => x.MaNhanVien == maNhanVien)
-                .Sum(x => (decimal?)x.TongTien) ?? 0;
-
-            decimal donTB = tongDon == 0 ? 0 : doanhThu / tongDon;
-
-            int traHang = 0;
-
-            // ===== HIỂN THỊ =====
-            lblTongDon_Value.Text = tongDon.ToString();
-            lblDoanhThu_Value.Text = doanhThu.ToString("N0") + "đ";
-            lblDoanhThu.Text = String.Format("{0:N0} đ", doanhThu);
-            lblDonTB_Value.Text = donTB.ToString("N0") + "đ";
-            lblTraHang_Value.Text = traHang.ToString();
-
-            // ===== TUẦN TRƯỚC =====
-            var tuanTruoc2 = DateTime.Now.AddDays(-14);
-            var tuanGanNhat = DateTime.Now.AddDays(-7);
-
-            int tongDonTuanTruoc = db.HOA_DON
-                .Where(x => x.MaNhanVien == maNhanVien
-                    && x.NgayLap >= tuanTruoc2
-                    && x.NgayLap < tuanGanNhat)
-                .Count();
-
-            decimal doanhThuTuanTruoc = db.HOA_DON
-                .Where(x => x.MaNhanVien == maNhanVien
-                    && x.NgayLap >= tuanTruoc2
-                    && x.NgayLap < tuanGanNhat)
-                .Sum(x => (decimal?)x.TongTien) ?? 0;
-
-            decimal donTBTuanTruoc = tongDonTuanTruoc == 0
-                ? 0
-                : doanhThuTuanTruoc / tongDonTuanTruoc;
-
-            // ===== TÍNH % =====
-            int ptTongDon = TinhPhanTram(tongDon, tongDonTuanTruoc);
-            int ptDoanhThu = TinhPhanTram(doanhThu, doanhThuTuanTruoc);
-            int ptDonTB = TinhPhanTram(donTB, donTBTuanTruoc);
-            int ptTraHang = 0;
-
-            // ===== GÁN % =====
-            lblTongDon_Percent.Text = ptTongDon + "%";
-            lblDoanhThu_Percent.Text = ptDoanhThu + "%";
-            lblDonTB_Percent.Text = ptDonTB + "%";
-            lblTraHang_Percent.Text = ptTraHang + "%";
-
-            // ===== ĐỔI MÀU =====
-            SetMau(lblTongDon_Percent, ptTongDon);
-            SetMau(lblDoanhThu_Percent, ptDoanhThu);
-            SetMau(lblDonTB_Percent, ptDonTB);
-            SetMau(lblTraHang_Percent, ptTraHang);
+            var ca = LayCaHienTai();
+            HienThiThoiGian(ca);
+            FormatOrderGrid_Pro();
         }
 
         int TinhPhanTram(decimal hienTai, decimal truoc)
@@ -126,45 +81,49 @@ namespace demo.Control
             else
                 lbl.ForeColor = System.Drawing.Color.Gray;
         }
-// homnay/tuan/thang
-        void LoadData(DateTime fromDate, DateTime toDate)
+        // homnay/tuan/thang
+        // Thay thế hàm LoadData cũ bằng hàm này
+        void RefreshBaoCao(DateTime fromDate, DateTime toDate)
         {
-            int maNhanVien = 1;
+            // Giả sử lấy mã nhân viên là 1 (hoặc lấy từ UserSession.UserId nếu bạn đã có)
+            int maNV = UserSession.MaNhanVien;
 
-            int tongDon = db.HOA_DON
-                .Where(x => x.MaNhanVien == maNhanVien
-                    && x.NgayLap >= fromDate
-                    && x.NgayLap <= toDate)
-                .Count();
-
-            decimal doanhThu = db.HOA_DON
-                .Where(x => x.MaNhanVien == maNhanVien
-                    && x.NgayLap >= fromDate
-                    && x.NgayLap <= toDate)
-                .Sum(x => (decimal?)x.TongTien) ?? 0;
-
+            // 1. Cập nhật các con số thống kê (Sử dụng Service để đồng bộ logic)
+            int tongDon = hoaDonService.GetTongSoDon(maNV, fromDate, toDate);
+            decimal doanhThu = hoaDonService.GetTongTien(maNV, fromDate, toDate);
             decimal donTB = tongDon == 0 ? 0 : doanhThu / tongDon;
 
+            // Hiển thị lên Label
             lblTongDon_Value.Text = tongDon.ToString();
             lblDoanhThu_Value.Text = doanhThu.ToString("N0") + "đ";
             lblDonTB_Value.Text = donTB.ToString("N0") + "đ";
+            lblDoanhThu.Text = String.Format("{0:N0} đ", doanhThu); // Label to trên banner
+
+            // 2. Cập nhật DataGridView
+            dgvHoaDon.DataSource = hoaDonService.GetHoaDonChiTiet(maNV, fromDate, toDate);
+
+            // 3. Cập nhật Top Sản Phẩm (Truyền tham số ngày vào)
+            LoadTopSanPham(maNV, fromDate, toDate);
+
+            LoadLichSuCa(maNV, fromDate, toDate);
         }
 
         private void btnHomNay_Click(object sender, EventArgs e)
         {
-            var today = DateTime.Today;
-            LoadData(today, today.AddDays(1));
+            // Từ 00:00:00 đến 23:59:59 hôm nay
+            RefreshBaoCao(DateTime.Today, DateTime.Today.AddDays(1).AddTicks(-1));
         }
 
         private void btnTuan_Click(object sender, EventArgs e)
         {
-            LoadData(DateTime.Now.AddDays(-7), DateTime.Now);
+            RefreshBaoCao(DateTime.Now.AddDays(-7), DateTime.Now);
         }
 
         private void btnThang_Click(object sender, EventArgs e)
         {
-            LoadData(DateTime.Now.AddDays(-30), DateTime.Now);
+            RefreshBaoCao(DateTime.Now.AddDays(-30), DateTime.Now);
         }
+        
         //Bang datagridview bangca
 
         string LayCa(DateTime ngay)
@@ -178,107 +137,118 @@ namespace demo.Control
             else
                 return "Ca đêm";
         }
-        void LoadLichSuCa()
+
+        //hienthithoigian
+        void HienThiThoiGian(CA_LAM_VIEC ca = null)
         {
-            var data = db.HOA_DON
-                .ToList() // bắt buộc
-                .GroupBy(x => new { x.NgayLap.Value.Date, Ca = LayCa(x.NgayLap.Value) })
-                .Select(g => new
-                {
-                    Ngay = g.Key.Date,
-                    Ca = g.Key.Ca,
-                    SoDon = g.Count(),
-                    DoanhThu = g.Sum(x => x.TongTien),
-                    TrangThai = g.Key.Date == DateTime.Today ? "🟢 Đang làm" : "✓ Hoàn tất"
-                })
-                .OrderByDescending(x => x.Ngay)
-                .Take(5)
-                .ToList();
-
-            dgvLichSuCa.DataSource = data;
-            dgvLichSuCa.Columns["Ngay"].HeaderText = "Ngày";
-            dgvLichSuCa.Columns["Ca"].HeaderText = "Ca";
-            dgvLichSuCa.Columns["SoDon"].HeaderText = "Số đơn";
-            dgvLichSuCa.Columns["DoanhThu"].HeaderText = "Doanh thu";
-            dgvLichSuCa.Columns["TrangThai"].HeaderText = "Trạng thái";
-
-            // format ngày
-            dgvLichSuCa.Columns["Ngay"].DefaultCellStyle.Format = "dd/MM";
-
-            // format tiền
-            dgvLichSuCa.Columns["DoanhThu"].DefaultCellStyle.Format = "N0";
+            if (ca != null)
+            {
+                lblThoiGian.Text =
+                    $"📅 {DateTime.Now:dd/MM/yyyy HH:mm:ss} | " +
+                    $"Ca {ca.TenCa} ({ca.GioBatDau:hh\\:mm} - {ca.GioKetThuc:hh\\:mm})";
+            }
+            else
+            {
+                lblThoiGian.Text = $"📅 {DateTime.Now:dd/MM/yyyy HH:mm:ss}";
+            }
         }
-
         // top san pham
-        void LoadTopSanPham()
+        void LoadTopSanPham(int maNV, DateTime tu, DateTime den)
         {
-            var data = db.CHI_TIET_HOA_DON
-                .GroupBy(x => x.SAN_PHAM.TenSanPham)
-                .Select(g => new
-                {
-                    TenSP = g.Key,
-                    SoLuong = g.Sum(x => (int?)x.SoLuong) ?? 0
-                })
-                .OrderByDescending(x => x.SoLuong)
-                .Take(5)
-                .ToList();
+            var data = hoaDonService.GetTopSanPham(maNV, tu, den);
 
             flpTopSP.Controls.Clear();
+            if (data.Count == 0) return;
 
-            int max = data.Max(x => x.SoLuong);
-
+            int max = data.Max(x => (int)x.GetType().GetProperty("SoLuong").GetValue(x));
             int stt = 1;
 
             foreach (var item in data)
             {
+                var soLuong = (int)item.GetType().GetProperty("SoLuong").GetValue(item);
+                var tenSP = item.GetType().GetProperty("TenSP").GetValue(item).ToString();
+
                 flpTopSP.Controls.Add(
-                    TaoItemTopSP(stt++, item.TenSP, item.SoLuong, max)
+                    TaoItemTopSP_New(stt++, tenSP, soLuong, max)
                 );
             }
         }
-        Panel TaoItemTopSP(int stt, string tenSP, int soLuong, int max)
+        Panel TaoItemTopSP_New(int stt, string tenSP, int soLuong, int max)
         {
             Panel p = new Panel();
-            p.Width = 300;
-            p.Height = 60;
+            p.Width = flpTopSP.Width - 30;
+            p.Height = 85; // Tăng nhẹ chiều cao
+            p.Margin = new Padding(0, 5, 0, 5);
+            p.BackColor = DrawingColor.FromArgb(40, 45, 70);
 
-            // Label tên
-            Label lblTen = new Label();
-            lblTen.Text = stt + ". " + tenSP;
-            lblTen.Top = 5;
-            lblTen.Left = 5;
-            lblTen.Width = 200;
+            // Áp dụng bo góc cho Panel (Dùng Region như bạn làm ở dưới)
+            var path = new System.Drawing.Drawing2D.GraphicsPath();
+            path.AddArc(0, 0, 15, 15, 180, 90);
+            path.AddArc(p.Width - 15, 0, 15, 15, 270, 90);
+            path.AddArc(p.Width - 15, p.Height - 15, 15, 15, 0, 90);
+            path.AddArc(0, p.Height - 15, 15, 15, 90, 90);
+            p.Region = new Region(path);
 
-            // Thanh progress
-            Panel barBg = new Panel();
-            barBg.Width = 200;
-            barBg.Height = 10;
-            barBg.Top = 30;
-            barBg.Left = 5;
-            barBg.BackColor = System.Drawing.Color.LightGray;
+            // Tên sản phẩm: Viết hoa chữ cái đầu, font chữ hiện đại
+            Label lblTen = new Label
+            {
+                Text = $"{stt}. {tenSP}",
+                ForeColor = DrawingColor.White,
+                Font = new DrawingFont("Segoe UI Semibold", 10),
+                Top = 15,
+                Left = 15,
+                AutoSize = true
+            };
 
-            Panel bar = new Panel();
-            bar.Height = 10;
-            bar.BackColor = System.Drawing.Color.Green;
+            // Số lượng: Nhấn mạnh bằng màu sắc
+            Label lblSL = new Label
+            {
+                Text = soLuong + " sản phẩm",
+                ForeColor = DrawingColor.FromArgb(0, 200, 150),
+                Font = new DrawingFont("Segoe UI", 9),
+                Top = 38,
+                Left = 15,
+                AutoSize = true
+            };
 
-            int width = (int)((soLuong * 1.0 / max) * barBg.Width);
-            bar.Width = width;
+            // Progress Bar Background (Làm mỏng lại nhìn sẽ sang hơn)
+            Panel barBg = new Panel
+            {
+                Width = p.Width - 30,
+                Height = 6,
+                Top = 65,
+                Left = 15,
+                BackColor = DrawingColor.FromArgb(60, 65, 90)
+            };
 
+            Panel bar = new Panel
+            {
+                Height = 6,
+                Width = max == 0 ? 0 : (int)((soLuong * 1.0 / max) * barBg.Width),
+                BackColor = (stt <= 3) ? DrawingColor.Gold : DrawingColor.DeepSkyBlue
+            };
             barBg.Controls.Add(bar);
 
-            // Số lượng
-            Label lblSL = new Label();
-            lblSL.Text = soLuong.ToString();
-            lblSL.Top = 25;
-            lblSL.Left = 220;
-
-            p.Controls.Add(lblTen);
-            p.Controls.Add(barBg);
-            p.Controls.Add(lblSL);
-
+            p.Controls.AddRange(new System.Windows.Forms.Control[] { lblTen, lblSL, barBg });
             return p;
         }
-// xuất DL
+        void LoadData(DateTime fromDate, DateTime toDate)
+{
+    int maNhanVien = UserSession.MaNhanVien;
+
+    // Cập nhật các Label (Sử dụng Service thay vì gọi db trực tiếp để đồng bộ)
+    int tongDon = hoaDonService.GetTongSoDon(maNhanVien, fromDate, toDate);
+    decimal doanhThu = hoaDonService.GetTongTien(maNhanVien, fromDate, toDate);
+    decimal donTB = tongDon == 0 ? 0 : doanhThu / tongDon;
+
+    lblTongDon_Value.Text = tongDon.ToString();
+    lblDoanhThu_Value.Text = doanhThu.ToString("N0") + "đ";
+    lblDonTB_Value.Text = donTB.ToString("N0") + "đ";
+    
+    // CẬP NHẬT LUÔN CẢ GRIDVIEW TẠI ĐÂY
+    dgvHoaDon.DataSource = hoaDonService.GetHoaDonChiTiet(maNhanVien, fromDate, toDate);
+}
+        // xuất DL
 
         private void btnXuatTatCa_Click(object sender, EventArgs e)
         {
@@ -314,11 +284,17 @@ namespace demo.Control
             sb.AppendLine();
 
             sb.AppendLine("--- LỊCH SỬ CA ---");
-            foreach (DataGridViewRow row in dgvLichSuCa.Rows)
+            foreach (DataGridViewRow row in dgvHoaDon.Rows)
             {
                 if (row.Cells[0].Value == null) continue;
 
-                sb.AppendLine($"{row.Cells["Ngay"].Value} | {row.Cells["Ca"].Value} | {row.Cells["SoDon"].Value} | {row.Cells["DoanhThu"].Value}");
+                // Sửa tên cột cho đúng với Data Source
+                string ngay = row.Cells["NgayLap"].Value.ToString(); // Đổi "Ngay" thành "NgayLap"
+                string ca = LayCa(DateTime.Parse(ngay)); // Dùng hàm LayCa bạn đã viết
+                string soDon = row.Cells["SoLuong"].Value.ToString(); // Đổi "SoDon" thành "SoLuong"
+                string doanhThu = row.Cells["TongTien"].Value.ToString();
+
+                sb.AppendLine($"{ngay} | {ca} | {soDon} | {doanhThu}");
             }
 
             sb.AppendLine();
@@ -331,7 +307,7 @@ namespace demo.Control
                 if (p == null) continue;
 
                 Label lblTen = p.Controls[0] as Label;
-                Label lblSL = p.Controls[2] as Label;
+                Label lblSL = p.Controls[1] as Label;
 
                 sb.AppendLine($"{stt}. {lblTen.Text} - {lblSL.Text}");
                 stt++;
@@ -464,7 +440,7 @@ void XuatWord(string path)
             // ===== LỊCH SỬ CA =====
             sb.AppendLine("--- LỊCH SỬ CA ---");
 
-            foreach (DataGridViewRow row in dgvLichSuCa.Rows)
+            foreach (DataGridViewRow row in dgvHoaDon.Rows)
             {
                 if (row.Cells[0].Value == null) continue;
 
@@ -503,6 +479,232 @@ void XuatWord(string path)
 
             MessageBox.Show("Xuất báo cáo thành công!", "Thông báo");
         }
+        void LoadDanhSachDonHang()
+        {
+            int maNhanVien = UserSession.MaNhanVien;
 
+            var data = hoaDonService.GetDanhSachHoaDon(maNhanVien, DateTime.Now.AddDays(-7), DateTime.Now);
+
+            dgvHoaDon.Columns.Clear(); // 🔥 QUAN TRỌNG
+
+            dgvHoaDon.DataSource = data;
+            FormatOrderGrid_Pro();
+
+            // đổi tên cột
+            dgvHoaDon.Columns["MaDon"].HeaderText = "Mã đơn";
+            dgvHoaDon.Columns["SoLuongSP"].HeaderText = "Số lượng SP";
+            dgvHoaDon.Columns["TongTien"].HeaderText = "Tổng tiền";
+            dgvHoaDon.Columns["TrangThai"].HeaderText = "Trạng thái";
+
+          
+
+            // format tiền
+            dgvHoaDon.Columns["TongTien"].DefaultCellStyle.Format = "N0";
+
+            FormatGridUI();
+        }
+        void FormatGridUI()
+        {
+            dgvHoaDon.BorderStyle = BorderStyle.None;
+            dgvHoaDon.BackgroundColor = System.Drawing.Color.FromArgb(28, 32, 57);
+
+            dgvHoaDon.EnableHeadersVisualStyles = false;
+            dgvHoaDon.ColumnHeadersDefaultCellStyle.BackColor = System.Drawing.Color.FromArgb(28, 32, 57);
+            dgvHoaDon.ColumnHeadersDefaultCellStyle.ForeColor = System.Drawing.Color.White;
+
+            dgvHoaDon.DefaultCellStyle.BackColor = System.Drawing.Color.FromArgb(28, 32, 57);
+            dgvHoaDon.DefaultCellStyle.ForeColor = System.Drawing.Color.White;
+            dgvHoaDon.DefaultCellStyle.SelectionBackColor = System.Drawing.Color.FromArgb(50, 60, 100);
+
+            dgvHoaDon.RowTemplate.Height = 40;
+            dgvHoaDon.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+        }
+        private void dgvHoaDon_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
+        {
+            if (dgvHoaDon.Columns[e.ColumnIndex].Name == "TongTien")
+            {
+                e.CellStyle.ForeColor = System.Drawing.Color.LightGreen;
+            }
+
+            if (dgvHoaDon.Columns[e.ColumnIndex].Name == "TrangThai")
+            {
+                e.CellStyle.BackColor = System.Drawing.Color.Green;
+                e.CellStyle.ForeColor = System.Drawing.Color.White;
+            }
+        }
+        //giờ làm
+        CA_LAM_VIEC LayCaHienTai()
+        {
+            var now = DateTime.Now.TimeOfDay;
+
+            return db.CA_LAM_VIEC
+                .ToList()
+                .FirstOrDefault(c =>
+                    (c.GioBatDau <= c.GioKetThuc && now >= c.GioBatDau && now <= c.GioKetThuc)
+                 || (c.GioBatDau > c.GioKetThuc && (now >= c.GioBatDau || now <= c.GioKetThuc))
+                );
+        }
+        void LoadLichSuCa(int maNV, DateTime tu, DateTime den)
+        {
+            var data = hoaDonService.GetLichSuCa(maNV, tu, den);
+            flpLichSuCa.Controls.Add(TaoHeaderLichSuCa());
+            flpLichSuCa.Controls.Clear();
+
+            foreach (var item in data)
+            {
+                flpLichSuCa.Controls.Add(
+                    TaoItemLichSuCa(item)
+                );
+            }
+        }
+
+        Panel TaoHeaderLichSuCa()
+        {
+            Panel header = new Panel();
+            header.Width = flpLichSuCa.Width - 25;
+            header.Height = 50; // Tăng chiều cao một chút
+            header.BackColor = DrawingColor.Transparent; // Để nền trôi theo FlowLayout
+            header.Margin = new Padding(5, 10, 5, 0);
+
+            Label lbl = new Label();
+            lbl.Text = "🕘 LỊCH SỬ CA LÀM VIỆC";
+            lbl.ForeColor = DrawingColor.FromArgb(140, 150, 180); // Màu xám xanh sang trọng
+            lbl.Font = new DrawingFont("Segoe UI", 11, FontStyle.Bold);
+            lbl.AutoSize = true;
+            lbl.Left = 10;
+            lbl.Top = 15;
+
+            header.Controls.Add(lbl);
+            return header;
+        }
+        Panel TaoItemLichSuCa(LichSuCaDTO item)
+        {
+            Panel p = new Panel();
+            p.Width = flpLichSuCa.Width - 30;
+            p.Height = 100; // Tăng chiều cao để thoáng hơn
+            p.BackColor = DrawingColor.FromArgb(40, 45, 70); // Màu Surface nhẹ hơn nền chính
+            p.Margin = new Padding(5, 8, 5, 8);
+
+            // --- Hiệu ứng Bo góc ---
+            var path = new System.Drawing.Drawing2D.GraphicsPath();
+            int radius = 15;
+            path.AddArc(0, 0, radius, radius, 180, 90);
+            path.AddArc(p.Width - radius, 0, radius, radius, 270, 90);
+            path.AddArc(p.Width - radius, p.Height - radius, radius, radius, 0, 90);
+            path.AddArc(0, p.Height - radius, radius, radius, 90, 90);
+            p.Region = new Region(path);
+
+            // --- Thanh nhấn màu bên trái (Accent Bar) ---
+            Panel accentBar = new Panel();
+            accentBar.Width = 5;
+            accentBar.Height = p.Height;
+            accentBar.Dock = DockStyle.Left;
+            // Đổi màu theo tên ca
+            if (item.TenCa.Contains("sáng")) accentBar.BackColor = DrawingColor.Orange;
+            else if (item.TenCa.Contains("chiều")) accentBar.BackColor = DrawingColor.DeepSkyBlue;
+            else accentBar.BackColor = DrawingColor.MediumPurple; // Ca đêm
+
+            // --- Thông tin Ca & Ngày ---
+            Label lblTitle = new Label
+            {
+                Text = $"{item.TenCa} • {item.Ngay:dd/MM/yyyy}",
+                ForeColor = DrawingColor.White,
+                Font = new DrawingFont("Segoe UI Semibold", 11),
+                Left = 20,
+                Top = 15,
+                AutoSize = true
+            };
+
+            Label lblTime = new Label
+            {
+                Text = $"🕒 {item.GioBatDau:hh\\:mm} - {item.GioKetThuc:hh\\:mm}",
+                ForeColor = DrawingColor.FromArgb(160, 160, 180),
+                Font = new DrawingFont("Segoe UI", 9),
+                Left = 20,
+                Top = 40,
+                AutoSize = true
+            };
+
+            // --- Khối thống kê bên trong Card ---
+            // Số đơn
+            Label lblDonVal = new Label
+            {
+                Text = item.SoDon.ToString().PadLeft(2, '0'),
+                ForeColor = DrawingColor.FromArgb(0, 200, 150),
+                Font = new DrawingFont("Segoe UI", 12, FontStyle.Bold),
+                Left = 20,
+                Top = 65,
+                AutoSize = true
+            };
+            Label lblDonText = new Label
+            {
+                Text = "đơn hàng",
+                ForeColor = DrawingColor.Gray,
+                Font = new DrawingFont("Segoe UI", 8),
+                Left = 50,
+                Top = 70,
+                AutoSize = true
+            };
+
+            // Doanh thu (Căn lề phải)
+            Label lblDTVal = new Label
+            {
+                Text = $"{item.DoanhThu:N0} đ",
+                ForeColor = DrawingColor.Gold,
+                Font = new DrawingFont("Segoe UI", 12, FontStyle.Bold),
+                TextAlign = ContentAlignment.MiddleRight,
+                Width = 150,
+                Top = 65,
+                Left = p.Width - 170
+            };
+
+            p.Controls.AddRange(new System.Windows.Forms.Control[] {
+        accentBar, lblTitle, lblTime, lblDonVal, lblDonText, lblDTVal
+    });
+
+            return p;
+        }
+        void FormatOrderGrid_Pro()
+        {
+            // --- 1. Thiết lập chung (Nền và Viền) ---
+            dgvHoaDon.BackgroundColor = DrawingColor.FromArgb(28, 32, 57);
+            dgvHoaDon.BorderStyle = BorderStyle.None;
+            dgvHoaDon.CellBorderStyle = DataGridViewCellBorderStyle.SingleHorizontal;
+            dgvHoaDon.GridColor = DrawingColor.FromArgb(45, 50, 80);
+
+            dgvHoaDon.EnableHeadersVisualStyles = false;
+            dgvHoaDon.RowHeadersVisible = false;
+            dgvHoaDon.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dgvHoaDon.MultiSelect = false;
+            dgvHoaDon.AllowUserToResizeRows = false;
+
+            // --- 2. Thiết kế Tiêu đề (Header) ---
+            DataGridViewCellStyle headerStyle = new DataGridViewCellStyle();
+            headerStyle.BackColor = DrawingColor.FromArgb(28, 32, 57);
+            headerStyle.ForeColor = DrawingColor.FromArgb(140, 150, 180);
+            headerStyle.Font = new DrawingFont("Segoe UI Semibold", 10);
+            headerStyle.SelectionBackColor = DrawingColor.FromArgb(28, 32, 57);
+            headerStyle.Padding = new Padding(10, 0, 0, 0);
+
+            dgvHoaDon.ColumnHeadersDefaultCellStyle = headerStyle;
+            dgvHoaDon.ColumnHeadersHeight = 45;
+
+            // --- 3. Thiết kế Dòng dữ liệu (Rows) ---
+            DataGridViewCellStyle rowStyle = new DataGridViewCellStyle();
+            rowStyle.BackColor = DrawingColor.FromArgb(28, 32, 57);
+            rowStyle.ForeColor = DrawingColor.White;
+            rowStyle.Font = new DrawingFont("Segoe UI", 10);
+            rowStyle.SelectionBackColor = DrawingColor.FromArgb(50, 60, 100);
+            rowStyle.SelectionForeColor = DrawingColor.White;
+            rowStyle.Padding = new Padding(10, 0, 0, 0);
+
+            dgvHoaDon.DefaultCellStyle = rowStyle;
+            dgvHoaDon.RowTemplate.Height = 45;
+
+            // --- 4. Tự động dãn cột ---
+            dgvHoaDon.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+        }
+
+      
     }
 }

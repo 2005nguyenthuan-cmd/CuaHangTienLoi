@@ -46,6 +46,7 @@
             this.lblTongDon_Title = new System.Windows.Forms.Label();
             this.lblTongDon_Value = new System.Windows.Forms.Label();
             this.panel10 = new System.Windows.Forms.Panel();
+            this.lblThoiGian = new System.Windows.Forms.Label();
             this.btnXuatTatCa = new System.Windows.Forms.Button();
             this.btnThang = new System.Windows.Forms.Button();
             this.btnTuan = new System.Windows.Forms.Button();
@@ -53,14 +54,13 @@
             this.pnlBanner = new System.Windows.Forms.Panel();
             this.lblTong = new System.Windows.Forms.Label();
             this.lblDoanhThu = new System.Windows.Forms.Label();
-            this.lblMoTa = new System.Windows.Forms.Label();
-            this.lblXuatSac = new System.Windows.Forms.Label();
             this.lblHieuSuat = new System.Windows.Forms.Label();
             this.lblNhanVien = new System.Windows.Forms.Label();
             this.lblTitle = new System.Windows.Forms.Label();
-            this.panel1 = new System.Windows.Forms.Panel();
-            this.dgvLichSuCa = new System.Windows.Forms.DataGridView();
             this.flpTopSP = new System.Windows.Forms.FlowLayoutPanel();
+            this.dgvHoaDon = new System.Windows.Forms.DataGridView();
+            this.flpLichSuCa = new System.Windows.Forms.FlowLayoutPanel();
+            this.panel1 = new System.Windows.Forms.Panel();
             this.pnlCards.SuspendLayout();
             this.cardTraHang.SuspendLayout();
             this.cardDonTB.SuspendLayout();
@@ -68,8 +68,8 @@
             this.cardTongDon.SuspendLayout();
             this.panel10.SuspendLayout();
             this.pnlBanner.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvHoaDon)).BeginInit();
             this.panel1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dgvLichSuCa)).BeginInit();
             this.SuspendLayout();
             // 
             // pnlCards
@@ -79,9 +79,9 @@
             this.pnlCards.Controls.Add(this.cardDoanhThu);
             this.pnlCards.Controls.Add(this.cardTongDon);
             this.pnlCards.Dock = System.Windows.Forms.DockStyle.Top;
-            this.pnlCards.Location = new System.Drawing.Point(0, 208);
+            this.pnlCards.Location = new System.Drawing.Point(0, 148);
             this.pnlCards.Name = "pnlCards";
-            this.pnlCards.Size = new System.Drawing.Size(1483, 144);
+            this.pnlCards.Size = new System.Drawing.Size(1455, 144);
             this.pnlCards.TabIndex = 3;
             // 
             // cardTraHang
@@ -254,6 +254,7 @@
             // 
             // panel10
             // 
+            this.panel10.Controls.Add(this.lblThoiGian);
             this.panel10.Controls.Add(this.btnXuatTatCa);
             this.panel10.Controls.Add(this.btnThang);
             this.panel10.Controls.Add(this.btnTuan);
@@ -264,15 +265,25 @@
             this.panel10.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel10.Location = new System.Drawing.Point(0, 0);
             this.panel10.Name = "panel10";
-            this.panel10.Size = new System.Drawing.Size(1483, 208);
+            this.panel10.Size = new System.Drawing.Size(1455, 148);
             this.panel10.TabIndex = 10;
+            // 
+            // lblThoiGian
+            // 
+            this.lblThoiGian.AutoSize = true;
+            this.lblThoiGian.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(163)));
+            this.lblThoiGian.Location = new System.Drawing.Point(302, 17);
+            this.lblThoiGian.Name = "lblThoiGian";
+            this.lblThoiGian.Size = new System.Drawing.Size(46, 18);
+            this.lblThoiGian.TabIndex = 15;
+            this.lblThoiGian.Text = "label1";
             // 
             // btnXuatTatCa
             // 
             this.btnXuatTatCa.Dock = System.Windows.Forms.DockStyle.Right;
-            this.btnXuatTatCa.Location = new System.Drawing.Point(1183, 61);
+            this.btnXuatTatCa.Location = new System.Drawing.Point(1155, 61);
             this.btnXuatTatCa.Name = "btnXuatTatCa";
-            this.btnXuatTatCa.Size = new System.Drawing.Size(75, 147);
+            this.btnXuatTatCa.Size = new System.Drawing.Size(75, 87);
             this.btnXuatTatCa.TabIndex = 14;
             this.btnXuatTatCa.Text = "Xuất";
             this.btnXuatTatCa.UseVisualStyleBackColor = true;
@@ -281,9 +292,9 @@
             // btnThang
             // 
             this.btnThang.Dock = System.Windows.Forms.DockStyle.Right;
-            this.btnThang.Location = new System.Drawing.Point(1258, 61);
+            this.btnThang.Location = new System.Drawing.Point(1230, 61);
             this.btnThang.Name = "btnThang";
-            this.btnThang.Size = new System.Drawing.Size(75, 147);
+            this.btnThang.Size = new System.Drawing.Size(75, 87);
             this.btnThang.TabIndex = 13;
             this.btnThang.Text = "Tháng";
             this.btnThang.UseVisualStyleBackColor = true;
@@ -292,9 +303,9 @@
             // btnTuan
             // 
             this.btnTuan.Dock = System.Windows.Forms.DockStyle.Right;
-            this.btnTuan.Location = new System.Drawing.Point(1333, 61);
+            this.btnTuan.Location = new System.Drawing.Point(1305, 61);
             this.btnTuan.Name = "btnTuan";
-            this.btnTuan.Size = new System.Drawing.Size(75, 147);
+            this.btnTuan.Size = new System.Drawing.Size(75, 87);
             this.btnTuan.TabIndex = 12;
             this.btnTuan.Text = "Tuần";
             this.btnTuan.UseVisualStyleBackColor = true;
@@ -303,9 +314,9 @@
             // btnHomNay
             // 
             this.btnHomNay.Dock = System.Windows.Forms.DockStyle.Right;
-            this.btnHomNay.Location = new System.Drawing.Point(1408, 61);
+            this.btnHomNay.Location = new System.Drawing.Point(1380, 61);
             this.btnHomNay.Name = "btnHomNay";
-            this.btnHomNay.Size = new System.Drawing.Size(75, 147);
+            this.btnHomNay.Size = new System.Drawing.Size(75, 87);
             this.btnHomNay.TabIndex = 11;
             this.btnHomNay.Text = "Hôm nay";
             this.btnHomNay.UseVisualStyleBackColor = true;
@@ -316,21 +327,19 @@
             this.pnlBanner.BackColor = System.Drawing.Color.Honeydew;
             this.pnlBanner.Controls.Add(this.lblTong);
             this.pnlBanner.Controls.Add(this.lblDoanhThu);
-            this.pnlBanner.Controls.Add(this.lblMoTa);
-            this.pnlBanner.Controls.Add(this.lblXuatSac);
             this.pnlBanner.Controls.Add(this.lblHieuSuat);
-            this.pnlBanner.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.pnlBanner.Dock = System.Windows.Forms.DockStyle.Left;
             this.pnlBanner.ForeColor = System.Drawing.SystemColors.ControlText;
             this.pnlBanner.ImeMode = System.Windows.Forms.ImeMode.Off;
             this.pnlBanner.Location = new System.Drawing.Point(0, 61);
             this.pnlBanner.Name = "pnlBanner";
-            this.pnlBanner.Size = new System.Drawing.Size(1483, 147);
+            this.pnlBanner.Size = new System.Drawing.Size(1455, 87);
             this.pnlBanner.TabIndex = 10;
             // 
             // lblTong
             // 
             this.lblTong.AutoSize = true;
-            this.lblTong.Location = new System.Drawing.Point(658, 51);
+            this.lblTong.Location = new System.Drawing.Point(821, 30);
             this.lblTong.Name = "lblTong";
             this.lblTong.Size = new System.Drawing.Size(128, 16);
             this.lblTong.TabIndex = 4;
@@ -346,27 +355,6 @@
             this.lblDoanhThu.Size = new System.Drawing.Size(90, 38);
             this.lblDoanhThu.TabIndex = 3;
             this.lblDoanhThu.Text = "0VND";
-            // 
-            // lblMoTa
-            // 
-            this.lblMoTa.AutoSize = true;
-            this.lblMoTa.ForeColor = System.Drawing.Color.Green;
-            this.lblMoTa.Location = new System.Drawing.Point(50, 62);
-            this.lblMoTa.Name = "lblMoTa";
-            this.lblMoTa.Size = new System.Drawing.Size(231, 16);
-            this.lblMoTa.TabIndex = 2;
-            this.lblMoTa.Text = "Bạn đang TOP 1 doanh thu trong tuần!";
-            // 
-            // lblXuatSac
-            // 
-            this.lblXuatSac.AutoSize = true;
-            this.lblXuatSac.Font = new System.Drawing.Font("Microsoft Sans Serif", 13.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(163)));
-            this.lblXuatSac.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
-            this.lblXuatSac.Location = new System.Drawing.Point(48, 33);
-            this.lblXuatSac.Name = "lblXuatSac";
-            this.lblXuatSac.Size = new System.Drawing.Size(113, 29);
-            this.lblXuatSac.TabIndex = 1;
-            this.lblXuatSac.Text = "Xuất sắc";
             // 
             // lblHieuSuat
             // 
@@ -402,40 +390,53 @@
             this.lblTitle.TabIndex = 8;
             this.lblTitle.Text = "Báo cáo ca của tôi";
             // 
-            // panel1
-            // 
-            this.panel1.Controls.Add(this.dgvLichSuCa);
-            this.panel1.Controls.Add(this.flpTopSP);
-            this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel1.Location = new System.Drawing.Point(0, 352);
-            this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(1483, 329);
-            this.panel1.TabIndex = 11;
-            // 
-            // dgvLichSuCa
-            // 
-            this.dgvLichSuCa.AllowUserToAddRows = false;
-            this.dgvLichSuCa.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
-            this.dgvLichSuCa.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgvLichSuCa.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dgvLichSuCa.Location = new System.Drawing.Point(0, 0);
-            this.dgvLichSuCa.Name = "dgvLichSuCa";
-            this.dgvLichSuCa.RowHeadersVisible = false;
-            this.dgvLichSuCa.RowHeadersWidth = 51;
-            this.dgvLichSuCa.RowTemplate.Height = 24;
-            this.dgvLichSuCa.Size = new System.Drawing.Size(809, 329);
-            this.dgvLichSuCa.TabIndex = 10;
-            // 
             // flpTopSP
             // 
             this.flpTopSP.AutoScroll = true;
+            this.flpTopSP.BackColor = System.Drawing.Color.MidnightBlue;
             this.flpTopSP.Dock = System.Windows.Forms.DockStyle.Right;
             this.flpTopSP.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
-            this.flpTopSP.Location = new System.Drawing.Point(809, 0);
+            this.flpTopSP.Location = new System.Drawing.Point(867, 0);
             this.flpTopSP.Name = "flpTopSP";
-            this.flpTopSP.Size = new System.Drawing.Size(674, 329);
+            this.flpTopSP.Size = new System.Drawing.Size(588, 458);
             this.flpTopSP.TabIndex = 11;
             this.flpTopSP.WrapContents = false;
+            // 
+            // dgvHoaDon
+            // 
+            this.dgvHoaDon.AllowUserToAddRows = false;
+            this.dgvHoaDon.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.dgvHoaDon.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgvHoaDon.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dgvHoaDon.Location = new System.Drawing.Point(0, 0);
+            this.dgvHoaDon.Name = "dgvHoaDon";
+            this.dgvHoaDon.RowHeadersVisible = false;
+            this.dgvHoaDon.RowHeadersWidth = 51;
+            this.dgvHoaDon.RowTemplate.Height = 24;
+            this.dgvHoaDon.Size = new System.Drawing.Size(1455, 458);
+            this.dgvHoaDon.TabIndex = 10;
+            // 
+            // flpLichSuCa
+            // 
+            this.flpLichSuCa.AutoScroll = true;
+            this.flpLichSuCa.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.flpLichSuCa.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
+            this.flpLichSuCa.Location = new System.Drawing.Point(0, 228);
+            this.flpLichSuCa.Name = "flpLichSuCa";
+            this.flpLichSuCa.Size = new System.Drawing.Size(867, 230);
+            this.flpLichSuCa.TabIndex = 12;
+            this.flpLichSuCa.WrapContents = false;
+            // 
+            // panel1
+            // 
+            this.panel1.Controls.Add(this.flpLichSuCa);
+            this.panel1.Controls.Add(this.flpTopSP);
+            this.panel1.Controls.Add(this.dgvHoaDon);
+            this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panel1.Location = new System.Drawing.Point(0, 292);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(1455, 458);
+            this.panel1.TabIndex = 12;
             // 
             // UC_BaoCaoCa
             // 
@@ -446,7 +447,7 @@
             this.Controls.Add(this.pnlCards);
             this.Controls.Add(this.panel10);
             this.Name = "UC_BaoCaoCa";
-            this.Size = new System.Drawing.Size(1483, 681);
+            this.Size = new System.Drawing.Size(1455, 750);
             this.Load += new System.EventHandler(this.UC_BaoCaoCa_Load);
             this.pnlCards.ResumeLayout(false);
             this.cardTraHang.ResumeLayout(false);
@@ -461,8 +462,8 @@
             this.panel10.PerformLayout();
             this.pnlBanner.ResumeLayout(false);
             this.pnlBanner.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvHoaDon)).EndInit();
             this.panel1.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.dgvLichSuCa)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -490,16 +491,16 @@
         private System.Windows.Forms.Button btnThang;
         private System.Windows.Forms.Button btnTuan;
         private System.Windows.Forms.Button btnHomNay;
+        private System.Windows.Forms.Label lblNhanVien;
+        private System.Windows.Forms.Label lblTitle;
+        private System.Windows.Forms.Label lblThoiGian;
         private System.Windows.Forms.Panel pnlBanner;
         private System.Windows.Forms.Label lblTong;
         private System.Windows.Forms.Label lblDoanhThu;
-        private System.Windows.Forms.Label lblMoTa;
-        private System.Windows.Forms.Label lblXuatSac;
         private System.Windows.Forms.Label lblHieuSuat;
-        private System.Windows.Forms.Label lblNhanVien;
-        private System.Windows.Forms.Label lblTitle;
-        private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.FlowLayoutPanel flpTopSP;
-        private System.Windows.Forms.DataGridView dgvLichSuCa;
+        private System.Windows.Forms.DataGridView dgvHoaDon;
+        private System.Windows.Forms.FlowLayoutPanel flpLichSuCa;
+        private System.Windows.Forms.Panel panel1;
     }
 }
