@@ -180,6 +180,8 @@
           <Property Name="MaDanhMuc" Type="int" />
           <Property Name="MoTa" Type="nvarchar" MaxLength="255" />
           <Property Name="HinhAnh" Type="nvarchar" MaxLength="255" />
+          <Property Name="TonToiThieu" Type="int" />
+          <Property Name="HanSuDung" Type="date" />
         </EntityType>
         <EntityType Name="SAN_PHAM_KHUYEN_MAI">
           <Key>
@@ -1029,6 +1031,8 @@
           <NavigationProperty Name="CHI_TIET_NHAP" Relationship="CUA_HANG_TIEN_LOIModel.FK__CHI_TIET___MaSan__7B5B524B" FromRole="SAN_PHAM" ToRole="CHI_TIET_NHAP" />
           <NavigationProperty Name="DANH_MUC" Relationship="CUA_HANG_TIEN_LOIModel.FK__SAN_PHAM__MaDanh__656C112C" FromRole="SAN_PHAM" ToRole="DANH_MUC" />
           <NavigationProperty Name="KHUYEN_MAI" Relationship="CUA_HANG_TIEN_LOIModel.SAN_PHAM_KHUYEN_MAI" FromRole="SAN_PHAM" ToRole="KHUYEN_MAI" />
+          <Property Name="TonToiThieu" Type="Int32" />
+          <Property Name="HanSuDung" Type="DateTime" Precision="0" />
         </EntityType>
         <Association Name="FK_CHI_TIET_HOA_DON_SAN_PHAM">
           <End Type="CUA_HANG_TIEN_LOIModel.SAN_PHAM" Role="SAN_PHAM" Multiplicity="1" />
@@ -1278,6 +1282,8 @@
           <EntitySetMapping Name="SAN_PHAM">
             <EntityTypeMapping TypeName="CUA_HANG_TIEN_LOIModel.SAN_PHAM">
               <MappingFragment StoreEntitySet="SAN_PHAM">
+                <ScalarProperty Name="HanSuDung" ColumnName="HanSuDung" />
+                <ScalarProperty Name="TonToiThieu" ColumnName="TonToiThieu" />
                 <ScalarProperty Name="HinhAnh" ColumnName="HinhAnh" />
                 <ScalarProperty Name="MoTa" ColumnName="MoTa" />
                 <ScalarProperty Name="MaDanhMuc" ColumnName="MaDanhMuc" />
@@ -1316,6 +1322,45 @@
 				<DesignerProperty Name="CodeGenerationStrategy" Value="None" />
 			</DesignerInfoPropertySet>
 		</Options>
-		<Diagrams></Diagrams>
+		<Diagrams>
+      <Diagram DiagramId="74088973c39546b0a655cc13589f4af2" Name="Diagram1" ZoomLevel="46">
+        <EntityTypeShape EntityType="CUA_HANG_TIEN_LOIModel.CA_LAM_VIEC" Width="1.5" PointX="0.75" PointY="5.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="CUA_HANG_TIEN_LOIModel.CHI_TIET_HOA_DON" Width="1.5" PointX="13.5" PointY="5.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="CUA_HANG_TIEN_LOIModel.CHI_TIET_NHAP" Width="1.5" PointX="10.5" PointY="1.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="CUA_HANG_TIEN_LOIModel.CHI_TIET_KIEM_KE" Width="1.5" PointX="10.5" PointY="14.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="CUA_HANG_TIEN_LOIModel.CONG_VIEC" Width="1.5" PointX="6" PointY="1.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="CUA_HANG_TIEN_LOIModel.DANH_MUC" Width="1.5" PointX="6" PointY="13" IsExpanded="true" />
+        <EntityTypeShape EntityType="CUA_HANG_TIEN_LOIModel.HOA_DON" Width="1.5" PointX="11.25" PointY="5.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="CUA_HANG_TIEN_LOIModel.KHACH_HANG" Width="1.5" PointX="9" PointY="9.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="CUA_HANG_TIEN_LOIModel.KHUYEN_MAI" Width="1.5" PointX="6" PointY="15.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="CUA_HANG_TIEN_LOIModel.KIEM_KE" Width="1.5" PointX="8.25" PointY="18.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="CUA_HANG_TIEN_LOIModel.LICH_LAM_CONG_VIEC" Width="1.5" PointX="8.25" PointY="5.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="CUA_HANG_TIEN_LOIModel.LICH_LAM_VIEC" Width="1.5" PointX="3" PointY="4.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="CUA_HANG_TIEN_LOIModel.NHA_CUNG_CAP" Width="1.5" PointX="6" PointY="9.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="CUA_HANG_TIEN_LOIModel.NHAN_VIEN" Width="1.5" PointX="6" PointY="5" IsExpanded="true" />
+        <EntityTypeShape EntityType="CUA_HANG_TIEN_LOIModel.PHIEU_NHAP" Width="1.5" PointX="8.25" PointY="1.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="CUA_HANG_TIEN_LOIModel.VAI_TRO" Width="1.5" PointX="3.75" PointY="2" IsExpanded="true" />
+        <EntityTypeShape EntityType="CUA_HANG_TIEN_LOIModel.SAN_PHAM" Width="1.5" PointX="8.25" PointY="13.75" IsExpanded="true" />
+        <AssociationConnector Association="CUA_HANG_TIEN_LOIModel.FK_LLV_CA" ManuallyRouted="false" />
+        <AssociationConnector Association="CUA_HANG_TIEN_LOIModel.FK_NHAN_VIEN_CA_LAM_VIEC" ManuallyRouted="false" />
+        <AssociationConnector Association="CUA_HANG_TIEN_LOIModel.FK_CHI_TIET_HOA_DON_HOA_DON" ManuallyRouted="false" />
+        <AssociationConnector Association="CUA_HANG_TIEN_LOIModel.FK__CHI_TIET___MaPhi__7A672E12" ManuallyRouted="false" />
+        <AssociationConnector Association="CUA_HANG_TIEN_LOIModel.FK_LLCV_CV" ManuallyRouted="false" />
+        <AssociationConnector Association="CUA_HANG_TIEN_LOIModel.FK__HOA_DON__MaKhach__6D0D32F4" ManuallyRouted="false" />
+        <AssociationConnector Association="CUA_HANG_TIEN_LOIModel.FK__HOA_DON__MaNhanV__6C190EBB" ManuallyRouted="false" />
+        <AssociationConnector Association="CUA_HANG_TIEN_LOIModel.FK_LLCV_LICH" ManuallyRouted="false" />
+        <AssociationConnector Association="CUA_HANG_TIEN_LOIModel.FK_LLV_NGUOICAPNHAT" ManuallyRouted="false" />
+        <AssociationConnector Association="CUA_HANG_TIEN_LOIModel.FK_LLV_NV" ManuallyRouted="false" />
+        <AssociationConnector Association="CUA_HANG_TIEN_LOIModel.FK__PHIEU_NHA__MaNCC__778AC167" ManuallyRouted="false" />
+        <AssociationConnector Association="CUA_HANG_TIEN_LOIModel.FK__NHAN_VIEN__MaVai__5FB337D6" ManuallyRouted="false" />
+        <AssociationConnector Association="CUA_HANG_TIEN_LOIModel.FK__PHIEU_NHA__MaNha__76969D2E" ManuallyRouted="false" />
+        <AssociationConnector Association="CUA_HANG_TIEN_LOIModel.FK__CHI_TIET___MaKie__793DFFAF" ManuallyRouted="false" />
+        <AssociationConnector Association="CUA_HANG_TIEN_LOIModel.FK_CHI_TIET_HOA_DON_SAN_PHAM" ManuallyRouted="false" />
+        <AssociationConnector Association="CUA_HANG_TIEN_LOIModel.FK__CHI_TIET___MaSan__7A3223E8" ManuallyRouted="false" />
+        <AssociationConnector Association="CUA_HANG_TIEN_LOIModel.FK__CHI_TIET___MaSan__7B5B524B" ManuallyRouted="false" />
+        <AssociationConnector Association="CUA_HANG_TIEN_LOIModel.FK__SAN_PHAM__MaDanh__656C112C" ManuallyRouted="false" />
+        <AssociationConnector Association="CUA_HANG_TIEN_LOIModel.SAN_PHAM_KHUYEN_MAI" ManuallyRouted="false" />
+      </Diagram>
+    </Diagrams>
 	</Designer>
 </edmx:Edmx>

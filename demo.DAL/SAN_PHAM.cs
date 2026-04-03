@@ -30,6 +30,8 @@ namespace demo.DAL
         public Nullable<int> MaDanhMuc { get; set; }
         public string MoTa { get; set; }
         public string HinhAnh { get; set; }
+        public Nullable<int> TonToiThieu { get; set; }
+        public Nullable<System.DateTime> HanSuDung { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<CHI_TIET_HOA_DON> CHI_TIET_HOA_DON { get; set; }
