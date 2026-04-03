@@ -18,9 +18,9 @@ namespace demo.DAL
         public SAN_PHAM()
         {
             this.CHI_TIET_HOA_DON = new HashSet<CHI_TIET_HOA_DON>();
+            this.CHI_TIET_KIEM_KE = new HashSet<CHI_TIET_KIEM_KE>();
             this.CHI_TIET_NHAP = new HashSet<CHI_TIET_NHAP>();
             this.KHUYEN_MAI = new HashSet<KHUYEN_MAI>();
-            this.CHI_TIET_KIEM_KE = new HashSet<CHI_TIET_KIEM_KE>();
         }
     
         public int MaSanPham { get; set; }
@@ -34,11 +34,11 @@ namespace demo.DAL
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<CHI_TIET_HOA_DON> CHI_TIET_HOA_DON { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<CHI_TIET_KIEM_KE> CHI_TIET_KIEM_KE { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<CHI_TIET_NHAP> CHI_TIET_NHAP { get; set; }
         public virtual DANH_MUC DANH_MUC { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<KHUYEN_MAI> KHUYEN_MAI { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<CHI_TIET_KIEM_KE> CHI_TIET_KIEM_KE { get; set; }
     }
 }

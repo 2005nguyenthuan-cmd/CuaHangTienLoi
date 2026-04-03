@@ -80,9 +80,11 @@
     <Compile Include="KHUYEN_MAI.cs">
       <DependentUpon>Store_Model.tt</DependentUpon>
     </Compile>
+
     <Compile Include="KIEM_KE.cs">
       <DependentUpon>Store_Model.tt</DependentUpon>
     </Compile>
+
     <Compile Include="LICH_LAM_CONG_VIEC.cs">
       <DependentUpon>Store_Model.tt</DependentUpon>
     </Compile>

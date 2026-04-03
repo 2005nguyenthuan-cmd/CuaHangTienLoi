@@ -12,5 +12,6 @@ namespace demo.BLL.Service
         public static string TenNhanVien { get; set; }
         public static string TenDangNhap { get; set; }
         public static string VaiTro { get; set; }
+        public static int? MaVaiTro { get; set; }
     }
 }

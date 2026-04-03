@@ -18,9 +18,9 @@ namespace demo.DAL
         public NHAN_VIEN()
         {
             this.HOA_DON = new HashSet<HOA_DON>();
-            this.PHIEU_NHAP = new HashSet<PHIEU_NHAP>();
             this.LICH_LAM_VIEC = new HashSet<LICH_LAM_VIEC>();
             this.LICH_LAM_VIEC1 = new HashSet<LICH_LAM_VIEC>();
+            this.PHIEU_NHAP = new HashSet<PHIEU_NHAP>();
         }
     
         public int MaNhanVien { get; set; }
@@ -36,12 +36,12 @@ namespace demo.DAL
         public virtual CA_LAM_VIEC CA_LAM_VIEC { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<HOA_DON> HOA_DON { get; set; }
-        public virtual VAI_TRO VAI_TRO { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<PHIEU_NHAP> PHIEU_NHAP { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<LICH_LAM_VIEC> LICH_LAM_VIEC { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<LICH_LAM_VIEC> LICH_LAM_VIEC1 { get; set; }
+        public virtual VAI_TRO VAI_TRO { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<PHIEU_NHAP> PHIEU_NHAP { get; set; }
     }
 }

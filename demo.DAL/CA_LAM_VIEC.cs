@@ -17,8 +17,8 @@ namespace demo.DAL
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public CA_LAM_VIEC()
         {
-            this.NHAN_VIEN = new HashSet<NHAN_VIEN>();
             this.LICH_LAM_VIEC = new HashSet<LICH_LAM_VIEC>();
+            this.NHAN_VIEN = new HashSet<NHAN_VIEN>();
         }
     
         public int MaCa { get; set; }
@@ -31,8 +31,8 @@ namespace demo.DAL
         public string MoTa { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<NHAN_VIEN> NHAN_VIEN { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<LICH_LAM_VIEC> LICH_LAM_VIEC { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<NHAN_VIEN> NHAN_VIEN { get; set; }
     }
 }
