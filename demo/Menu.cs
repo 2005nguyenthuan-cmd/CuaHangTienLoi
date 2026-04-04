@@ -126,6 +126,11 @@ namespace demo
         private void btn_exit_Click(object sender, EventArgs e)
         {
 
+            this.Hide();
+            Form_Login f = new Form_Login();
+            f.ShowDialog();
+            this.Close();
+
         }
 
         private void btn_bcc_Click(object sender, EventArgs e)

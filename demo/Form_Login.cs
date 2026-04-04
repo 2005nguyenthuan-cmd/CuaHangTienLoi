@@ -46,7 +46,7 @@ namespace demo
 
 
                 MessageBox.Show("Đăng nhập thành công!");
-
+                this.Hide();
                 Form_Menu f = new Form_Menu();
                 f.ShowDialog();
                 this.Close();

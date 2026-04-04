@@ -47,20 +47,20 @@
             this.dgvExpiry = new System.Windows.Forms.DataGridView();
             this.pnKPI = new System.Windows.Forms.Panel();
             this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
-            this.pnHeader = new System.Windows.Forms.Panel();
-            this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
-            this.dtTo = new System.Windows.Forms.DateTimePicker();
-            this.dtFrom = new System.Windows.Forms.DateTimePicker();
-            this.label1 = new System.Windows.Forms.Label();
-            this.btnToday = new System.Windows.Forms.Button();
-            this.btn7Days = new System.Windows.Forms.Button();
-            this.btn30Days = new System.Windows.Forms.Button();
-            this.btnExport = new System.Windows.Forms.Button();
-            this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
             this.cardRevenue = new demo.Control.UC_Card_KPI();
             this.cardOrders = new demo.Control.UC_Card_KPI();
             this.cardProfit = new demo.Control.UC_Card_KPI();
             this.cardStock = new demo.Control.UC_Card_KPI();
+            this.pnHeader = new System.Windows.Forms.Panel();
+            this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
+            this.btnExport = new System.Windows.Forms.Button();
+            this.btn30Days = new System.Windows.Forms.Button();
+            this.btnToday = new System.Windows.Forms.Button();
+            this.btn7Days = new System.Windows.Forms.Button();
+            this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+            this.dtTo = new System.Windows.Forms.DateTimePicker();
+            this.dtFrom = new System.Windows.Forms.DateTimePicker();
+            this.label1 = new System.Windows.Forms.Label();
             this.pnDashboard.SuspendLayout();
             this.pnCenter.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
@@ -84,8 +84,8 @@
             this.pnKPI.SuspendLayout();
             this.flowLayoutPanel1.SuspendLayout();
             this.pnHeader.SuspendLayout();
-            this.tableLayoutPanel1.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
+            this.tableLayoutPanel1.SuspendLayout();
             this.SuspendLayout();
             // 
             // pnDashboard
@@ -263,6 +263,37 @@
             this.flowLayoutPanel1.TabIndex = 0;
             this.flowLayoutPanel1.WrapContents = false;
             // 
+            // cardRevenue
+            // 
+            this.cardRevenue.Location = new System.Drawing.Point(13, 13);
+            this.cardRevenue.Name = "cardRevenue";
+            this.cardRevenue.Padding = new System.Windows.Forms.Padding(0, 0, 15, 0);
+            this.cardRevenue.Size = new System.Drawing.Size(306, 112);
+            this.cardRevenue.TabIndex = 0;
+            // 
+            // cardOrders
+            // 
+            this.cardOrders.Location = new System.Drawing.Point(325, 13);
+            this.cardOrders.Name = "cardOrders";
+            this.cardOrders.Padding = new System.Windows.Forms.Padding(0, 0, 15, 0);
+            this.cardOrders.Size = new System.Drawing.Size(257, 112);
+            this.cardOrders.TabIndex = 1;
+            // 
+            // cardProfit
+            // 
+            this.cardProfit.Location = new System.Drawing.Point(588, 13);
+            this.cardProfit.Name = "cardProfit";
+            this.cardProfit.Padding = new System.Windows.Forms.Padding(0, 0, 15, 0);
+            this.cardProfit.Size = new System.Drawing.Size(265, 112);
+            this.cardProfit.TabIndex = 2;
+            // 
+            // cardStock
+            // 
+            this.cardStock.Location = new System.Drawing.Point(859, 13);
+            this.cardStock.Name = "cardStock";
+            this.cardStock.Size = new System.Drawing.Size(231, 112);
+            this.cardStock.TabIndex = 3;
+            // 
             // pnHeader
             // 
             this.pnHeader.BackColor = System.Drawing.Color.White;
@@ -274,6 +305,76 @@
             this.pnHeader.Padding = new System.Windows.Forms.Padding(15);
             this.pnHeader.Size = new System.Drawing.Size(1101, 107);
             this.pnHeader.TabIndex = 1;
+            // 
+            // tableLayoutPanel2
+            // 
+            this.tableLayoutPanel2.ColumnCount = 4;
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
+            this.tableLayoutPanel2.Controls.Add(this.btnExport, 3, 0);
+            this.tableLayoutPanel2.Controls.Add(this.btn30Days, 2, 0);
+            this.tableLayoutPanel2.Controls.Add(this.btnToday, 0, 0);
+            this.tableLayoutPanel2.Controls.Add(this.btn7Days, 1, 0);
+            this.tableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Right;
+            this.tableLayoutPanel2.Location = new System.Drawing.Point(686, 15);
+            this.tableLayoutPanel2.Name = "tableLayoutPanel2";
+            this.tableLayoutPanel2.RowCount = 1;
+            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel2.Size = new System.Drawing.Size(400, 77);
+            this.tableLayoutPanel2.TabIndex = 8;
+            // 
+            // btnExport
+            // 
+            this.btnExport.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.btnExport.Location = new System.Drawing.Point(303, 3);
+            this.btnExport.Name = "btnExport";
+            this.btnExport.Padding = new System.Windows.Forms.Padding(5);
+            this.btnExport.Size = new System.Drawing.Size(94, 71);
+            this.btnExport.TabIndex = 3;
+            this.btnExport.Text = "Xuất báo cáo";
+            this.btnExport.UseVisualStyleBackColor = true;
+            this.btnExport.Click += new System.EventHandler(this.btnExport_Click);
+            // 
+            // btn30Days
+            // 
+            this.btn30Days.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.btn30Days.Location = new System.Drawing.Point(203, 3);
+            this.btn30Days.Name = "btn30Days";
+            this.btn30Days.Padding = new System.Windows.Forms.Padding(5);
+            this.btn30Days.Size = new System.Drawing.Size(94, 71);
+            this.btn30Days.TabIndex = 6;
+            this.btn30Days.Tag = "filter";
+            this.btn30Days.Text = "Tháng";
+            this.btn30Days.UseVisualStyleBackColor = true;
+            this.btn30Days.Click += new System.EventHandler(this.btn30Days_Click);
+            // 
+            // btnToday
+            // 
+            this.btnToday.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.btnToday.Location = new System.Drawing.Point(3, 3);
+            this.btnToday.Name = "btnToday";
+            this.btnToday.Padding = new System.Windows.Forms.Padding(5);
+            this.btnToday.Size = new System.Drawing.Size(94, 71);
+            this.btnToday.TabIndex = 4;
+            this.btnToday.Tag = "filter";
+            this.btnToday.Text = "Hôm nay";
+            this.btnToday.UseVisualStyleBackColor = true;
+            this.btnToday.Click += new System.EventHandler(this.btnToday_Click);
+            // 
+            // btn7Days
+            // 
+            this.btn7Days.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.btn7Days.Location = new System.Drawing.Point(103, 3);
+            this.btn7Days.Name = "btn7Days";
+            this.btn7Days.Padding = new System.Windows.Forms.Padding(5);
+            this.btn7Days.Size = new System.Drawing.Size(94, 71);
+            this.btn7Days.TabIndex = 5;
+            this.btn7Days.Tag = "filter";
+            this.btn7Days.Text = "Tuần";
+            this.btn7Days.UseVisualStyleBackColor = true;
+            this.btn7Days.Click += new System.EventHandler(this.btn7Days_Click);
             // 
             // tableLayoutPanel1
             // 
@@ -326,107 +427,6 @@
             this.label1.TabIndex = 0;
             this.label1.Text = "DASHBOARD";
             // 
-            // btnToday
-            // 
-            this.btnToday.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.btnToday.Location = new System.Drawing.Point(3, 3);
-            this.btnToday.Name = "btnToday";
-            this.btnToday.Padding = new System.Windows.Forms.Padding(5);
-            this.btnToday.Size = new System.Drawing.Size(94, 71);
-            this.btnToday.TabIndex = 4;
-            this.btnToday.Tag = "filter";
-            this.btnToday.Text = "Hôm nay";
-            this.btnToday.UseVisualStyleBackColor = true;
-            this.btnToday.Click += new System.EventHandler(this.btnToday_Click);
-            // 
-            // btn7Days
-            // 
-            this.btn7Days.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.btn7Days.Location = new System.Drawing.Point(103, 3);
-            this.btn7Days.Name = "btn7Days";
-            this.btn7Days.Padding = new System.Windows.Forms.Padding(5);
-            this.btn7Days.Size = new System.Drawing.Size(94, 71);
-            this.btn7Days.TabIndex = 5;
-            this.btn7Days.Tag = "filter";
-            this.btn7Days.Text = "Tuần";
-            this.btn7Days.UseVisualStyleBackColor = true;
-            this.btn7Days.Click += new System.EventHandler(this.btn7Days_Click);
-            // 
-            // btn30Days
-            // 
-            this.btn30Days.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.btn30Days.Location = new System.Drawing.Point(203, 3);
-            this.btn30Days.Name = "btn30Days";
-            this.btn30Days.Padding = new System.Windows.Forms.Padding(5);
-            this.btn30Days.Size = new System.Drawing.Size(94, 71);
-            this.btn30Days.TabIndex = 6;
-            this.btn30Days.Tag = "filter";
-            this.btn30Days.Text = "Tháng";
-            this.btn30Days.UseVisualStyleBackColor = true;
-            this.btn30Days.Click += new System.EventHandler(this.btn30Days_Click);
-            // 
-            // btnExport
-            // 
-            this.btnExport.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.btnExport.Location = new System.Drawing.Point(303, 3);
-            this.btnExport.Name = "btnExport";
-            this.btnExport.Padding = new System.Windows.Forms.Padding(5);
-            this.btnExport.Size = new System.Drawing.Size(94, 71);
-            this.btnExport.TabIndex = 3;
-            this.btnExport.Text = "Xuất báo cáo";
-            this.btnExport.UseVisualStyleBackColor = true;
-            this.btnExport.Click += new System.EventHandler(this.btnExport_Click);
-            // 
-            // tableLayoutPanel2
-            // 
-            this.tableLayoutPanel2.ColumnCount = 4;
-            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
-            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
-            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
-            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
-            this.tableLayoutPanel2.Controls.Add(this.btnExport, 3, 0);
-            this.tableLayoutPanel2.Controls.Add(this.btn30Days, 2, 0);
-            this.tableLayoutPanel2.Controls.Add(this.btnToday, 0, 0);
-            this.tableLayoutPanel2.Controls.Add(this.btn7Days, 1, 0);
-            this.tableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Right;
-            this.tableLayoutPanel2.Location = new System.Drawing.Point(686, 15);
-            this.tableLayoutPanel2.Name = "tableLayoutPanel2";
-            this.tableLayoutPanel2.RowCount = 1;
-            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel2.Size = new System.Drawing.Size(400, 77);
-            this.tableLayoutPanel2.TabIndex = 8;
-            // 
-            // cardRevenue
-            // 
-            this.cardRevenue.Location = new System.Drawing.Point(13, 13);
-            this.cardRevenue.Name = "cardRevenue";
-            this.cardRevenue.Padding = new System.Windows.Forms.Padding(0, 0, 15, 0);
-            this.cardRevenue.Size = new System.Drawing.Size(306, 112);
-            this.cardRevenue.TabIndex = 0;
-            // 
-            // cardOrders
-            // 
-            this.cardOrders.Location = new System.Drawing.Point(325, 13);
-            this.cardOrders.Name = "cardOrders";
-            this.cardOrders.Padding = new System.Windows.Forms.Padding(0, 0, 15, 0);
-            this.cardOrders.Size = new System.Drawing.Size(257, 112);
-            this.cardOrders.TabIndex = 1;
-            // 
-            // cardProfit
-            // 
-            this.cardProfit.Location = new System.Drawing.Point(588, 13);
-            this.cardProfit.Name = "cardProfit";
-            this.cardProfit.Padding = new System.Windows.Forms.Padding(0, 0, 15, 0);
-            this.cardProfit.Size = new System.Drawing.Size(265, 112);
-            this.cardProfit.TabIndex = 2;
-            // 
-            // cardStock
-            // 
-            this.cardStock.Location = new System.Drawing.Point(859, 13);
-            this.cardStock.Name = "cardStock";
-            this.cardStock.Size = new System.Drawing.Size(231, 112);
-            this.cardStock.TabIndex = 3;
-            // 
             // UC_TongQuan
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -458,9 +458,9 @@
             this.pnKPI.ResumeLayout(false);
             this.flowLayoutPanel1.ResumeLayout(false);
             this.pnHeader.ResumeLayout(false);
+            this.tableLayoutPanel2.ResumeLayout(false);
             this.tableLayoutPanel1.ResumeLayout(false);
             this.tableLayoutPanel1.PerformLayout();
-            this.tableLayoutPanel2.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
