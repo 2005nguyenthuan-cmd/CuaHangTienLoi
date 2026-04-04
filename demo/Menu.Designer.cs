@@ -80,18 +80,18 @@
             // panel_Menu
             // 
             this.panel_Menu.BackColor = System.Drawing.Color.Green;
+            this.panel_Menu.Controls.Add(this.btn_exit);
             this.panel_Menu.Controls.Add(this.btn_clv);
             this.panel_Menu.Controls.Add(this.btn_bcc);
-            this.panel_Menu.Controls.Add(this.btn_exit);
             this.panel_Menu.Controls.Add(this.btn_lshd);
             this.panel_Menu.Controls.Add(this.btn_price_discount);
             this.panel_Menu.Controls.Add(this.btn_kh);
             this.panel_Menu.Controls.Add(this.btn_ql);
+            this.panel_Menu.Controls.Add(this.btn_ncc);
+            this.panel_Menu.Controls.Add(this.btn_qlk);
             this.panel_Menu.Controls.Add(this.btn_sp);
             this.panel_Menu.Controls.Add(this.btn_pos);
-            this.panel_Menu.Controls.Add(this.btn_qlk);
             this.panel_Menu.Controls.Add(this.btn_dashboard);
-            this.panel_Menu.Controls.Add(this.btn_ncc);
             this.panel_Menu.Dock = System.Windows.Forms.DockStyle.Left;
             this.panel_Menu.Location = new System.Drawing.Point(0, 97);
             this.panel_Menu.Name = "panel_Menu";
@@ -101,7 +101,7 @@
             // btn_clv
             // 
             this.btn_clv.Dock = System.Windows.Forms.DockStyle.Top;
-            this.btn_clv.Location = new System.Drawing.Point(0, 425);
+            this.btn_clv.Location = new System.Drawing.Point(0, 409);
             this.btn_clv.Name = "btn_clv";
             this.btn_clv.Size = new System.Drawing.Size(181, 52);
             this.btn_clv.TabIndex = 12;
@@ -112,7 +112,7 @@
             // btn_bcc
             // 
             this.btn_bcc.Dock = System.Windows.Forms.DockStyle.Top;
-            this.btn_bcc.Location = new System.Drawing.Point(0, 374);
+            this.btn_bcc.Location = new System.Drawing.Point(0, 358);
             this.btn_bcc.Name = "btn_bcc";
             this.btn_bcc.Size = new System.Drawing.Size(181, 51);
             this.btn_bcc.TabIndex = 11;
@@ -123,7 +123,7 @@
             // btn_exit
             // 
             this.btn_exit.Dock = System.Windows.Forms.DockStyle.Top;
-            this.btn_exit.Location = new System.Drawing.Point(0, 319);
+            this.btn_exit.Location = new System.Drawing.Point(0, 461);
             this.btn_exit.Name = "btn_exit";
             this.btn_exit.Size = new System.Drawing.Size(181, 55);
             this.btn_exit.TabIndex = 10;
@@ -134,7 +134,7 @@
             // btn_lshd
             // 
             this.btn_lshd.Dock = System.Windows.Forms.DockStyle.Top;
-            this.btn_lshd.Location = new System.Drawing.Point(0, 280);
+            this.btn_lshd.Location = new System.Drawing.Point(0, 319);
             this.btn_lshd.Name = "btn_lshd";
             this.btn_lshd.Size = new System.Drawing.Size(181, 39);
             this.btn_lshd.TabIndex = 9;
@@ -145,7 +145,7 @@
             // btn_price_discount
             // 
             this.btn_price_discount.Dock = System.Windows.Forms.DockStyle.Top;
-            this.btn_price_discount.Location = new System.Drawing.Point(0, 241);
+            this.btn_price_discount.Location = new System.Drawing.Point(0, 280);
             this.btn_price_discount.Name = "btn_price_discount";
             this.btn_price_discount.Size = new System.Drawing.Size(181, 39);
             this.btn_price_discount.TabIndex = 5;
@@ -156,7 +156,7 @@
             // btn_kh
             // 
             this.btn_kh.Dock = System.Windows.Forms.DockStyle.Top;
-            this.btn_kh.Location = new System.Drawing.Point(0, 195);
+            this.btn_kh.Location = new System.Drawing.Point(0, 234);
             this.btn_kh.Name = "btn_kh";
             this.btn_kh.Size = new System.Drawing.Size(181, 46);
             this.btn_kh.TabIndex = 7;
@@ -167,7 +167,7 @@
             // btn_ql
             // 
             this.btn_ql.Dock = System.Windows.Forms.DockStyle.Top;
-            this.btn_ql.Location = new System.Drawing.Point(0, 156);
+            this.btn_ql.Location = new System.Drawing.Point(0, 195);
             this.btn_ql.Name = "btn_ql";
             this.btn_ql.Size = new System.Drawing.Size(181, 39);
             this.btn_ql.TabIndex = 6;
@@ -178,7 +178,7 @@
             // btn_sp
             // 
             this.btn_sp.Dock = System.Windows.Forms.DockStyle.Top;
-            this.btn_sp.Location = new System.Drawing.Point(0, 117);
+            this.btn_sp.Location = new System.Drawing.Point(0, 78);
             this.btn_sp.Name = "btn_sp";
             this.btn_sp.Size = new System.Drawing.Size(181, 39);
             this.btn_sp.TabIndex = 3;
@@ -189,7 +189,7 @@
             // btn_pos
             // 
             this.btn_pos.Dock = System.Windows.Forms.DockStyle.Top;
-            this.btn_pos.Location = new System.Drawing.Point(0, 78);
+            this.btn_pos.Location = new System.Drawing.Point(0, 39);
             this.btn_pos.Name = "btn_pos";
             this.btn_pos.Size = new System.Drawing.Size(181, 39);
             this.btn_pos.TabIndex = 2;
@@ -200,7 +200,7 @@
             // btn_qlk
             // 
             this.btn_qlk.Dock = System.Windows.Forms.DockStyle.Top;
-            this.btn_qlk.Location = new System.Drawing.Point(0, 39);
+            this.btn_qlk.Location = new System.Drawing.Point(0, 117);
             this.btn_qlk.Name = "btn_qlk";
             this.btn_qlk.Size = new System.Drawing.Size(181, 39);
             this.btn_qlk.TabIndex = 4;
@@ -221,8 +221,8 @@
             // 
             // btn_ncc
             // 
-            this.btn_ncc.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.btn_ncc.Location = new System.Drawing.Point(0, 556);
+            this.btn_ncc.Dock = System.Windows.Forms.DockStyle.Top;
+            this.btn_ncc.Location = new System.Drawing.Point(0, 156);
             this.btn_ncc.Name = "btn_ncc";
             this.btn_ncc.Size = new System.Drawing.Size(181, 39);
             this.btn_ncc.TabIndex = 8;

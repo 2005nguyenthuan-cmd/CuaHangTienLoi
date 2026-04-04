@@ -549,7 +549,6 @@
 					<EntitySet Name="CHI_TIET_NHAP" EntityType="CUA_HANG_TIEN_LOIModel.CHI_TIET_NHAP" />
 					<EntitySet Name="CHI_TIET_KIEM_KE" EntityType="CUA_HANG_TIEN_LOIModel.CHI_TIET_KIEM_KE" />
 					<EntitySet Name="CONG_VIEC" EntityType="CUA_HANG_TIEN_LOIModel.CONG_VIEC" />
-					<EntitySet Name="DANH_MUC" EntityType="CUA_HANG_TIEN_LOIModel.DANH_MUC" />
 					<EntitySet Name="HOA_DON" EntityType="CUA_HANG_TIEN_LOIModel.HOA_DON" />
 					<EntitySet Name="KHACH_HANG" EntityType="CUA_HANG_TIEN_LOIModel.KHACH_HANG" />
 					<EntitySet Name="KHUYEN_MAI" EntityType="CUA_HANG_TIEN_LOIModel.KHUYEN_MAI" />
@@ -616,6 +615,7 @@
 						<End Role="NHAN_VIEN" EntitySet="NHAN_VIEN" />
 						<End Role="PHIEU_NHAP" EntitySet="PHIEU_NHAP" />
 					</AssociationSet>
+          <EntitySet Name="DANH_MUC" EntityType="CUA_HANG_TIEN_LOIModel.DANH_MUC" />
           <EntitySet Name="SAN_PHAM" EntityType="CUA_HANG_TIEN_LOIModel.SAN_PHAM" />
           <AssociationSet Name="FK_CHI_TIET_HOA_DON_SAN_PHAM" Association="CUA_HANG_TIEN_LOIModel.FK_CHI_TIET_HOA_DON_SAN_PHAM">
             <End Role="SAN_PHAM" EntitySet="SAN_PHAM" />
@@ -637,7 +637,7 @@
             <End Role="KHUYEN_MAI" EntitySet="KHUYEN_MAI" />
             <End Role="SAN_PHAM" EntitySet="SAN_PHAM" />
           </AssociationSet>
-				</EntityContainer>
+          </EntityContainer>
 
 				<EntityType Name="CA_LAM_VIEC">
 					<Key>
@@ -704,15 +704,6 @@
 					<Property Name="TrangThai" Type="Boolean" Nullable="false" />
 					<NavigationProperty Name="LICH_LAM_CONG_VIEC" Relationship="CUA_HANG_TIEN_LOIModel.FK_LLCV_CV" FromRole="CONG_VIEC" ToRole="LICH_LAM_CONG_VIEC" />
 				</EntityType>
-				<EntityType Name="DANH_MUC">
-					<Key>
-						<PropertyRef Name="MaDanhMuc" />
-					</Key>
-					<Property Name="MaDanhMuc" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-					<Property Name="TenDanhMuc" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
-					<Property Name="MoTa" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="SAN_PHAM" Relationship="CUA_HANG_TIEN_LOIModel.FK__SAN_PHAM__MaDanh__656C112C" FromRole="DANH_MUC" ToRole="SAN_PHAM" />
-				</EntityType>
 				<EntityType Name="HOA_DON">
 					<Key>
 						<PropertyRef Name="MaHoaDon" />
@@ -746,7 +737,7 @@
 					<Property Name="NgayBatDau" Type="DateTime" Precision="0" />
 					<Property Name="NgayKetThuc" Type="DateTime" Precision="0" />
           <NavigationProperty Name="SAN_PHAM" Relationship="CUA_HANG_TIEN_LOIModel.SAN_PHAM_KHUYEN_MAI" FromRole="KHUYEN_MAI" ToRole="SAN_PHAM" />
-				</EntityType>
+          </EntityType>
 				<EntityType Name="KIEM_KE">
 					<Key>
 						<PropertyRef Name="MaKiemKe" />
@@ -1015,6 +1006,15 @@
 						</Dependent>
 					</ReferentialConstraint>
 				</Association>
+        <EntityType Name="DANH_MUC">
+          <Key>
+            <PropertyRef Name="MaDanhMuc" />
+          </Key>
+          <Property Name="MaDanhMuc" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="TenDanhMuc" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="MoTa" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="SAN_PHAM" Relationship="CUA_HANG_TIEN_LOIModel.FK__SAN_PHAM__MaDanh__656C112C" FromRole="DANH_MUC" ToRole="SAN_PHAM" />
+        </EntityType>
         <EntityType Name="SAN_PHAM">
           <Key>
             <PropertyRef Name="MaSanPham" />
@@ -1026,13 +1026,13 @@
           <Property Name="MaDanhMuc" Type="Int32" />
           <Property Name="MoTa" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
           <Property Name="HinhAnh" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="TonToiThieu" Type="Int32" />
+          <Property Name="HanSuDung" Type="DateTime" Precision="0" />
           <NavigationProperty Name="CHI_TIET_HOA_DON" Relationship="CUA_HANG_TIEN_LOIModel.FK_CHI_TIET_HOA_DON_SAN_PHAM" FromRole="SAN_PHAM" ToRole="CHI_TIET_HOA_DON" />
           <NavigationProperty Name="CHI_TIET_KIEM_KE" Relationship="CUA_HANG_TIEN_LOIModel.FK__CHI_TIET___MaSan__7A3223E8" FromRole="SAN_PHAM" ToRole="CHI_TIET_KIEM_KE" />
           <NavigationProperty Name="CHI_TIET_NHAP" Relationship="CUA_HANG_TIEN_LOIModel.FK__CHI_TIET___MaSan__7B5B524B" FromRole="SAN_PHAM" ToRole="CHI_TIET_NHAP" />
           <NavigationProperty Name="DANH_MUC" Relationship="CUA_HANG_TIEN_LOIModel.FK__SAN_PHAM__MaDanh__656C112C" FromRole="SAN_PHAM" ToRole="DANH_MUC" />
           <NavigationProperty Name="KHUYEN_MAI" Relationship="CUA_HANG_TIEN_LOIModel.SAN_PHAM_KHUYEN_MAI" FromRole="SAN_PHAM" ToRole="KHUYEN_MAI" />
-          <Property Name="TonToiThieu" Type="Int32" />
-          <Property Name="HanSuDung" Type="DateTime" Precision="0" />
         </EntityType>
         <Association Name="FK_CHI_TIET_HOA_DON_SAN_PHAM">
           <End Type="CUA_HANG_TIEN_LOIModel.SAN_PHAM" Role="SAN_PHAM" Multiplicity="1" />
@@ -1086,7 +1086,7 @@
           <End Type="CUA_HANG_TIEN_LOIModel.KHUYEN_MAI" Role="KHUYEN_MAI" Multiplicity="*" />
           <End Type="CUA_HANG_TIEN_LOIModel.SAN_PHAM" Role="SAN_PHAM" Multiplicity="*" />
         </Association>
-			</Schema>
+        </Schema>
 		</edmx:ConceptualModels>
 
 		<edmx:Mappings>
@@ -1147,15 +1147,6 @@
 								<ScalarProperty Name="MoTa" ColumnName="MoTa" />
 								<ScalarProperty Name="TenCongViec" ColumnName="TenCongViec" />
 								<ScalarProperty Name="MaCongViec" ColumnName="MaCongViec" />
-							</MappingFragment>
-						</EntityTypeMapping>
-					</EntitySetMapping>
-					<EntitySetMapping Name="DANH_MUC">
-						<EntityTypeMapping TypeName="CUA_HANG_TIEN_LOIModel.DANH_MUC">
-							<MappingFragment StoreEntitySet="DANH_MUC">
-								<ScalarProperty Name="MoTa" ColumnName="MoTa" />
-								<ScalarProperty Name="TenDanhMuc" ColumnName="TenDanhMuc" />
-								<ScalarProperty Name="MaDanhMuc" ColumnName="MaDanhMuc" />
 							</MappingFragment>
 						</EntityTypeMapping>
 					</EntitySetMapping>
@@ -1279,6 +1270,15 @@
 							</MappingFragment>
 						</EntityTypeMapping>
 					</EntitySetMapping>
+          <EntitySetMapping Name="DANH_MUC">
+            <EntityTypeMapping TypeName="CUA_HANG_TIEN_LOIModel.DANH_MUC">
+              <MappingFragment StoreEntitySet="DANH_MUC">
+                <ScalarProperty Name="MoTa" ColumnName="MoTa" />
+                <ScalarProperty Name="TenDanhMuc" ColumnName="TenDanhMuc" />
+                <ScalarProperty Name="MaDanhMuc" ColumnName="MaDanhMuc" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="SAN_PHAM">
             <EntityTypeMapping TypeName="CUA_HANG_TIEN_LOIModel.SAN_PHAM">
               <MappingFragment StoreEntitySet="SAN_PHAM">
@@ -1302,7 +1302,7 @@
               <ScalarProperty Name="MaKhuyenMai" ColumnName="MaKhuyenMai" />
             </EndProperty>
           </AssociationSetMapping>
-				</EntityContainerMapping>
+          </EntityContainerMapping>
 			</Mapping>
 		</edmx:Mappings>
 	</edmx:Runtime>

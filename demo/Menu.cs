@@ -70,7 +70,14 @@ namespace demo
 
         private void btn_pos_Click(object sender, EventArgs e)
         {
+            panel_Main.Controls.Clear();
 
+            // 2. Lấy cái "kênh" UC_BanHang của Kiệt đã làm sẵn mang ra
+            UC_BanHang ucCuaKiet = new UC_BanHang();
+            ucCuaKiet.Dock = DockStyle.Fill; // Bắt nó phình to lấp đầy vùng trắng
+
+            // 3. Chiếu lên màn hình (Nhét vào Panel chính)
+            panel_Main.Controls.Add(ucCuaKiet);
         }
 
         private void btn_sp_Click(object sender, EventArgs e)
@@ -88,12 +95,14 @@ namespace demo
 
         private void btn_price_discount_Click(object sender, EventArgs e)
         {
-
+            UC_KhuyenMai uc = new UC_KhuyenMai();
+            OpenControl(uc);
         }
 
         private void btn_ql_Click(object sender, EventArgs e)
         {
-
+            UC_QLNV uc = new UC_QLNV();
+            OpenControl(uc);
         }
 
         private void btn_kh_Click(object sender, EventArgs e)
