@@ -32,6 +32,8 @@
             this.lblSdt = new System.Windows.Forms.Label();
             this.lblDiachi = new System.Windows.Forms.Label();
             this.ptb_ha = new System.Windows.Forms.PictureBox();
+            this.btn_edit = new System.Windows.Forms.Button();
+            this.btn_remove = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.ptb_ha)).BeginInit();
             this.SuspendLayout();
             // 
@@ -71,10 +73,32 @@
             this.ptb_ha.TabIndex = 3;
             this.ptb_ha.TabStop = false;
             // 
+            // btn_edit
+            // 
+            this.btn_edit.Location = new System.Drawing.Point(31, 174);
+            this.btn_edit.Name = "btn_edit";
+            this.btn_edit.Size = new System.Drawing.Size(75, 23);
+            this.btn_edit.TabIndex = 4;
+            this.btn_edit.Text = "Update";
+            this.btn_edit.UseVisualStyleBackColor = true;
+            this.btn_edit.Click += new System.EventHandler(this.btn_edit_Click);
+            // 
+            // btn_remove
+            // 
+            this.btn_remove.Location = new System.Drawing.Point(153, 174);
+            this.btn_remove.Name = "btn_remove";
+            this.btn_remove.Size = new System.Drawing.Size(75, 23);
+            this.btn_remove.TabIndex = 5;
+            this.btn_remove.Text = "Remove";
+            this.btn_remove.UseVisualStyleBackColor = true;
+            this.btn_remove.Click += new System.EventHandler(this.btn_remove_Click);
+            // 
             // UC_SupplierCard
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.btn_remove);
+            this.Controls.Add(this.btn_edit);
             this.Controls.Add(this.ptb_ha);
             this.Controls.Add(this.lblDiachi);
             this.Controls.Add(this.lblSdt);
@@ -93,5 +117,7 @@
         private System.Windows.Forms.Label lblSdt;
         private System.Windows.Forms.Label lblDiachi;
         private System.Windows.Forms.PictureBox ptb_ha;
+        private System.Windows.Forms.Button btn_edit;
+        private System.Windows.Forms.Button btn_remove;
     }
 }

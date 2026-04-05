@@ -16,6 +16,8 @@ namespace demo.Control
     public partial class UC_SupplierCard : UserControl
     {
         private readonly SupplierService supplierService;
+        private NHA_CUNG_CAP currentNCC;
+        public event Action ReloadData;
         public UC_SupplierCard()
         {
             InitializeComponent();
@@ -25,6 +27,8 @@ namespace demo.Control
 
         public void SetData(NHA_CUNG_CAP ncc)
         {
+            currentNCC = ncc; // lưu lại
+
             lblTen.Text = ncc.TenNCC;
             lblSdt.Text = ncc.SoDienThoai;
             lblDiachi.Text = ncc.DiaChi;
@@ -46,6 +50,32 @@ namespace demo.Control
             using (var img = Image.FromFile(imgPath))
             {
                 ptb_ha.Image = new Bitmap(img);
+            }
+        }
+
+        private void btn_edit_Click(object sender, EventArgs e)
+        {
+            Form_NhaCungCap f = new Form_NhaCungCap();
+
+            f.SetData(currentNCC); // truyền dữ liệu
+
+            if (f.ShowDialog() == DialogResult.OK)
+            {
+                // reload lại card hoặc form cha
+                ReloadData?.Invoke();
+            }
+        }
+
+        private void btn_remove_Click(object sender, EventArgs e)
+        {
+            if (MessageBox.Show("Xóa nhà cung cấp?", "Confirm",
+        MessageBoxButtons.YesNo) == DialogResult.Yes)
+            {
+                supplierService.Delete(currentNCC.MaNCC);
+
+                MessageBox.Show("Đã xóa");
+
+                ReloadData?.Invoke();
             }
         }
     }

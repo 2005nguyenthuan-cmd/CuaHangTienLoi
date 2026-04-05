@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Data.SqlClient;
+using System.Xml.Linq;
 
 namespace demo.Control
 {
@@ -188,22 +189,108 @@ namespace demo.Control
             }
         }
 
+        private static string GetProviderConnectionString()
+        {
+            string configPath = System.IO.Path.Combine(Application.StartupPath, "db.config");
+            if (!System.IO.File.Exists(configPath))
+            {
+                throw new InvalidOperationException("Không tìm thấy file db.config trong thư mục chạy ứng dụng.");
+            }
+
+            XDocument document = XDocument.Load(configPath);
+            XElement addElement = document.Descendants("add")
+                .FirstOrDefault(x => string.Equals((string)x.Attribute("name"), "CUA_HANG_TIEN_LOI_Entities", StringComparison.OrdinalIgnoreCase));
+
+            if (addElement == null)
+            {
+                throw new InvalidOperationException("Không tìm thấy connection string CUA_HANG_TIEN_LOI_Entities trong db.config.");
+            }
+
+            string entityConnectionString = (string)addElement.Attribute("connectionString");
+            if (string.IsNullOrWhiteSpace(entityConnectionString))
+            {
+                throw new InvalidOperationException("Connection string trong db.config đang rỗng.");
+            }
+
+            const string marker = "provider connection string=\"";
+            int startIndex = entityConnectionString.IndexOf(marker, StringComparison.OrdinalIgnoreCase);
+            if (startIndex < 0)
+            {
+                throw new InvalidOperationException("Không đọc được provider connection string từ db.config.");
+            }
+
+            startIndex += marker.Length;
+            int endIndex = entityConnectionString.IndexOf("\"", startIndex, StringComparison.Ordinal);
+            if (endIndex < 0)
+            {
+                throw new InvalidOperationException("Provider connection string trong db.config không hợp lệ.");
+            }
+
+            string providerConnectionString = entityConnectionString.Substring(startIndex, endIndex - startIndex);
+            SqlConnectionStringBuilder builder = new SqlConnectionStringBuilder(providerConnectionString);
+            builder.TrustServerCertificate = true;
+            builder.Encrypt = false;
+
+            return builder.ConnectionString;
+        }
+
+        private static SqlConnection OpenConfiguredConnection()
+        {
+            SqlConnectionStringBuilder baseBuilder = new SqlConnectionStringBuilder(GetProviderConnectionString());
+            string[] serverCandidates = new[]
+            {
+                baseBuilder.DataSource,
+                @".\SQLEXPRESS",
+                @"(local)\SQLEXPRESS",
+                Environment.MachineName + @"\SQLEXPRESS",
+                @"localhost\SQLEXPRESS"
+            }
+            .Where(x => !string.IsNullOrWhiteSpace(x))
+            .Distinct(StringComparer.OrdinalIgnoreCase)
+            .ToArray();
+
+            Exception lastException = null;
+
+            foreach (string serverName in serverCandidates)
+            {
+                SqlConnectionStringBuilder builder = new SqlConnectionStringBuilder(baseBuilder.ConnectionString)
+                {
+                    DataSource = serverName,
+                    TrustServerCertificate = true,
+                    Encrypt = false
+                };
+
+                SqlConnection connection = new SqlConnection(builder.ConnectionString);
+
+                try
+                {
+                    connection.Open();
+                    return connection;
+                }
+                catch (Exception ex)
+                {
+                    lastException = ex;
+                    connection.Dispose();
+                }
+            }
+
+            throw new InvalidOperationException(
+                "Không thể kết nối tới cơ sở dữ liệu. Hãy kiểm tra db.config và instance SQL Server SQLEXPRESS trên máy này.",
+                lastException);
+        }
+
         private void LoadSanPhamTuDatabase()
         {
             // 1. Xóa sạch màn hình trước khi nạp đồ mới
             flpProducts.Controls.Clear();
 
-            // 2. Chuỗi kết nối (CỰC QUAN TRỌNG: Bạn sửa lại chỗ Kiet_PC cho đúng với tên Server SQL của bạn nhé)
-            string connectionString = @"Data Source=PC-ADMIN\SQLEXPRESS;Initial Catalog=CUA_HANG_TIEN_LOI;Integrated Security=True";
-
             // Câu lệnh SQL lấy dữ liệu
             string query = "SELECT TenSanPham, MoTa, GiaBan, SoLuongTon, HinhAnh FROM SAN_PHAM";
 
-            using (SqlConnection conn = new SqlConnection(connectionString))
+            using (SqlConnection conn = OpenConfiguredConnection())
             {
                 try
                 {
-                    conn.Open();
                     SqlCommand cmd = new SqlCommand(query, conn);
                     SqlDataReader reader = cmd.ExecuteReader();
 
@@ -280,17 +367,13 @@ namespace demo.Control
             // Xóa sạch mâm cũ để bày đồ mới lên
             flpProducts.Controls.Clear();
 
-            // Nhớ sửa lại Data Source cho đúng tên máy của bạn nhé (Kiet_PC)
-            string connectionString = @"Data Source=PC-ADMIN\SQLEXPRESS;Initial Catalog=CUA_HANG_TIEN_LOI;Integrated Security=True";
-
             // Câu lệnh SQL lọc theo Mô Tả (Tìm gần đúng chứa từ khóa)
             string query = "SELECT TenSanPham, MoTa, GiaBan, SoLuongTon, HinhAnh FROM SAN_PHAM WHERE MoTa LIKE @tuKhoa";
 
-            using (SqlConnection conn = new SqlConnection(connectionString))
+            using (SqlConnection conn = OpenConfiguredConnection())
             {
                 try
                 {
-                    conn.Open();
                     SqlCommand cmd = new SqlCommand(query, conn);
 
                     // Dùng %tuKhoa% để tìm được cả những chữ chứa từ khóa ở giữa. 
@@ -366,83 +449,83 @@ namespace demo.Control
             decimal tongTienThucTe = 0;
             decimal.TryParse(tongTienStr, out tongTienThucTe);
 
-            // =========================================================================
-            // CHÚ Ý CHỖ NÀY: SỬA LẠI TÊN SERVER CHO ĐÚNG VỚI TRONG HÌNH CỦA BẠN
-            // Ví dụ: @"Data Source=Kiet_PC\kingo;Initial Catalog..."
-            // =========================================================================
-            string strConn = @"Data Source=PC-ADMIN\SQLEXPRESS;Initial Catalog=CUA_HANG_TIEN_LOI;Integrated Security=True";
-
-            using (SqlConnection conn = new SqlConnection(strConn))
+            try
             {
-                conn.Open();
-                SqlTransaction transaction = conn.BeginTransaction();
-
-                try
+                using (SqlConnection conn = OpenConfiguredConnection())
                 {
-                    // BƯỚC 1: LƯU HÓA ĐƠN
-                    string sqlInsertHD = "INSERT INTO HOA_DON (NgayLap, TongTien) OUTPUT INSERTED.MaHoaDon VALUES (GETDATE(), @TongTien)";
-                    SqlCommand cmdHD = new SqlCommand(sqlInsertHD, conn, transaction);
-                    cmdHD.Parameters.AddWithValue("@TongTien", tongTienThucTe);
+                    SqlTransaction transaction = conn.BeginTransaction();
 
-                    int maHoaDonMoi = Convert.ToInt32(cmdHD.ExecuteScalar());
-
-                    // BƯỚC 2 & 3: LƯU CHI TIẾT VÀ TRỪ TỒN KHO
-                    foreach (DataGridViewRow row in dgvDonHang.Rows)
+                    try
                     {
-                        if (!row.IsNewRow && row.Cells[0].Value != null)
+                        // BƯỚC 1: LƯU HÓA ĐƠN
+                        string sqlInsertHD = "INSERT INTO HOA_DON (NgayLap, TongTien) OUTPUT INSERTED.MaHoaDon VALUES (GETDATE(), @TongTien)";
+                        SqlCommand cmdHD = new SqlCommand(sqlInsertHD, conn, transaction);
+                        cmdHD.Parameters.AddWithValue("@TongTien", tongTienThucTe);
+
+                        int maHoaDonMoi = Convert.ToInt32(cmdHD.ExecuteScalar());
+
+                        // BƯỚC 2 & 3: LƯU CHI TIẾT VÀ TRỪ TỒN KHO
+                        foreach (DataGridViewRow row in dgvDonHang.Rows)
                         {
-                            string tenSP = row.Cells[0].Value.ToString();
-                            int soLuongMua = Convert.ToInt32(row.Cells[1].Value);
+                            if (!row.IsNewRow && row.Cells[0].Value != null)
+                            {
+                                string tenSP = row.Cells[0].Value.ToString();
+                                int soLuongMua = Convert.ToInt32(row.Cells[1].Value);
 
-                            string giaStr = row.Cells[2].Value.ToString().Replace("đ", "").Replace(".", "").Replace(",", "").Trim();
-                            decimal donGia = Convert.ToDecimal(giaStr);
+                                string giaStr = row.Cells[2].Value.ToString().Replace("đ", "").Replace(".", "").Replace(",", "").Trim();
+                                decimal donGia = Convert.ToDecimal(giaStr);
 
-                            // Tính luôn thành tiền để đưa vào DB
-                            decimal thanhTienCT = soLuongMua * donGia;
+                                // Tính luôn thành tiền để đưa vào DB
+                                decimal thanhTienCT = soLuongMua * donGia;
 
-                            // --- Lưu CHI_TIET_HOA_DON (Đã thêm cột ThanhTien) ---
-                            string sqlInsertChiTiet = "INSERT INTO CHI_TIET_HOA_DON (MaHoaDon, MaSanPham, SoLuong, DonGia, ThanhTien) " +
-                                                      "VALUES (@MaHD, (SELECT TOP 1 MaSanPham FROM SAN_PHAM WHERE TenSanPham = @TenSP), @SL, @Gia, @ThanhTienCT)";
-                            SqlCommand cmdCT = new SqlCommand(sqlInsertChiTiet, conn, transaction);
-                            cmdCT.Parameters.AddWithValue("@MaHD", maHoaDonMoi);
-                            cmdCT.Parameters.Add("@TenSP", SqlDbType.NVarChar).Value = tenSP; // Fix lỗi tiếng Việt
-                            cmdCT.Parameters.AddWithValue("@SL", soLuongMua);
-                            cmdCT.Parameters.AddWithValue("@Gia", donGia);
-                            cmdCT.Parameters.AddWithValue("@ThanhTienCT", thanhTienCT);
-                            cmdCT.ExecuteNonQuery();
+                                // --- Lưu CHI_TIET_HOA_DON (Đã thêm cột ThanhTien) ---
+                                string sqlInsertChiTiet = "INSERT INTO CHI_TIET_HOA_DON (MaHoaDon, MaSanPham, SoLuong, DonGia, ThanhTien) " +
+                                                          "VALUES (@MaHD, (SELECT TOP 1 MaSanPham FROM SAN_PHAM WHERE TenSanPham = @TenSP), @SL, @Gia, @ThanhTienCT)";
+                                SqlCommand cmdCT = new SqlCommand(sqlInsertChiTiet, conn, transaction);
+                                cmdCT.Parameters.AddWithValue("@MaHD", maHoaDonMoi);
+                                cmdCT.Parameters.Add("@TenSP", SqlDbType.NVarChar).Value = tenSP; // Fix lỗi tiếng Việt
+                                cmdCT.Parameters.AddWithValue("@SL", soLuongMua);
+                                cmdCT.Parameters.AddWithValue("@Gia", donGia);
+                                cmdCT.Parameters.AddWithValue("@ThanhTienCT", thanhTienCT);
+                                cmdCT.ExecuteNonQuery();
 
-                            // --- Trừ kho SAN_PHAM ---
-                            string sqlUpdateKho = "UPDATE SAN_PHAM SET SoLuongTon = SoLuongTon - @SLMua WHERE TenSanPham = @TenSPKho";
-                            SqlCommand cmdKho = new SqlCommand(sqlUpdateKho, conn, transaction);
-                            cmdKho.Parameters.AddWithValue("@SLMua", soLuongMua);
-                            cmdKho.Parameters.Add("@TenSPKho", SqlDbType.NVarChar).Value = tenSP; // Fix lỗi tiếng Việt
-                            cmdKho.ExecuteNonQuery();
+                                // --- Trừ kho SAN_PHAM ---
+                                string sqlUpdateKho = "UPDATE SAN_PHAM SET SoLuongTon = SoLuongTon - @SLMua WHERE TenSanPham = @TenSPKho";
+                                SqlCommand cmdKho = new SqlCommand(sqlUpdateKho, conn, transaction);
+                                cmdKho.Parameters.AddWithValue("@SLMua", soLuongMua);
+                                cmdKho.Parameters.Add("@TenSPKho", SqlDbType.NVarChar).Value = tenSP; // Fix lỗi tiếng Việt
+                                cmdKho.ExecuteNonQuery();
+                            }
                         }
+
+                        // HOÀN TẤT GIAO DỊCH
+                        transaction.Commit();
+                        MessageBox.Show("Thanh toán thành công! Mã hóa đơn: " + maHoaDonMoi, "Hoàn tất", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                        // Dọn giao diện
+                        dgvDonHang.Rows.Clear();
+                        lbl_TamTinh.Text = "0 đ";
+                        lbl_Sum.Text = "0 đ";
+
+                        if (this.Controls.Find("lbl_GiamGia", true).Length > 0)
+                            this.Controls.Find("lbl_GiamGia", true)[0].Text = "-0 đ";
+
+                        txtMaGiamGia.Text = "";
+                        txtMaGiamGia.Tag = 0.0m;
+
+                        // Nạp lại sản phẩm
+                        LoadSanPhamTuDatabase();
                     }
-
-                    // HOÀN TẤT GIAO DỊCH
-                    transaction.Commit();
-                    MessageBox.Show("Thanh toán thành công! Mã hóa đơn: " + maHoaDonMoi, "Hoàn tất", MessageBoxButtons.OK, MessageBoxIcon.Information);
-
-                    // Dọn giao diện
-                    dgvDonHang.Rows.Clear();
-                    lbl_TamTinh.Text = "0 đ";
-                    lbl_Sum.Text = "0 đ";
-
-                    if (this.Controls.Find("lbl_GiamGia", true).Length > 0)
-                        this.Controls.Find("lbl_GiamGia", true)[0].Text = "-0 đ";
-
-                    txtMaGiamGia.Text = "";
-                    txtMaGiamGia.Tag = 0.0m;
-
-                    // Nạp lại sản phẩm
-                    LoadSanPhamTuDatabase();
+                    catch (Exception ex)
+                    {
+                        transaction.Rollback();
+                        MessageBox.Show("Lỗi hệ thống khi lưu hóa đơn.\nChi tiết: " + ex.Message, "Lỗi Nghiêm Trọng", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
                 }
-                catch (Exception ex)
-                {
-                    transaction.Rollback();
-                    MessageBox.Show("Lỗi hệ thống khi lưu hóa đơn.\nChi tiết: " + ex.Message, "Lỗi Nghiêm Trọng", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Lỗi kết nối cơ sở dữ liệu: " + ex.Message, "Báo Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -480,8 +563,6 @@ namespace demo.Control
         private decimal LayPhanTramGiamTuDB(string tenMa)
         {
             decimal phanTram = 0;
-            // Nhớ kiểm tra lại Data Source cho đúng tên máy (Kiet_PC)
-            string connectionString = @"Data Source=PC-ADMIN\SQLEXPRESS;Initial Catalog=CUA_HANG_TIEN_LOI;Integrated Security=True";
 
             // Câu lệnh SQL: Tìm mã khớp tên VÀ ngày hiện tại phải nằm trong khoảng Bắt đầu -> Kết thúc
             string query = "SELECT PhanTramGiam FROM KHUYEN_MAI " +
@@ -489,11 +570,10 @@ namespace demo.Control
                // CAST sang DATE để bỏ qua phần giờ phút giây
                "AND CAST(GETDATE() AS DATE) BETWEEN NgayBatDau AND NgayKetThuc";
 
-            using (SqlConnection conn = new SqlConnection(connectionString))
+            using (SqlConnection conn = OpenConfiguredConnection())
             {
                 try
                 {
-                    conn.Open();
                     SqlCommand cmd = new SqlCommand(query, conn);
                     cmd.Parameters.AddWithValue("@tenMa", tenMa);
 

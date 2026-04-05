@@ -26,15 +26,19 @@ namespace demo.Control
 
         private void LoadSuppliers()
         {
-            var list = SupplierService.GetAll();
 
             flowSuppliers.Controls.Clear();
+            var list = SupplierService.GetAll();
 
             foreach (var ncc in list)
             {
                 UC_SupplierCard card = new UC_SupplierCard();
                 card.SetData(ncc);
 
+                card.ReloadData += () =>
+                {
+                    LoadSuppliers();
+                };
                 flowSuppliers.Controls.Add(card);
             }
         }
