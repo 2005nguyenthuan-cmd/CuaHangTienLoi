@@ -120,7 +120,6 @@ namespace demo
             this.txtMaSP.Location = new System.Drawing.Point(29, 210);
             this.txtMaSP.Multiline = true;
             this.txtMaSP.Name = "txtMaSP";
-            this.txtMaSP.ReadOnly = true;
             this.txtMaSP.Size = new System.Drawing.Size(132, 30);
             this.txtMaSP.TabIndex = 7;
             // 
