@@ -15,6 +15,7 @@ namespace demo.Control
     public partial class UC_KhachHang : UserControl
     {
         int selectedCustomerId = -1;
+        UC_KhachHangCard selectedCard = null;
         private readonly CustomerService customerService;
         private Panel pnHeader;
         private Label label2;
@@ -42,6 +43,7 @@ namespace demo.Control
         private Button btnThemKH;
         private FlowLayoutPanel flowLayoutPanel1;
         private Button btn_xoa;
+        private Button button1;
         CUA_HANG_TIEN_LOI_Entities db = new CUA_HANG_TIEN_LOI_Entities();
         public UC_KhachHang()
         {
@@ -98,6 +100,16 @@ namespace demo.Control
                 card.Click += (s, e) =>
                 {
                     selectedCustomerId = item.MaKhachHang;
+
+                    // bỏ chọn card cũ
+                    if (selectedCard != null)
+                    {
+                        selectedCard.BackColor = Color.White;
+                    }
+
+                    // chọn card mới
+                    selectedCard = card;
+                    selectedCard.BackColor = Color.FromArgb(255, 230, 230); // hồng nhạt
                 };
 
                 flowLayoutPanel1.Controls.Add(card);
@@ -111,39 +123,40 @@ namespace demo.Control
             this.label1 = new System.Windows.Forms.Label();
             this.panelStats = new System.Windows.Forms.Panel();
             this.panel4 = new System.Windows.Forms.Panel();
+            this.pictureBox4 = new System.Windows.Forms.PictureBox();
             this.label9 = new System.Windows.Forms.Label();
             this.label10 = new System.Windows.Forms.Label();
             this.panel3 = new System.Windows.Forms.Panel();
+            this.pictureBox3 = new System.Windows.Forms.PictureBox();
             this.label7 = new System.Windows.Forms.Label();
             this.label8 = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.pictureBox2 = new System.Windows.Forms.PictureBox();
             this.label5 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
             this.panel2 = new System.Windows.Forms.Panel();
+            this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.label4 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.panel5 = new System.Windows.Forms.Panel();
+            this.btn_xoa = new System.Windows.Forms.Button();
             this.btnThemKH = new System.Windows.Forms.Button();
+            this.pictureBox5 = new System.Windows.Forms.PictureBox();
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
-            this.pictureBox5 = new System.Windows.Forms.PictureBox();
-            this.pictureBox4 = new System.Windows.Forms.PictureBox();
-            this.pictureBox3 = new System.Windows.Forms.PictureBox();
-            this.pictureBox2 = new System.Windows.Forms.PictureBox();
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
-            this.btn_xoa = new System.Windows.Forms.Button();
+            this.button1 = new System.Windows.Forms.Button();
             this.pnHeader.SuspendLayout();
             this.panelStats.SuspendLayout();
             this.panel4.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox4)).BeginInit();
             this.panel3.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).BeginInit();
             this.panel1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             this.panel2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.panel5.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox5)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox4)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
             // pnHeader
@@ -203,6 +216,16 @@ namespace demo.Control
             this.panel4.Size = new System.Drawing.Size(250, 90);
             this.panel4.TabIndex = 3;
             // 
+            // pictureBox4
+            // 
+            this.pictureBox4.Image = global::demo.Properties.Resources._12200crown_109565;
+            this.pictureBox4.Location = new System.Drawing.Point(189, 38);
+            this.pictureBox4.Name = "pictureBox4";
+            this.pictureBox4.Size = new System.Drawing.Size(40, 40);
+            this.pictureBox4.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.pictureBox4.TabIndex = 2;
+            this.pictureBox4.TabStop = false;
+            // 
             // label9
             // 
             this.label9.AutoSize = true;
@@ -234,6 +257,16 @@ namespace demo.Control
             this.panel3.Name = "panel3";
             this.panel3.Size = new System.Drawing.Size(250, 90);
             this.panel3.TabIndex = 3;
+            // 
+            // pictureBox3
+            // 
+            this.pictureBox3.Image = global::demo.Properties.Resources._269561_upward_trend_icon;
+            this.pictureBox3.Location = new System.Drawing.Point(189, 38);
+            this.pictureBox3.Name = "pictureBox3";
+            this.pictureBox3.Size = new System.Drawing.Size(40, 40);
+            this.pictureBox3.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.pictureBox3.TabIndex = 2;
+            this.pictureBox3.TabStop = false;
             // 
             // label7
             // 
@@ -267,6 +300,16 @@ namespace demo.Control
             this.panel1.Size = new System.Drawing.Size(250, 90);
             this.panel1.TabIndex = 3;
             // 
+            // pictureBox2
+            // 
+            this.pictureBox2.Image = global::demo.Properties.Resources.star_favourite_15499;
+            this.pictureBox2.Location = new System.Drawing.Point(189, 38);
+            this.pictureBox2.Name = "pictureBox2";
+            this.pictureBox2.Size = new System.Drawing.Size(40, 40);
+            this.pictureBox2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.pictureBox2.TabIndex = 2;
+            this.pictureBox2.TabStop = false;
+            // 
             // label5
             // 
             this.label5.AutoSize = true;
@@ -299,6 +342,16 @@ namespace demo.Control
             this.panel2.Size = new System.Drawing.Size(250, 90);
             this.panel2.TabIndex = 2;
             // 
+            // pictureBox1
+            // 
+            this.pictureBox1.Image = global::demo.Properties.Resources.systemusers_104569;
+            this.pictureBox1.Location = new System.Drawing.Point(189, 38);
+            this.pictureBox1.Name = "pictureBox1";
+            this.pictureBox1.Size = new System.Drawing.Size(40, 40);
+            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.pictureBox1.TabIndex = 2;
+            this.pictureBox1.TabStop = false;
+            // 
             // label4
             // 
             this.label4.AutoSize = true;
@@ -324,6 +377,7 @@ namespace demo.Control
             // panel5
             // 
             this.panel5.BackColor = System.Drawing.Color.White;
+            this.panel5.Controls.Add(this.button1);
             this.panel5.Controls.Add(this.btn_xoa);
             this.panel5.Controls.Add(this.btnThemKH);
             this.panel5.Controls.Add(this.pictureBox5);
@@ -333,6 +387,20 @@ namespace demo.Control
             this.panel5.Name = "panel5";
             this.panel5.Size = new System.Drawing.Size(1200, 90);
             this.panel5.TabIndex = 2;
+            // 
+            // btn_xoa
+            // 
+            this.btn_xoa.BackColor = System.Drawing.Color.Pink;
+            this.btn_xoa.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btn_xoa.Font = new System.Drawing.Font("Segoe UI", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(163)));
+            this.btn_xoa.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.btn_xoa.Location = new System.Drawing.Point(786, 25);
+            this.btn_xoa.Name = "btn_xoa";
+            this.btn_xoa.Size = new System.Drawing.Size(200, 40);
+            this.btn_xoa.TabIndex = 5;
+            this.btn_xoa.Text = "- Xóa Khách Hàng";
+            this.btn_xoa.UseVisualStyleBackColor = false;
+            this.btn_xoa.Click += new System.EventHandler(this.btn_xoa_Click);
             // 
             // btnThemKH
             // 
@@ -347,6 +415,16 @@ namespace demo.Control
             this.btnThemKH.Text = "+ Thêm khách hàng";
             this.btnThemKH.UseVisualStyleBackColor = false;
             this.btnThemKH.Click += new System.EventHandler(this.btnThemKH_Click);
+            // 
+            // pictureBox5
+            // 
+            this.pictureBox5.Image = global::demo.Properties.Resources.xmag_search_find_export_locate_5984;
+            this.pictureBox5.Location = new System.Drawing.Point(40, 30);
+            this.pictureBox5.Name = "pictureBox5";
+            this.pictureBox5.Size = new System.Drawing.Size(30, 30);
+            this.pictureBox5.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.pictureBox5.TabIndex = 3;
+            this.pictureBox5.TabStop = false;
             // 
             // textBox1
             // 
@@ -366,69 +444,19 @@ namespace demo.Control
             this.flowLayoutPanel1.Size = new System.Drawing.Size(1200, 410);
             this.flowLayoutPanel1.TabIndex = 3;
             // 
-            // pictureBox5
+            // button1
             // 
-            this.pictureBox5.Image = global::demo.Properties.Resources.xmag_search_find_export_locate_5984;
-            this.pictureBox5.Location = new System.Drawing.Point(40, 30);
-            this.pictureBox5.Name = "pictureBox5";
-            this.pictureBox5.Size = new System.Drawing.Size(30, 30);
-            this.pictureBox5.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.pictureBox5.TabIndex = 3;
-            this.pictureBox5.TabStop = false;
-            // 
-            // pictureBox4
-            // 
-            this.pictureBox4.Image = global::demo.Properties.Resources._12200crown_109565;
-            this.pictureBox4.Location = new System.Drawing.Point(189, 38);
-            this.pictureBox4.Name = "pictureBox4";
-            this.pictureBox4.Size = new System.Drawing.Size(40, 40);
-            this.pictureBox4.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.pictureBox4.TabIndex = 2;
-            this.pictureBox4.TabStop = false;
-            // 
-            // pictureBox3
-            // 
-            this.pictureBox3.Image = global::demo.Properties.Resources._269561_upward_trend_icon;
-            this.pictureBox3.Location = new System.Drawing.Point(189, 38);
-            this.pictureBox3.Name = "pictureBox3";
-            this.pictureBox3.Size = new System.Drawing.Size(40, 40);
-            this.pictureBox3.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.pictureBox3.TabIndex = 2;
-            this.pictureBox3.TabStop = false;
-            // 
-            // pictureBox2
-            // 
-            this.pictureBox2.Image = global::demo.Properties.Resources.star_favourite_15499;
-            this.pictureBox2.Location = new System.Drawing.Point(189, 38);
-            this.pictureBox2.Name = "pictureBox2";
-            this.pictureBox2.Size = new System.Drawing.Size(40, 40);
-            this.pictureBox2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.pictureBox2.TabIndex = 2;
-            this.pictureBox2.TabStop = false;
-            // 
-            // pictureBox1
-            // 
-            this.pictureBox1.Image = global::demo.Properties.Resources.systemusers_104569;
-            this.pictureBox1.Location = new System.Drawing.Point(189, 38);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(40, 40);
-            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.pictureBox1.TabIndex = 2;
-            this.pictureBox1.TabStop = false;
-            // 
-            // btn_xoa
-            // 
-            this.btn_xoa.BackColor = System.Drawing.Color.Pink;
-            this.btn_xoa.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btn_xoa.Font = new System.Drawing.Font("Segoe UI", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(163)));
-            this.btn_xoa.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.btn_xoa.Location = new System.Drawing.Point(786, 25);
-            this.btn_xoa.Name = "btn_xoa";
-            this.btn_xoa.Size = new System.Drawing.Size(200, 40);
-            this.btn_xoa.TabIndex = 5;
-            this.btn_xoa.Text = "- Xóa Khách Hàng";
-            this.btn_xoa.UseVisualStyleBackColor = false;
-            this.btn_xoa.Click += new System.EventHandler(this.btn_xoa_Click);
+            this.button1.BackColor = System.Drawing.Color.Pink;
+            this.button1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.button1.Font = new System.Drawing.Font("Segoe UI", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(163)));
+            this.button1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.button1.Location = new System.Drawing.Point(996, 25);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(115, 40);
+            this.button1.TabIndex = 6;
+            this.button1.Text = "Sửa";
+            this.button1.UseVisualStyleBackColor = false;
+            this.button1.Click += new System.EventHandler(this.button1_Click_1);
             // 
             // UC_KhachHang
             // 
@@ -445,19 +473,19 @@ namespace demo.Control
             this.panelStats.ResumeLayout(false);
             this.panel4.ResumeLayout(false);
             this.panel4.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox4)).EndInit();
             this.panel3.ResumeLayout(false);
             this.panel3.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).EndInit();
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
             this.panel2.ResumeLayout(false);
             this.panel2.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.panel5.ResumeLayout(false);
             this.panel5.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox5)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox4)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -469,7 +497,29 @@ namespace demo.Control
 
         private void textBox1_TextChanged(object sender, EventArgs e)
         {
-            TimKiemKhachHang(textBox1.Text);
+            LoadKhachHang(textBox1.Text);
+        }
+        void LoadKhachHang(string keyword = "")
+        {
+            flowLayoutPanel1.SuspendLayout(); // 🔥 NGĂN NHÁY
+
+            flowLayoutPanel1.Controls.Clear();
+
+            using (var db = new CUA_HANG_TIEN_LOI_Entities())
+            {
+                var list = db.KHACH_HANG
+                             .Where(x => x.TenKhachHang.Contains(keyword))
+                             .ToList();
+
+                foreach (var kh in list)
+                {
+                    UC_KhachHangCard card = new UC_KhachHangCard();
+                    card.setdata(kh);
+                    flowLayoutPanel1.Controls.Add(card);
+                }
+            }
+
+            flowLayoutPanel1.ResumeLayout(); // 🔥 VẼ LẠI 1 LẦN
         }
         void TimKiemKhachHang(string keyword)
         {
@@ -485,6 +535,19 @@ namespace demo.Control
                 {
                     UC_KhachHangCard card = new UC_KhachHangCard();
                     card.setdata(kh);
+
+                    card.Click += (s, e) =>
+                    {
+                        selectedCustomerId = kh.MaKhachHang;
+
+                        if (selectedCard != null)
+                        {
+                            selectedCard.BackColor = Color.White;
+                        }
+
+                        selectedCard = card;
+                        selectedCard.BackColor = Color.FromArgb(255, 245, 200);
+                    };
 
                     flowLayoutPanel1.Controls.Add(card);
                 }
@@ -520,6 +583,20 @@ namespace demo.Control
             {
                 using (var db = new CUA_HANG_TIEN_LOI_Entities())
                 {
+                    // kiểm tra khách hàng có hóa đơn chưa
+                    bool hasInvoice = db.HOA_DON
+                                        .Any(x => x.MaKhachHang == selectedCustomerId);
+
+                    if (hasInvoice)
+                    {
+                        MessageBox.Show(
+                            "Khách hàng này đã có hóa đơn nên không thể xóa!",
+                            "Không thể xóa",
+                            MessageBoxButtons.OK,
+                            MessageBoxIcon.Warning);
+                        return;
+                    }
+
                     var kh = db.KHACH_HANG.Find(selectedCustomerId);
 
                     if (kh != null)
@@ -531,10 +608,40 @@ namespace demo.Control
 
                 selectedCustomerId = -1;
 
-                loaddata();      // load lại danh sách
-                LoadThongKe();   // cập nhật tổng khách + VIP
+                loaddata();
+                LoadThongKe();
 
                 MessageBox.Show("Xóa khách hàng thành công!");
+            }
+        }
+
+        private void button1_Click_1(object sender, EventArgs e)
+        {
+            if (selectedCustomerId == -1)
+            {
+                MessageBox.Show("Vui lòng chọn khách hàng để sửa!");
+                return;
+            }
+
+            using (var db = new CUA_HANG_TIEN_LOI_Entities())
+            {
+                // 2. Lấy khách hàng từ DB
+                var kh = db.KHACH_HANG.Find(selectedCustomerId);
+
+                if (kh == null)
+                {
+                    MessageBox.Show("Không tìm thấy khách hàng!");
+                    return;
+                }
+
+                // 3. MỞ FORM SỬA (🔥 QUAN TRỌNG)
+                FrmThemKhachHang f = new FrmThemKhachHang(kh);
+
+                if (f.ShowDialog() == DialogResult.OK)
+                {
+                    loaddata();
+                    LoadThongKe();
+                }
             }
         }
     }

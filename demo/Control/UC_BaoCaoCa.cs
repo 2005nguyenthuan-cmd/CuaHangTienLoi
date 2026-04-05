@@ -58,6 +58,22 @@ namespace demo.Control
 
             var ca = LayCaHienTai();
             HienThiThoiGian(ca);
+
+            if (ca != null)
+            {
+                DateTime tuNgay = DateTime.Today.Add(ca.GioBatDau ?? TimeSpan.Zero);
+                DateTime denNgay = DateTime.Today.Add(ca.GioKetThuc ?? TimeSpan.Zero);
+
+                // xử lý ca đêm
+                if (denNgay < tuNgay)
+                    denNgay = denNgay.AddDays(1);
+
+                RefreshBaoCao(tuNgay, denNgay);
+            }
+            else
+            {
+                RefreshBaoCao(DateTime.Now.AddDays(-7), DateTime.Now);
+            }
             FormatOrderGrid_Pro();
         }
 
@@ -123,19 +139,35 @@ namespace demo.Control
         {
             RefreshBaoCao(DateTime.Now.AddDays(-30), DateTime.Now);
         }
-        
+
         //Bang datagridview bangca
 
-        string LayCa(DateTime ngay)
-        {
-            int gio = ngay.Hour;
+        /*  string LayCa(DateTime ngay)
+          {
+              int gio = ngay.Hour;
 
-            if (gio >= 6 && gio < 14)
-                return "Ca sáng";
-            else if (gio >= 14 && gio < 22)
-                return "Ca chiều";
-            else
-                return "Ca đêm";
+              if (gio >= 6 && gio < 14)
+                  return "Ca sáng";
+              else if (gio >= 14 && gio < 22)
+                  return "Ca chiều";
+              else
+                  return "Ca đêm";
+          }*/
+        DateTime LayTuNgayTheoCa(CA_LAM_VIEC ca)
+        {
+            return DateTime.Today.Add(ca.GioBatDau ?? TimeSpan.Zero);
+        }
+
+        DateTime LayDenNgayTheoCa(CA_LAM_VIEC ca)
+        {
+            TimeSpan batDau = ca.GioBatDau ?? TimeSpan.Zero;
+            TimeSpan ketThuc = ca.GioKetThuc ?? TimeSpan.Zero;
+
+            // xử lý ca đêm
+            if (ketThuc < batDau)
+                return DateTime.Today.AddDays(1).Add(ketThuc);
+
+            return DateTime.Today.Add(ketThuc);
         }
 
         //hienthithoigian
@@ -289,8 +321,8 @@ namespace demo.Control
                 if (row.Cells[0].Value == null) continue;
 
                 // Sửa tên cột cho đúng với Data Source
-                string ngay = row.Cells["NgayLap"].Value.ToString(); // Đổi "Ngay" thành "NgayLap"
-                string ca = LayCa(DateTime.Parse(ngay)); // Dùng hàm LayCa bạn đã viết
+                string ngay = row.Cells["NgayLap"].Value.ToString();
+                string ca = row.Cells["TenCa"].Value.ToString();
                 string soDon = row.Cells["SoLuong"].Value.ToString(); // Đổi "SoDon" thành "SoLuong"
                 string doanhThu = row.Cells["TongTien"].Value.ToString();
 
@@ -535,20 +567,23 @@ void XuatWord(string path)
         //giờ làm
         CA_LAM_VIEC LayCaHienTai()
         {
-            var now = DateTime.Now.TimeOfDay;
+            int maNV = UserSession.MaNhanVien;
+            DateTime homNay = DateTime.Today;
+
+            var lich = db.LICH_LAM_VIEC
+                .FirstOrDefault(x => x.MaNhanVien == maNV
+                                  && DbFunctions.TruncateTime(x.NgayLam) == homNay);
+
+            if (lich == null) return null;
 
             return db.CA_LAM_VIEC
-                .ToList()
-                .FirstOrDefault(c =>
-                    (c.GioBatDau <= c.GioKetThuc && now >= c.GioBatDau && now <= c.GioKetThuc)
-                 || (c.GioBatDau > c.GioKetThuc && (now >= c.GioBatDau || now <= c.GioKetThuc))
-                );
+                .FirstOrDefault(c => c.MaCa == lich.MaCa);
         }
         void LoadLichSuCa(int maNV, DateTime tu, DateTime den)
         {
             var data = hoaDonService.GetLichSuCa(maNV, tu, den);
-            flpLichSuCa.Controls.Add(TaoHeaderLichSuCa());
             flpLichSuCa.Controls.Clear();
+            flpLichSuCa.Controls.Add(TaoHeaderLichSuCa());
 
             foreach (var item in data)
             {

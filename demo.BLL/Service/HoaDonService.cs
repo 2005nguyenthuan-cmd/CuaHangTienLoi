@@ -43,7 +43,8 @@ namespace demo.BLL.Service
         public List<HoaDonDTO> GetHoaDonChiTiet(int maNhanVien, DateTime tuNgay, DateTime denNgay)
         {
             var list = db.HOA_DON
-                .Where(hd => hd.MaNhanVien == maNhanVien && hd.NgayLap >= tuNgay && hd.NgayLap <= denNgay)
+                .Where(hd => hd.NgayLap >= tuNgay
+          && hd.NgayLap <= denNgay)
                 .Select(hd => new
                 {
                     MaDon = hd.MaHoaDon,
@@ -72,22 +73,23 @@ namespace demo.BLL.Service
         public decimal GetTongTien(int maNhanVien, DateTime tuNgay, DateTime denNgay)
         {
             return db.HOA_DON
-                .Where(x => x.MaNhanVien == maNhanVien && x.NgayLap >= tuNgay && x.NgayLap <= denNgay)
-                .Sum(x => (decimal?)x.TongTien) ?? 0;
+          .Where(x => x.NgayLap >= tuNgay && x.NgayLap <= denNgay)
+          .Sum(x => (decimal?)x.TongTien) ?? 0;
         }
 
         // 3. Hàm lấy tổng số đơn
         public int GetTongSoDon(int maNhanVien, DateTime tuNgay, DateTime denNgay)
         {
             return db.HOA_DON
-                .Count(x => x.MaNhanVien == maNhanVien && x.NgayLap >= tuNgay && x.NgayLap <= denNgay);
+    .Count(x => x.NgayLap >= tuNgay && x.NgayLap <= denNgay);
         }
 
         // 4. Hàm lấy Top sản phẩm
         public List<dynamic> GetTopSanPham(int maNhanVien, DateTime tuNgay, DateTime denNgay)
         {
             var data = db.CHI_TIET_HOA_DON
-                .Where(ct => ct.HOA_DON.MaNhanVien == maNhanVien && ct.HOA_DON.NgayLap >= tuNgay && ct.HOA_DON.NgayLap <= denNgay)
+                .Where(ct => ct.HOA_DON.NgayLap >= tuNgay
+          && ct.HOA_DON.NgayLap <= denNgay)
                 .GroupBy(ct => ct.SAN_PHAM.TenSanPham)
                 .Select(g => new
                 {
@@ -112,27 +114,33 @@ namespace demo.BLL.Service
             using (var db = new CUA_HANG_TIEN_LOI_Entities())
             {
                 var data = db.HOA_DON
-                    .Where(x => x.MaNhanVien == maNV
-                             && x.NgayLap >= tu
-                             && x.NgayLap <= den)
+                    .Where(x => x.NgayLap >= tu && x.NgayLap <= den)
                     .ToList()
-                    .Select(x => new
+                    .Select(x =>
                     {
-                        Ngay = x.NgayLap.Value.Date,
-                        Ca = LayCa(x.NgayLap.Value),
-                        TongTien = x.TongTien ?? 0
+                        string ca = LayCa(x.NgayLap.Value);
+
+                        return new
+                        {
+                            Ngay = x.NgayLap.Value.Date,
+                            Ca = ca,
+                            GioBatDau = LayGioBatDau(ca),
+                            GioKetThuc = LayGioKetThuc(ca),
+                            TongTien = x.TongTien ?? 0
+                        };
                     })
-                    .GroupBy(x => new { x.Ngay, x.Ca })
+                    .GroupBy(x => new { x.Ngay, x.Ca, x.GioBatDau, x.GioKetThuc })
                     .Select(g => new LichSuCaDTO
                     {
                         Ngay = g.Key.Ngay,
                         TenCa = g.Key.Ca,
-                        GioBatDau = LayGioBatDau(g.Key.Ca),
-                        GioKetThuc = LayGioKetThuc(g.Key.Ca),
+                        GioBatDau = g.Key.GioBatDau,
+                        GioKetThuc = g.Key.GioKetThuc,
                         SoDon = g.Count(),
                         DoanhThu = g.Sum(x => x.TongTien)
                     })
                     .OrderByDescending(x => x.Ngay)
+                    .ThenByDescending(x => x.GioBatDau)
                     .ToList();
 
                 return data;
