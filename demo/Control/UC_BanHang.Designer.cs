@@ -30,6 +30,7 @@
         {
             this.pnlCart = new System.Windows.Forms.Panel();
             this.panel2 = new System.Windows.Forms.Panel();
+            this.lblGiamGia = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.btnApDung = new System.Windows.Forms.Button();
@@ -50,7 +51,9 @@
             this.label4 = new System.Windows.Forms.Label();
             this.flpProducts = new System.Windows.Forms.FlowLayoutPanel();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
-            this.lblGiamGia = new System.Windows.Forms.Label();
+            this.txtSoDienThoai = new System.Windows.Forms.TextBox();
+            this.label6 = new System.Windows.Forms.Label();
+            this.btnXoaSanPham = new System.Windows.Forms.Button();
             this.pnlCart.SuspendLayout();
             this.panel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvDonHang)).BeginInit();
@@ -63,6 +66,9 @@
             // pnlCart
             // 
             this.pnlCart.BackColor = System.Drawing.SystemColors.ActiveBorder;
+            this.pnlCart.Controls.Add(this.btnXoaSanPham);
+            this.pnlCart.Controls.Add(this.label6);
+            this.pnlCart.Controls.Add(this.txtSoDienThoai);
             this.pnlCart.Controls.Add(this.panel2);
             this.pnlCart.Controls.Add(this.dgvDonHang);
             this.pnlCart.Controls.Add(this.panel1);
@@ -83,10 +89,21 @@
             this.panel2.Controls.Add(this.txtMaGiamGia);
             this.panel2.Controls.Add(this.lbl_TamTinh);
             this.panel2.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panel2.Location = new System.Drawing.Point(0, 390);
+            this.panel2.Location = new System.Drawing.Point(0, 396);
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(585, 100);
             this.panel2.TabIndex = 3;
+            // 
+            // lblGiamGia
+            // 
+            this.lblGiamGia.AutoSize = true;
+            this.lblGiamGia.Font = new System.Drawing.Font("Microsoft YaHei", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblGiamGia.ForeColor = System.Drawing.Color.Gold;
+            this.lblGiamGia.Location = new System.Drawing.Point(474, 64);
+            this.lblGiamGia.Name = "lblGiamGia";
+            this.lblGiamGia.Size = new System.Drawing.Size(32, 24);
+            this.lblGiamGia.TabIndex = 5;
+            this.lblGiamGia.Text = "0đ";
             // 
             // label5
             // 
@@ -132,7 +149,6 @@
             this.txtMaGiamGia.Name = "txtMaGiamGia";
             this.txtMaGiamGia.Size = new System.Drawing.Size(419, 22);
             this.txtMaGiamGia.TabIndex = 0;
-            this.txtMaGiamGia.Text = "Mã Giảm Giá";
             this.txtMaGiamGia.TextChanged += new System.EventHandler(this.txtMaGiamGia_TextChanged);
             // 
             // lbl_TamTinh
@@ -158,7 +174,7 @@
             this.dgvDonHang.Name = "dgvDonHang";
             this.dgvDonHang.RowHeadersWidth = 51;
             this.dgvDonHang.RowTemplate.Height = 24;
-            this.dgvDonHang.Size = new System.Drawing.Size(552, 341);
+            this.dgvDonHang.Size = new System.Drawing.Size(552, 288);
             this.dgvDonHang.TabIndex = 2;
             // 
             // Column1
@@ -195,16 +211,16 @@
             this.panel1.Controls.Add(this.btnThanhToan);
             this.panel1.Controls.Add(this.lbl_Sum);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panel1.Location = new System.Drawing.Point(0, 490);
+            this.panel1.Location = new System.Drawing.Point(0, 496);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(585, 110);
+            this.panel1.Size = new System.Drawing.Size(585, 104);
             this.panel1.TabIndex = 1;
             // 
             // label3
             // 
             this.label3.AutoSize = true;
             this.label3.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label3.Location = new System.Drawing.Point(13, 4);
+            this.label3.Location = new System.Drawing.Point(13, 29);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(97, 23);
             this.label3.TabIndex = 5;
@@ -229,7 +245,7 @@
             this.lbl_Sum.AutoSize = true;
             this.lbl_Sum.Font = new System.Drawing.Font("Microsoft YaHei", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lbl_Sum.ForeColor = System.Drawing.Color.Gold;
-            this.lbl_Sum.Location = new System.Drawing.Point(474, 0);
+            this.lbl_Sum.Location = new System.Drawing.Point(474, 28);
             this.lbl_Sum.Name = "lbl_Sum";
             this.lbl_Sum.Size = new System.Drawing.Size(32, 24);
             this.lbl_Sum.TabIndex = 1;
@@ -302,16 +318,33 @@
             this.dataGridView1.Size = new System.Drawing.Size(700, 0);
             this.dataGridView1.TabIndex = 0;
             // 
-            // lblGiamGia
+            // txtSoDienThoai
             // 
-            this.lblGiamGia.AutoSize = true;
-            this.lblGiamGia.Font = new System.Drawing.Font("Microsoft YaHei", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblGiamGia.ForeColor = System.Drawing.Color.Gold;
-            this.lblGiamGia.Location = new System.Drawing.Point(474, 64);
-            this.lblGiamGia.Name = "lblGiamGia";
-            this.lblGiamGia.Size = new System.Drawing.Size(32, 24);
-            this.lblGiamGia.TabIndex = 5;
-            this.lblGiamGia.Text = "0đ";
+            this.txtSoDienThoai.Location = new System.Drawing.Point(213, 367);
+            this.txtSoDienThoai.Name = "txtSoDienThoai";
+            this.txtSoDienThoai.Size = new System.Drawing.Size(349, 22);
+            this.txtSoDienThoai.TabIndex = 4;
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label6.ForeColor = System.Drawing.Color.White;
+            this.label6.Location = new System.Drawing.Point(13, 365);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(178, 22);
+            this.label6.TabIndex = 5;
+            this.label6.Text = "Nhập số điện thoại";
+            // 
+            // btnXoaSanPham
+            // 
+            this.btnXoaSanPham.Location = new System.Drawing.Point(442, 338);
+            this.btnXoaSanPham.Name = "btnXoaSanPham";
+            this.btnXoaSanPham.Size = new System.Drawing.Size(120, 23);
+            this.btnXoaSanPham.TabIndex = 6;
+            this.btnXoaSanPham.Text = "Xóa sản phẩm";
+            this.btnXoaSanPham.UseVisualStyleBackColor = true;
+            this.btnXoaSanPham.Click += new System.EventHandler(this.btnXoaSanPham_Click);
             // 
             // UC_BanHang
             // 
@@ -363,5 +396,8 @@
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.TextBox txtTimKiem;
         private System.Windows.Forms.Label lblGiamGia;
+        private System.Windows.Forms.TextBox txtSoDienThoai;
+        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.Button btnXoaSanPham;
     }
 }
