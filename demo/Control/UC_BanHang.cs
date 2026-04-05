@@ -194,7 +194,7 @@ namespace demo.Control
             flpProducts.Controls.Clear();
 
             // 2. Chuỗi kết nối (CỰC QUAN TRỌNG: Bạn sửa lại chỗ Kiet_PC cho đúng với tên Server SQL của bạn nhé)
-            string connectionString = @"Data Source=LAPTOP-ABQPQIPN\SQL2022;Initial Catalog=CUA_HANG_TIEN_LOI;Integrated Security=True";
+            string connectionString = @"Data Source=PC-ADMIN\SQLEXPRESS;Initial Catalog=CUA_HANG_TIEN_LOI;Integrated Security=True";
 
             // Câu lệnh SQL lấy dữ liệu
             string query = "SELECT TenSanPham, MoTa, GiaBan, SoLuongTon, HinhAnh FROM SAN_PHAM";
@@ -281,7 +281,7 @@ namespace demo.Control
             flpProducts.Controls.Clear();
 
             // Nhớ sửa lại Data Source cho đúng tên máy của bạn nhé (Kiet_PC)
-            string connectionString = @"Data Source=LAPTOP-ABQPQIPN\SQL2022;Initial Catalog=CUA_HANG_TIEN_LOI;Integrated Security=True";
+            string connectionString = @"Data Source=PC-ADMIN\SQLEXPRESS;Initial Catalog=CUA_HANG_TIEN_LOI;Integrated Security=True";
 
             // Câu lệnh SQL lọc theo Mô Tả (Tìm gần đúng chứa từ khóa)
             string query = "SELECT TenSanPham, MoTa, GiaBan, SoLuongTon, HinhAnh FROM SAN_PHAM WHERE MoTa LIKE @tuKhoa";
@@ -370,7 +370,7 @@ namespace demo.Control
             // CHÚ Ý CHỖ NÀY: SỬA LẠI TÊN SERVER CHO ĐÚNG VỚI TRONG HÌNH CỦA BẠN
             // Ví dụ: @"Data Source=Kiet_PC\kingo;Initial Catalog..."
             // =========================================================================
-            string strConn = @"Data Source=LAPTOP-ABQPQIPN\SQL2022;Initial Catalog=CUA_HANG_TIEN_LOI;Integrated Security=True";
+            string strConn = @"Data Source=PC-ADMIN\SQLEXPRESS;Initial Catalog=CUA_HANG_TIEN_LOI;Integrated Security=True";
 
             using (SqlConnection conn = new SqlConnection(strConn))
             {
@@ -481,7 +481,7 @@ namespace demo.Control
         {
             decimal phanTram = 0;
             // Nhớ kiểm tra lại Data Source cho đúng tên máy (Kiet_PC)
-            string connectionString = @"Data Source=LAPTOP-ABQPQIPN\SQL2022;Initial Catalog=CUA_HANG_TIEN_LOI;Integrated Security=True";
+            string connectionString = @"Data Source=PC-ADMIN\SQLEXPRESS;Initial Catalog=CUA_HANG_TIEN_LOI;Integrated Security=True";
 
             // Câu lệnh SQL: Tìm mã khớp tên VÀ ngày hiện tại phải nằm trong khoảng Bắt đầu -> Kết thúc
             string query = "SELECT PhanTramGiam FROM KHUYEN_MAI " +
