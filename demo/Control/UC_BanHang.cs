@@ -24,7 +24,7 @@ namespace demo.Control
 
         private void UC_BanHang_Load(object sender, EventArgs e)
         {
-            
+
         }
 
         private void pnlCart_Paint(object sender, PaintEventArgs e)
@@ -94,31 +94,24 @@ namespace demo.Control
                 {
                     string path = System.IO.Path.Combine(Application.StartupPath, "Resources", duongDanHinh);
 
-                    // BẬT TẠM DÒNG NÀY LÊN ĐỂ XEM MÁY TÍNH TÌM ẢNH Ở ĐÂU:
-                    // MessageBox.Show("Đang tìm ảnh tại: \n" + path);
-
                     if (System.IO.File.Exists(path))
                     {
                         pic.Image = Image.FromFile(path);
                     }
                     else
                     {
-                        // Nếu không thấy file, nó sẽ in ra cái bảng nhỏ cho mình biết
-                        // MessageBox.Show("Không tìm thấy file tại đường dẫn này!"); 
                         pic.BackColor = Color.FromArgb(50, 50, 60);
                     }
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Lỗi load ảnh: " + ex.Message);
                 pic.BackColor = Color.DimGray;
             }
 
             card.Tag = new string[] { ten, gia };
 
             // 2. Gắn sự kiện Click. 
-            // Phải gắn cho cả Panel, Hình ảnh và các chữ. Tránh tình trạng khách bấm trúng cái chữ thì nó không ăn.
             card.Click += SanPham_Click;
             pic.Click += SanPham_Click;
             lblTen.Click += SanPham_Click;
@@ -141,45 +134,38 @@ namespace demo.Control
                 string giaSP = thongTin[1];
 
                 // =====================================================
-                // 2. KIỂM TRA MÓN ĐÃ CÓ TRONG GIỎ CHƯA (Dùng vị trí cột 0, 1, 2, 3)
+                // 2. KIỂM TRA MÓN ĐÃ CÓ TRONG GIỎ CHƯA
                 // =====================================================
                 bool daCoTrongGio = false;
 
                 foreach (DataGridViewRow row in dgvDonHang.Rows)
                 {
-                    // Bỏ qua dòng trống rỗng cuối cùng của DataGridView
                     if (row.IsNewRow) continue;
 
-                    // Cột [0] là Tên món: Kiểm tra xem tên có trùng không
                     if (row.Cells[0].Value != null && row.Cells[0].Value.ToString() == tenSP)
                     {
-                        daCoTrongGio = true; // Đánh dấu là đã tìm thấy
+                        daCoTrongGio = true;
 
-                        // Cột [1] là Số lượng: Lấy SL hiện tại cộng thêm 1
                         int slHienTai = Convert.ToInt32(row.Cells[1].Value);
                         int slMoi = slHienTai + 1;
                         row.Cells[1].Value = slMoi.ToString();
 
-                        // Lột bỏ chữ 'đ' và dấu chấm của Đơn Giá để tính toán
                         string chuoiGia = giaSP.Replace("đ", "").Replace(".", "").Replace(",", "").Trim();
                         if (decimal.TryParse(chuoiGia, out decimal giaTienGoc))
                         {
-                            // Cột [3] là Thành tiền: Cập nhật lại tiền mới
                             decimal thanhTienMoi = giaTienGoc * slMoi;
                             row.Cells[3].Value = thanhTienMoi.ToString("N0") + " đ";
                         }
 
-                        break; // Tìm thấy rồi thì thoát vòng lặp
+                        break;
                     }
                 }
 
-                // 3. Nếu quét hết giỏ mà chưa có món này -> Thêm dòng mới tinh
                 if (daCoTrongGio == false)
                 {
                     dgvDonHang.Rows.Add(tenSP, "1", giaSP, giaSP);
                 }
 
-                // 4. Kích hoạt tính lại Tổng Cộng
                 TinhTongTien();
             }
             catch (Exception ex)
@@ -190,13 +176,11 @@ namespace demo.Control
 
         private void LoadSanPhamTuDatabase()
         {
-            // 1. Xóa sạch màn hình trước khi nạp đồ mới
             flpProducts.Controls.Clear();
 
-            // 2. Chuỗi kết nối (CỰC QUAN TRỌNG: Bạn sửa lại chỗ Kiet_PC cho đúng với tên Server SQL của bạn nhé)
-            string connectionString = @"Data Source=PC-ADMIN\SQLEXPRESS;Initial Catalog=CUA_HANG_TIEN_LOI;Integrated Security=True";
+            // ĐÃ SỬA LẠI THÀNH Kiet_PC
+            string connectionString = @"Data Source=Kiet_PC;Initial Catalog=CUA_HANG_TIEN_LOI;Integrated Security=True";
 
-            // Câu lệnh SQL lấy dữ liệu
             string query = "SELECT TenSanPham, MoTa, GiaBan, SoLuongTon, HinhAnh FROM SAN_PHAM";
 
             using (SqlConnection conn = new SqlConnection(connectionString))
@@ -207,32 +191,21 @@ namespace demo.Control
                     SqlCommand cmd = new SqlCommand(query, conn);
                     SqlDataReader reader = cmd.ExecuteReader();
 
-                    // 3. Đọc từng dòng dữ liệu trong bảng SAN_PHAM
                     while (reader.Read())
                     {
-                        // Lấy thông tin cơ bản
                         string ten = reader["TenSanPham"].ToString();
-
-                        // Cột MoTa đang chứa text (Nước ngọt, Mì ăn liền...), mình dùng tạm làm danh mục
                         string danhMuc = reader["MoTa"].ToString();
-
                         string soLuong = reader["SoLuongTon"].ToString();
-
-                        // Ép kiểu Giá Bán và format cho đẹp (ví dụ: 10000 -> 10.000)
                         decimal gia = Convert.ToDecimal(reader["GiaBan"]);
                         string giaHienThi = gia.ToString("N0") + " đ";
 
-                        // Xử lý cột Hình Ảnh (Đề phòng database đang bị NULL)
                         string duongDanHinh = "";
                         if (reader["HinhAnh"] != DBNull.Value)
                         {
                             duongDanHinh = reader["HinhAnh"].ToString();
                         }
 
-                        // 4. Bỏ dữ liệu vào cái "Khuôn đúc" đã tạo lúc nãy
                         Panel theSP = TaoTheSanPham_DarkTheme(ten, danhMuc, giaHienThi, soLuong, duongDanHinh);
-
-                        // 5. Quăng thẻ lên mâm
                         flpProducts.Controls.Add(theSP);
                     }
                 }
@@ -242,17 +215,16 @@ namespace demo.Control
                 }
             }
         }
+
         private void TinhTongTien()
         {
-            decimal tamTinh = 0; // KHAI BÁO BIẾN TẠM TÍNH
+            decimal tamTinh = 0;
 
-            // 1. Quét giỏ hàng để cộng dồn tiền các món
             foreach (DataGridViewRow row in dgvDonHang.Rows)
             {
                 if (!row.IsNewRow && row.Cells[3].Value != null)
                 {
                     string chuoiTien = row.Cells[3].Value.ToString();
-                    // Dọn dẹp rác để lấy số
                     chuoiTien = chuoiTien.Replace(" đ", "").Replace(".", "").Replace(",", "").Trim();
 
                     if (decimal.TryParse(chuoiTien, out decimal tienMonNay))
@@ -262,14 +234,10 @@ namespace demo.Control
                 }
             }
 
-            // 2. KHAI BÁO BIẾN GIẢM GIÁ VÀ TÍNH TOÁN (Để ngoài vòng lặp)
             decimal phanTramGiam = txtMaGiamGia.Tag != null ? Convert.ToDecimal(txtMaGiamGia.Tag) : 0;
             decimal giamGia = tamTinh * phanTramGiam;
-
-            // 3. Tính Tổng cộng
             decimal tongCong = tamTinh - giamGia;
 
-            // 4. Gắn kết quả lên Label (Nhớ đổi tên Label cho đúng với Name của bạn nhé)
             lbl_TamTinh.Text = tamTinh.ToString("N0") + " đ";
             lblGiamGia.Text = "-" + giamGia.ToString("N0") + " đ";
             lbl_Sum.Text = tongCong.ToString("N0") + " đ";
@@ -277,13 +245,11 @@ namespace demo.Control
 
         private void HienThiSanPhamTheoMoTa(string tuKhoa)
         {
-            // Xóa sạch mâm cũ để bày đồ mới lên
             flpProducts.Controls.Clear();
 
-            // Nhớ sửa lại Data Source cho đúng tên máy của bạn nhé (Kiet_PC)
-            string connectionString = @"Data Source=PC-ADMIN\SQLEXPRESS;Initial Catalog=CUA_HANG_TIEN_LOI;Integrated Security=True";
+            // ĐÃ SỬA LẠI THÀNH Kiet_PC
+            string connectionString = @"Data Source=Kiet_PC;Initial Catalog=CUA_HANG_TIEN_LOI;Integrated Security=True";
 
-            // Câu lệnh SQL lọc theo Mô Tả (Tìm gần đúng chứa từ khóa)
             string query = "SELECT TenSanPham, MoTa, GiaBan, SoLuongTon, HinhAnh FROM SAN_PHAM WHERE MoTa LIKE @tuKhoa";
 
             using (SqlConnection conn = new SqlConnection(connectionString))
@@ -292,11 +258,7 @@ namespace demo.Control
                 {
                     conn.Open();
                     SqlCommand cmd = new SqlCommand(query, conn);
-
-                    // Dùng %tuKhoa% để tìm được cả những chữ chứa từ khóa ở giữa. 
-                    // Truyền N phía trước để hỗ trợ tìm tiếng Việt có dấu.
                     cmd.Parameters.AddWithValue("@tuKhoa", "%" + tuKhoa + "%");
-
                     SqlDataReader reader = cmd.ExecuteReader();
 
                     while (reader.Read())
@@ -304,7 +266,6 @@ namespace demo.Control
                         string ten = reader["TenSanPham"].ToString();
                         string danhMuc = reader["MoTa"].ToString();
                         string soLuong = reader["SoLuongTon"].ToString();
-
                         decimal gia = Convert.ToDecimal(reader["GiaBan"]);
                         string giaHienThi = gia.ToString("N0") + " đ";
 
@@ -314,7 +275,6 @@ namespace demo.Control
                             duongDanHinh = reader["HinhAnh"].ToString();
                         }
 
-                        // Gọi khuôn đúc thẻ
                         Panel theSP = TaoTheSanPham_DarkTheme(ten, danhMuc, giaHienThi, soLuong, duongDanHinh);
                         flpProducts.Controls.Add(theSP);
                     }
@@ -338,24 +298,18 @@ namespace demo.Control
 
         private void txtTimKiem_TextChanged(object sender, EventArgs e)
         {
-        
-            // Lấy chữ người dùng đang gõ
             string tuKhoa = txtTimKiem.Text.Trim();
-
-            // Truyền chữ đó vào hàm tìm kiếm để nó gọi Database
             HienThiSanPhamTheoMoTa(tuKhoa);
         }
 
         private void btnThanhToan_Click(object sender, EventArgs e)
         {
-            // 1. KIỂM TRA GIỎ HÀNG
             if (dgvDonHang.Rows.Count == 0 || (dgvDonHang.Rows.Count == 1 && dgvDonHang.Rows[0].IsNewRow))
             {
                 MessageBox.Show("Giỏ hàng đang trống! Vui lòng chọn món trước khi thanh toán.", "Nhắc nhở", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
-            // 2. XÁC NHẬN THANH TOÁN
             string soTienCanThu = lbl_Sum.Text;
             if (MessageBox.Show("Thu của khách: " + soTienCanThu + "\n\nBạn có chắc chắn muốn thanh toán?", "Xác nhận", MessageBoxButtons.YesNo, MessageBoxIcon.Question) != DialogResult.Yes)
             {
@@ -366,11 +320,8 @@ namespace demo.Control
             decimal tongTienThucTe = 0;
             decimal.TryParse(tongTienStr, out tongTienThucTe);
 
-            // =========================================================================
-            // CHÚ Ý CHỖ NÀY: SỬA LẠI TÊN SERVER CHO ĐÚNG VỚI TRONG HÌNH CỦA BẠN
-            // Ví dụ: @"Data Source=Kiet_PC\kingo;Initial Catalog..."
-            // =========================================================================
-            string strConn = @"Data Source=PC-ADMIN\SQLEXPRESS;Initial Catalog=CUA_HANG_TIEN_LOI;Integrated Security=True";
+            // ĐÃ SỬA LẠI THÀNH Kiet_PC
+            string strConn = @"Data Source=Kiet_PC;Initial Catalog=CUA_HANG_TIEN_LOI;Integrated Security=True";
 
             using (SqlConnection conn = new SqlConnection(strConn))
             {
@@ -379,14 +330,12 @@ namespace demo.Control
 
                 try
                 {
-                    // BƯỚC 1: LƯU HÓA ĐƠN
                     string sqlInsertHD = "INSERT INTO HOA_DON (NgayLap, TongTien) OUTPUT INSERTED.MaHoaDon VALUES (GETDATE(), @TongTien)";
                     SqlCommand cmdHD = new SqlCommand(sqlInsertHD, conn, transaction);
                     cmdHD.Parameters.AddWithValue("@TongTien", tongTienThucTe);
 
                     int maHoaDonMoi = Convert.ToInt32(cmdHD.ExecuteScalar());
 
-                    // BƯỚC 2 & 3: LƯU CHI TIẾT VÀ TRỪ TỒN KHO
                     foreach (DataGridViewRow row in dgvDonHang.Rows)
                     {
                         if (!row.IsNewRow && row.Cells[0].Value != null)
@@ -397,34 +346,29 @@ namespace demo.Control
                             string giaStr = row.Cells[2].Value.ToString().Replace("đ", "").Replace(".", "").Replace(",", "").Trim();
                             decimal donGia = Convert.ToDecimal(giaStr);
 
-                            // Tính luôn thành tiền để đưa vào DB
                             decimal thanhTienCT = soLuongMua * donGia;
 
-                            // --- Lưu CHI_TIET_HOA_DON (Đã thêm cột ThanhTien) ---
                             string sqlInsertChiTiet = "INSERT INTO CHI_TIET_HOA_DON (MaHoaDon, MaSanPham, SoLuong, DonGia, ThanhTien) " +
                                                       "VALUES (@MaHD, (SELECT TOP 1 MaSanPham FROM SAN_PHAM WHERE TenSanPham = @TenSP), @SL, @Gia, @ThanhTienCT)";
                             SqlCommand cmdCT = new SqlCommand(sqlInsertChiTiet, conn, transaction);
                             cmdCT.Parameters.AddWithValue("@MaHD", maHoaDonMoi);
-                            cmdCT.Parameters.Add("@TenSP", SqlDbType.NVarChar).Value = tenSP; // Fix lỗi tiếng Việt
+                            cmdCT.Parameters.Add("@TenSP", SqlDbType.NVarChar).Value = tenSP;
                             cmdCT.Parameters.AddWithValue("@SL", soLuongMua);
                             cmdCT.Parameters.AddWithValue("@Gia", donGia);
                             cmdCT.Parameters.AddWithValue("@ThanhTienCT", thanhTienCT);
                             cmdCT.ExecuteNonQuery();
 
-                            // --- Trừ kho SAN_PHAM ---
                             string sqlUpdateKho = "UPDATE SAN_PHAM SET SoLuongTon = SoLuongTon - @SLMua WHERE TenSanPham = @TenSPKho";
                             SqlCommand cmdKho = new SqlCommand(sqlUpdateKho, conn, transaction);
                             cmdKho.Parameters.AddWithValue("@SLMua", soLuongMua);
-                            cmdKho.Parameters.Add("@TenSPKho", SqlDbType.NVarChar).Value = tenSP; // Fix lỗi tiếng Việt
+                            cmdKho.Parameters.Add("@TenSPKho", SqlDbType.NVarChar).Value = tenSP;
                             cmdKho.ExecuteNonQuery();
                         }
                     }
 
-                    // HOÀN TẤT GIAO DỊCH
                     transaction.Commit();
                     MessageBox.Show("Thanh toán thành công! Mã hóa đơn: " + maHoaDonMoi, "Hoàn tất", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-                    // Dọn giao diện
                     dgvDonHang.Rows.Clear();
                     lbl_TamTinh.Text = "0 đ";
                     lbl_Sum.Text = "0 đ";
@@ -435,7 +379,6 @@ namespace demo.Control
                     txtMaGiamGia.Text = "";
                     txtMaGiamGia.Tag = 0.0m;
 
-                    // Nạp lại sản phẩm
                     LoadSanPhamTuDatabase();
                 }
                 catch (Exception ex)
@@ -445,8 +388,6 @@ namespace demo.Control
                 }
             }
         }
-
-        
 
         private void btnApDung_Click(object sender, EventArgs e)
         {
@@ -458,35 +399,30 @@ namespace demo.Control
                 return;
             }
 
-            // Gọi hàm bạn vừa viết để lấy % giảm từ DB
             decimal phanTram = LayPhanTramGiamTuDB(maNhap);
 
             if (phanTram > 0)
             {
                 MessageBox.Show($"Áp dụng thành công! Giảm {(phanTram * 100):N0}%", "Thông báo");
-                // LƯU Ý: Cất con số decimal này vào Tag để hàm TinhTongTien dùng
                 txtMaGiamGia.Tag = phanTram;
             }
             else
             {
                 MessageBox.Show("Mã khuyến mãi không tồn tại hoặc đã hết hạn!", "Lỗi");
-                txtMaGiamGia.Tag = 0m; // Reset về 0 nếu sai
+                txtMaGiamGia.Tag = 0m;
             }
 
-            // Sau khi áp mã xong thì phải tính lại tiền ngay
             TinhTongTien();
         }
 
         private decimal LayPhanTramGiamTuDB(string tenMa)
         {
             decimal phanTram = 0;
-            // Nhớ kiểm tra lại Data Source cho đúng tên máy (Kiet_PC)
-            string connectionString = @"Data Source=PC-ADMIN\SQLEXPRESS;Initial Catalog=CUA_HANG_TIEN_LOI;Integrated Security=True";
+            // ĐÃ SỬA LẠI THÀNH Kiet_PC
+            string connectionString = @"Data Source=Kiet_PC;Initial Catalog=CUA_HANG_TIEN_LOI;Integrated Security=True";
 
-            // Câu lệnh SQL: Tìm mã khớp tên VÀ ngày hiện tại phải nằm trong khoảng Bắt đầu -> Kết thúc
             string query = "SELECT PhanTramGiam FROM KHUYEN_MAI " +
                "WHERE TenKhuyenMai = @tenMa " +
-               // CAST sang DATE để bỏ qua phần giờ phút giây
                "AND CAST(GETDATE() AS DATE) BETWEEN NgayBatDau AND NgayKetThuc";
 
             using (SqlConnection conn = new SqlConnection(connectionString))
@@ -497,11 +433,11 @@ namespace demo.Control
                     SqlCommand cmd = new SqlCommand(query, conn);
                     cmd.Parameters.AddWithValue("@tenMa", tenMa);
 
-                    object result = cmd.ExecuteScalar(); // Lấy giá trị đầu tiên tìm được
+                    object result = cmd.ExecuteScalar();
 
                     if (result != null)
                     {
-                        phanTram = Convert.ToDecimal(result) / 100; // Ví dụ trong DB là 10 thì đổi thành 0.1
+                        phanTram = Convert.ToDecimal(result) / 100;
                     }
                 }
                 catch (Exception ex)
