@@ -35,16 +35,10 @@
             this.btn_Loc = new System.Windows.Forms.Button();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.label7 = new System.Windows.Forms.Label();
-            this.label6 = new System.Windows.Forms.Label();
-            this.label5 = new System.Windows.Forms.Label();
-            this.label4 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.dtTuNgay = new System.Windows.Forms.DateTimePicker();
             this.dtDenNgay = new System.Windows.Forms.DateTimePicker();
             this.label2 = new System.Windows.Forms.Label();
-            this.cbNhanVien = new System.Windows.Forms.ComboBox();
-            this.cbKhachHang = new System.Windows.Forms.ComboBox();
-            this.cbCaLam = new System.Windows.Forms.ComboBox();
             this.txtSearch = new System.Windows.Forms.TextBox();
             this.panelTable = new System.Windows.Forms.Panel();
             this.dgvHoaDon = new System.Windows.Forms.DataGridView();
@@ -90,9 +84,10 @@
             // 
             // btn_XoaLoc
             // 
-            this.btn_XoaLoc.Location = new System.Drawing.Point(1022, 84);
+            this.btn_XoaLoc.Dock = System.Windows.Forms.DockStyle.Right;
+            this.btn_XoaLoc.Location = new System.Drawing.Point(980, 76);
             this.btn_XoaLoc.Name = "btn_XoaLoc";
-            this.btn_XoaLoc.Size = new System.Drawing.Size(75, 23);
+            this.btn_XoaLoc.Size = new System.Drawing.Size(75, 39);
             this.btn_XoaLoc.TabIndex = 2;
             this.btn_XoaLoc.Text = "Xóa lọc";
             this.btn_XoaLoc.UseVisualStyleBackColor = true;
@@ -100,9 +95,10 @@
             // 
             // btn_Loc
             // 
-            this.btn_Loc.Location = new System.Drawing.Point(922, 84);
+            this.btn_Loc.Dock = System.Windows.Forms.DockStyle.Right;
+            this.btn_Loc.Location = new System.Drawing.Point(1055, 76);
             this.btn_Loc.Name = "btn_Loc";
-            this.btn_Loc.Size = new System.Drawing.Size(75, 23);
+            this.btn_Loc.Size = new System.Drawing.Size(75, 39);
             this.btn_Loc.TabIndex = 1;
             this.btn_Loc.Text = "Lọc";
             this.btn_Loc.UseVisualStyleBackColor = true;
@@ -117,18 +113,12 @@
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 18.51852F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 18.51852F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 18.51852F));
-            this.tableLayoutPanel1.Controls.Add(this.label7, 5, 0);
-            this.tableLayoutPanel1.Controls.Add(this.label6, 4, 0);
-            this.tableLayoutPanel1.Controls.Add(this.label5, 3, 0);
-            this.tableLayoutPanel1.Controls.Add(this.label4, 2, 0);
             this.tableLayoutPanel1.Controls.Add(this.label3, 1, 0);
             this.tableLayoutPanel1.Controls.Add(this.dtTuNgay, 0, 1);
             this.tableLayoutPanel1.Controls.Add(this.dtDenNgay, 1, 1);
             this.tableLayoutPanel1.Controls.Add(this.label2, 0, 0);
-            this.tableLayoutPanel1.Controls.Add(this.cbNhanVien, 2, 1);
-            this.tableLayoutPanel1.Controls.Add(this.cbKhachHang, 3, 1);
-            this.tableLayoutPanel1.Controls.Add(this.cbCaLam, 4, 1);
             this.tableLayoutPanel1.Controls.Add(this.txtSearch, 5, 1);
+            this.tableLayoutPanel1.Controls.Add(this.label7, 5, 0);
             this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Top;
             this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
             this.tableLayoutPanel1.Margin = new System.Windows.Forms.Padding(5);
@@ -143,42 +133,13 @@
             // label7
             // 
             this.label7.AutoSize = true;
+            this.label7.Dock = System.Windows.Forms.DockStyle.Fill;
             this.label7.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label7.Location = new System.Drawing.Point(920, 3);
             this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(129, 20);
+            this.label7.Size = new System.Drawing.Size(204, 36);
             this.label7.TabIndex = 7;
             this.label7.Text = "Tìm mã hóa đơn";
-            // 
-            // label6
-            // 
-            this.label6.AutoSize = true;
-            this.label6.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label6.Location = new System.Drawing.Point(712, 3);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(62, 20);
-            this.label6.TabIndex = 6;
-            this.label6.Text = "Ca làm";
-            // 
-            // label5
-            // 
-            this.label5.AutoSize = true;
-            this.label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label5.Location = new System.Drawing.Point(504, 3);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(97, 20);
-            this.label5.TabIndex = 5;
-            this.label5.Text = "Khách hàng";
-            // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label4.Location = new System.Drawing.Point(296, 3);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(83, 20);
-            this.label4.TabIndex = 4;
-            this.label4.Text = "Nhân viên";
             // 
             // label3
             // 
@@ -214,35 +175,12 @@
             this.label2.TabIndex = 2;
             this.label2.Text = "Từ ngày";
             // 
-            // cbNhanVien
-            // 
-            this.cbNhanVien.FormattingEnabled = true;
-            this.cbNhanVien.Location = new System.Drawing.Point(296, 42);
-            this.cbNhanVien.Name = "cbNhanVien";
-            this.cbNhanVien.Size = new System.Drawing.Size(121, 24);
-            this.cbNhanVien.TabIndex = 8;
-            // 
-            // cbKhachHang
-            // 
-            this.cbKhachHang.FormattingEnabled = true;
-            this.cbKhachHang.Location = new System.Drawing.Point(504, 42);
-            this.cbKhachHang.Name = "cbKhachHang";
-            this.cbKhachHang.Size = new System.Drawing.Size(121, 24);
-            this.cbKhachHang.TabIndex = 9;
-            // 
-            // cbCaLam
-            // 
-            this.cbCaLam.FormattingEnabled = true;
-            this.cbCaLam.Location = new System.Drawing.Point(712, 42);
-            this.cbCaLam.Name = "cbCaLam";
-            this.cbCaLam.Size = new System.Drawing.Size(121, 24);
-            this.cbCaLam.TabIndex = 10;
-            // 
             // txtSearch
             // 
+            this.txtSearch.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txtSearch.Location = new System.Drawing.Point(920, 42);
             this.txtSearch.Name = "txtSearch";
-            this.txtSearch.Size = new System.Drawing.Size(175, 22);
+            this.txtSearch.Size = new System.Drawing.Size(204, 22);
             this.txtSearch.TabIndex = 11;
             this.txtSearch.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txtSearch_KeyDown);
             // 
@@ -308,18 +246,12 @@
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
         private System.Windows.Forms.Label label7;
-        private System.Windows.Forms.Label label6;
-        private System.Windows.Forms.Label label5;
-        private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.DateTimePicker dtTuNgay;
         private System.Windows.Forms.DateTimePicker dtDenNgay;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Button btn_XoaLoc;
         private System.Windows.Forms.Button btn_Loc;
-        private System.Windows.Forms.ComboBox cbNhanVien;
-        private System.Windows.Forms.ComboBox cbKhachHang;
-        private System.Windows.Forms.ComboBox cbCaLam;
         private System.Windows.Forms.TextBox txtSearch;
         private System.Windows.Forms.Panel panelTable;
         private System.Windows.Forms.Label label8;

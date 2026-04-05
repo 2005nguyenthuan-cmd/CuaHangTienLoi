@@ -202,11 +202,9 @@
     <Compile Include="KHUYEN_MAI.cs">
       <DependentUpon>Store_Model.tt</DependentUpon>
     </Compile>
-
     <Compile Include="KIEM_KE.cs">
       <DependentUpon>Store_Model.tt</DependentUpon>
     </Compile>
-
     <Compile Include="LICH_LAM_CONG_VIEC.cs">
       <DependentUpon>Store_Model.tt</DependentUpon>
     </Compile>
@@ -251,11 +249,11 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="App.config" />
-    <None Include="packages.config" />
     <EntityDeploy Include="Store_Model.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
       <LastGenOutput>Store_Model.Designer.cs</LastGenOutput>
     </EntityDeploy>
+    <None Include="packages.config" />
     <None Include="Store_Model.edmx.diagram">
       <DependentUpon>Store_Model.edmx</DependentUpon>
     </None>
