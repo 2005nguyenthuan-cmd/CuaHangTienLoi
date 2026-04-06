@@ -53,7 +53,7 @@
             // flowSuppliers
             // 
             this.flowSuppliers.AutoScroll = true;
-            this.flowSuppliers.BackColor = System.Drawing.Color.Purple;
+            this.flowSuppliers.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(192)))));
             this.flowSuppliers.Controls.Add(this.flowSupplier);
             this.flowSuppliers.Dock = System.Windows.Forms.DockStyle.Fill;
             this.flowSuppliers.Location = new System.Drawing.Point(0, 0);
@@ -114,7 +114,7 @@
             // 
             // panelStats
             // 
-            this.panelStats.BackColor = System.Drawing.SystemColors.ActiveCaptionText;
+            this.panelStats.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
             this.panelStats.Controls.Add(this.tableLayoutPanel1);
             this.panelStats.Dock = System.Windows.Forms.DockStyle.Top;
             this.panelStats.Location = new System.Drawing.Point(0, 67);
@@ -183,7 +183,7 @@
             // 
             // panelAction
             // 
-            this.panelAction.BackColor = System.Drawing.Color.Yellow;
+            this.panelAction.BackColor = System.Drawing.Color.Cyan;
             this.panelAction.Controls.Add(this.btnThemNCC);
             this.panelAction.Dock = System.Windows.Forms.DockStyle.Top;
             this.panelAction.Location = new System.Drawing.Point(0, 193);
