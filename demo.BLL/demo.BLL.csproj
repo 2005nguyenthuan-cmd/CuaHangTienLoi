@@ -226,12 +226,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\db.config" Condition="Exists('..\db.config')">
-      <Link>db.config</Link>
-      <TargetPath>db.config</TargetPath>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\db.config.example" Condition="!Exists('..\db.config')">
+    <None Include="..\db.config">
       <Link>db.config</Link>
       <TargetPath>db.config</TargetPath>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

@@ -1,4 +1,4 @@
-using demo.BLL.Service;
+﻿using demo.BLL.Service;
 using System;
 using System.Drawing;
 using System.Linq;
@@ -29,13 +29,13 @@ namespace demo.Control
             lblHeaderSubtitle.ForeColor = Color.FromArgb(107, 114, 128);
             lblHeaderSubtitle.MaximumSize = new Size(560, 0);
             lblHeaderSubtitle.Location = new Point(28, 66);
-            lblHeaderSubtitle.Text = "Quan ly thong tin nhan vien, email va tai khoan dang nhap tren cung mot man hinh.";
+            lblHeaderSubtitle.Text = "Qu\u1EA3n l\u00FD th\u00F4ng tin nh\u00E2n vi\u00EAn, email v\u00E0 t\u00E0i kho\u1EA3n \u0111\u0103ng nh\u1EADp tr\u00EAn c\u00F9ng m\u1ED9t m\u00E0n h\u00ECnh.";
             panelHeader.Controls.Add(lblHeaderSubtitle);
 
             panelHeader.Height = 104;
             panelHeader.Padding = new Padding(24, 18, 24, 12);
 
-            label1.Text = "Quan ly nhan vien";
+            label1.Text = "Qu\u1EA3n l\u00FD nh\u00E2n vi\u00EAn";
             label1.Location = new Point(24, 16);
 
             panelStats.Height = 118;
@@ -50,7 +50,7 @@ namespace demo.Control
             panel1.BackColor = Color.White;
             panel1.BorderStyle = BorderStyle.FixedSingle;
 
-            label2.Text = "Tong nhan vien";
+            label2.Text = "T\u1ED5ng nh\u00E2n vi\u00EAn";
             label2.Location = new Point(17, 16);
             label3.Location = new Point(17, 42);
             label3.Font = new Font("Segoe UI Semibold", 24F, FontStyle.Bold);
@@ -67,7 +67,7 @@ namespace demo.Control
 
             panelContent.Padding = new Padding(24, 4, 24, 24);
 
-            button2.Text = "Them nhan vien";
+            button2.Text = "Th\u00EAm nh\u00E2n vi\u00EAn";
             button2.BackColor = Color.FromArgb(34, 197, 94);
             button2.ForeColor = Color.White;
             button2.FlatAppearance.BorderSize = 0;
@@ -176,14 +176,14 @@ namespace demo.Control
                 EmployeeDashboardSummary summary = employeeService.GetDashboardSummary();
                 label3.Text = summary.TongNhanVien.ToString();
                 lblSummaryHint.Text = string.Format(
-                    "{0} tai khoan dang hoat dong • {1} email da cap nhat",
+                    "{0} t\u00E0i kho\u1EA3n \u0111ang ho\u1EA1t \u0111\u1ED9ng - {1} email \u0111\u00E3 c\u1EADp nh\u1EADt",
                     summary.SoTaiKhoanDangHoatDong,
                     summary.SoNhanVienCoEmail);
             }
             catch
             {
                 label3.Text = "0";
-                lblSummaryHint.Text = "Chua tai duoc thong tin nhan vien.";
+                lblSummaryHint.Text = "Ch\u01B0a t\u1EA3i \u0111\u01B0\u1EE3c th\u00F4ng tin nh\u00E2n vi\u00EAn.";
             }
         }
     }

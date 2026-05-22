@@ -67,7 +67,7 @@ namespace demo.BLL.Service
 
             data.Expiries = db.CHI_TIET_NHAP
                 .Where(x => x.HanSuDung != null
-                    && x.SoLuongCon > 0
+                    && (x.SAN_PHAM.SoLuongTon ?? 0) > 0
                     && x.HanSuDung >= now
                     && x.HanSuDung <= future)
                 .GroupBy(x => x.SAN_PHAM.TenSanPham)

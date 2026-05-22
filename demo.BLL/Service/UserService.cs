@@ -14,8 +14,7 @@ namespace demo.BLL.Service
 
         public NHAN_VIEN Login(string username, string password)
         {
-            var user = db.NHAN_VIEN
-                .FirstOrDefault(x => x.TenDangNhap == username && x.MatKhau == password);
+            var user = db.NHAN_VIEN.FirstOrDefault(x => x.TenDangNhap == username && x.MatKhau == password);
 
             return user;
         }

@@ -37,14 +37,14 @@ namespace demo.Control
             lblTitle.AutoSize = true;
             lblTitle.Font = new Font("Segoe UI Semibold", 18F, FontStyle.Bold);
             lblTitle.ForeColor = Color.FromArgb(17, 24, 39);
-            lblTitle.Text = "Quan ly ma khuyen mai";
+            lblTitle.Text = "Quản lý mã khuyến mãi";
 
             Label lblDescription = new Label();
             lblDescription.AutoSize = true;
             lblDescription.Font = new Font("Segoe UI", 10F, FontStyle.Regular);
             lblDescription.ForeColor = Color.FromArgb(107, 114, 128);
             lblDescription.Margin = new Padding(0, 6, 0, 0);
-            lblDescription.Text = "Luu tru ma giam gia de nhan vien ap dung trong man hinh POS khi thanh toan.";
+            lblDescription.Text = "Lưu trữ mã giảm giá để nhân viên áp dụng trong màn hình POS khi thanh toán.";
 
             TableLayoutPanel statsTable = new TableLayoutPanel();
             statsTable.ColumnCount = 4;
@@ -61,10 +61,10 @@ namespace demo.Control
             lblSapDienRa = CreateStatValueLabel();
             lblDaKetThuc = CreateStatValueLabel();
 
-            statsTable.Controls.Add(CreateStatCard("Tong ma giam", lblTongSo, Color.FromArgb(37, 99, 235)), 0, 0);
-            statsTable.Controls.Add(CreateStatCard("Dang hieu luc", lblDangDienRa, Color.FromArgb(34, 197, 94)), 1, 0);
-            statsTable.Controls.Add(CreateStatCard("Sap hieu luc", lblSapDienRa, Color.FromArgb(245, 158, 11)), 2, 0);
-            statsTable.Controls.Add(CreateStatCard("Het hieu luc", lblDaKetThuc, Color.FromArgb(239, 68, 68)), 3, 0);
+            statsTable.Controls.Add(CreateStatCard("Tổng mã giảm", lblTongSo, Color.FromArgb(37, 99, 235)), 0, 0);
+            statsTable.Controls.Add(CreateStatCard("Đang hiệu lực", lblDangDienRa, Color.FromArgb(34, 197, 94)), 1, 0);
+            statsTable.Controls.Add(CreateStatCard("Sắp hiệu lực", lblSapDienRa, Color.FromArgb(245, 158, 11)), 2, 0);
+            statsTable.Controls.Add(CreateStatCard("Hết hiệu lực", lblDaKetThuc, Color.FromArgb(239, 68, 68)), 3, 0);
 
             Panel toolbar = new Panel();
             toolbar.Dock = DockStyle.Fill;
@@ -78,7 +78,7 @@ namespace demo.Control
             lblSearch.Font = new Font("Segoe UI Semibold", 10F, FontStyle.Bold);
             lblSearch.ForeColor = Color.FromArgb(55, 65, 81);
             lblSearch.Location = new Point(16, 18);
-            lblSearch.Text = "Tim ma";
+            lblSearch.Text = "Tìm mã";
 
             txtSearch = new TextBox();
             txtSearch.BorderStyle = BorderStyle.FixedSingle;
@@ -93,10 +93,10 @@ namespace demo.Control
             actionPanel.WrapContents = false;
             actionPanel.AutoSize = true;
 
-            btnThem = CreateActionButton("Them moi", Color.FromArgb(34, 197, 94), Color.White);
-            btnSua = CreateActionButton("Chinh sua", Color.White, Color.FromArgb(55, 65, 81));
-            btnXoa = CreateActionButton("Xoa", Color.White, Color.FromArgb(220, 38, 38));
-            btnLamMoi = CreateActionButton("Lam moi", Color.White, Color.FromArgb(37, 99, 235));
+            btnThem = CreateActionButton("Thêm mới", Color.FromArgb(34, 197, 94), Color.White);
+            btnSua = CreateActionButton("Chỉnh sửa", Color.White, Color.FromArgb(55, 65, 81));
+            btnXoa = CreateActionButton("Xóa", Color.White, Color.FromArgb(220, 38, 38));
+            btnLamMoi = CreateActionButton("Làm mới", Color.White, Color.FromArgb(37, 99, 235));
 
             btnThem.Click += btnThem_Click;
             btnSua.Click += btnSua_Click;
@@ -132,9 +132,9 @@ namespace demo.Control
             dgvKhuyenMai.CellDoubleClick += dgvKhuyenMai_CellDoubleClick;
 
             dgvKhuyenMai.Columns.Add(CreateTextColumn("MaKhuyenMai", "ID", 80));
-            dgvKhuyenMai.Columns.Add(CreateTextColumn("MaKhuyenMaiCode", "Ma khuyen mai", 220));
-            dgvKhuyenMai.Columns.Add(CreateTextColumn("PhanTramGiam", "% giam", 90));
-            dgvKhuyenMai.Columns.Add(CreateTextColumn("ThoiGianApDung", "Thoi gian ap dung", 220));
+            dgvKhuyenMai.Columns.Add(CreateTextColumn("MaKhuyenMaiCode", "Mã khuyến mãi", 220));
+            dgvKhuyenMai.Columns.Add(CreateTextColumn("PhanTramGiam", "% giảm", 90));
+            dgvKhuyenMai.Columns.Add(CreateTextColumn("ThoiGianApDung", "Thời gian áp dụng", 220));
 
             Panel gridPanel = new Panel();
             gridPanel.Dock = DockStyle.Fill;
@@ -185,8 +185,8 @@ namespace demo.Control
             catch (Exception ex)
             {
                 MessageBox.Show(
-                    "Khong tai duoc danh sach ma khuyen mai.\n\n" + ex.Message,
-                    "Loi du lieu",
+                    "Không tải được danh sách mã khuyến mãi.\n\n" + ex.Message,
+                    "Lỗi dữ liệu",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
             }
@@ -216,13 +216,13 @@ namespace demo.Control
             int? selectedId = GetSelectedPromotionId();
             if (!selectedId.HasValue)
             {
-                MessageBox.Show("Vui long chon ma khuyen mai can xoa.", "Thong bao", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("Vui lòng chọn mã khuyến mãi cần xóa.", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return;
             }
 
             DialogResult result = MessageBox.Show(
-                "Ban co chac muon xoa ma khuyen mai da chon?",
-                "Xac nhan xoa",
+                "Bạn có chắc muốn xóa mã khuyến mãi đã chọn?",
+                "Xác nhận xóa",
                 MessageBoxButtons.YesNo,
                 MessageBoxIcon.Question);
 
@@ -234,12 +234,12 @@ namespace demo.Control
             try
             {
                 promotionService.Delete(selectedId.Value);
-                MessageBox.Show("Da xoa ma khuyen mai thanh cong.", "Thong bao", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("Đã xóa mã khuyến mãi thành công.", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 LoadDanhSachKhuyenMai();
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message, "Khong the xoa ma khuyen mai", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show(ex.Message, "Không thể xóa mã khuyến mãi", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
         }
 
@@ -267,7 +267,7 @@ namespace demo.Control
             int? selectedId = GetSelectedPromotionId();
             if (!selectedId.HasValue)
             {
-                MessageBox.Show("Vui long chon ma khuyen mai can chinh sua.", "Thong bao", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("Vui lòng chọn mã khuyến mãi cần chỉnh sửa.", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return;
             }
 

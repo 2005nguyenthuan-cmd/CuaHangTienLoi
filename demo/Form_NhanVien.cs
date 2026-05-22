@@ -11,12 +11,14 @@ using System.Windows.Forms;
 
 namespace demo
 {
-    public class Form_NhanVien : Form
+    public partial class Form_NhanVien : Form
     {
         private readonly EmployeeService employeeService = new EmployeeService();
         private readonly int maNhanVien;
         private readonly bool isEditMode;
 
+        private Label lblTitle;
+        private Label lblDescription;
         private TextBox txtTenNhanVien;
         private TextBox txtSoDienThoai;
         private TextBox txtEmail;
@@ -39,6 +41,7 @@ namespace demo
             isEditMode = maNhanVien > 0;
 
             InitializeComponent();
+            ApplyModeText();
             LoadLookupData();
 
             if (isEditMode)
@@ -49,7 +52,7 @@ namespace demo
 
         private void InitializeComponent()
         {
-            Text = isEditMode ? "Sua nhan vien" : "Them nhan vien";
+            Text = "Nhân viên";
             StartPosition = FormStartPosition.CenterParent;
             FormBorderStyle = FormBorderStyle.FixedDialog;
             MaximizeBox = false;
@@ -58,18 +61,18 @@ namespace demo
             ClientSize = new Size(620, 470);
             BackColor = Color.White;
 
-            Label lblTitle = new Label();
+            lblTitle = new Label();
             lblTitle.AutoSize = true;
             lblTitle.Font = new Font("Segoe UI Semibold", 16F, FontStyle.Bold);
             lblTitle.ForeColor = Color.FromArgb(17, 24, 39);
-            lblTitle.Text = isEditMode ? "Cap nhat nhan vien" : "Them nhan vien moi";
+            lblTitle.Text = "Thông tin nhân viên";
 
-            Label lblDescription = new Label();
+            lblDescription = new Label();
             lblDescription.AutoSize = true;
             lblDescription.Font = new Font("Segoe UI", 9.5F, FontStyle.Regular);
             lblDescription.ForeColor = Color.FromArgb(75, 85, 99);
             lblDescription.Margin = new Padding(0, 6, 0, 0);
-            lblDescription.Text = "Thong tin nhan vien, email va tai khoan dang nhap duoc luu cung luc. Ca lam se duoc dieu chinh o man hinh lich lam.";
+            lblDescription.Text = "Thông tin nhân viên, email và tài khoản đăng nhập được lưu cùng lúc. Ca làm được điều chỉnh ở màn hình lịch làm.";
 
             TableLayoutPanel formTable = new TableLayoutPanel();
             formTable.ColumnCount = 2;
@@ -91,22 +94,20 @@ namespace demo
 
             cboVaiTro = CreateComboBox();
 
-            AddField(formTable, 0, "Ten nhan vien", txtTenNhanVien);
-            AddField(formTable, 1, "So dien thoai", txtSoDienThoai);
+            AddField(formTable, 0, "Tên nhân viên", txtTenNhanVien);
+            AddField(formTable, 1, "Số điện thoại", txtSoDienThoai);
             AddField(formTable, 2, "Email", txtEmail);
-            AddField(formTable, 3, "Vai tro", cboVaiTro);
-            AddField(formTable, 4, "Ten dang nhap", txtTenDangNhap);
-            AddField(formTable, 5, "Mat khau", txtMatKhau);
-            AddField(formTable, 6, "Xac nhan mat khau", txtXacNhanMatKhau);
+            AddField(formTable, 3, "Vai trò", cboVaiTro);
+            AddField(formTable, 4, "Tên đăng nhập", txtTenDangNhap);
+            AddField(formTable, 5, "Mật khẩu", txtMatKhau);
+            AddField(formTable, 6, "Xác nhận mật khẩu", txtXacNhanMatKhau);
 
             lblPasswordHint = new Label();
             lblPasswordHint.AutoSize = true;
             lblPasswordHint.Font = new Font("Segoe UI", 9F, FontStyle.Italic);
             lblPasswordHint.ForeColor = Color.FromArgb(107, 114, 128);
             lblPasswordHint.Margin = new Padding(0, 6, 0, 0);
-            lblPasswordHint.Text = isEditMode
-                ? "De trong mat khau neu ban khong muon doi."
-                : "Thong tin ten dang nhap va mat khau se tao tai khoan cho nhan vien moi.";
+            lblPasswordHint.Text = "Mật khẩu và xác nhận mật khẩu.";
 
             formTable.Controls.Add(new Label(), 0, 7);
             formTable.Controls.Add(lblPasswordHint, 1, 7);
@@ -125,7 +126,7 @@ namespace demo
             btnLuu.Font = new Font("Segoe UI Semibold", 9.5F, FontStyle.Bold);
             btnLuu.ForeColor = Color.White;
             btnLuu.Size = new Size(120, 38);
-            btnLuu.Text = isEditMode ? "Cap nhat" : "Them moi";
+            btnLuu.Text = "Lưu";
             btnLuu.UseVisualStyleBackColor = false;
             btnLuu.Click += btnLuu_Click;
 
@@ -136,7 +137,7 @@ namespace demo
             btnHuy.Font = new Font("Segoe UI", 9.5F, FontStyle.Regular);
             btnHuy.ForeColor = Color.FromArgb(55, 65, 81);
             btnHuy.Size = new Size(100, 38);
-            btnHuy.Text = "Huy";
+            btnHuy.Text = "Hủy";
             btnHuy.UseVisualStyleBackColor = false;
             btnHuy.Click += btnHuy_Click;
 
@@ -163,6 +164,16 @@ namespace demo
 
             AcceptButton = btnLuu;
             CancelButton = btnHuy;
+        }
+
+        private void ApplyModeText()
+        {
+            Text = isEditMode ? "Sửa nhân viên" : "Thêm nhân viên";
+            lblTitle.Text = isEditMode ? "Cập nhật nhân viên" : "Thêm nhân viên mới";
+            btnLuu.Text = isEditMode ? "Cập nhật" : "Thêm mới";
+            lblPasswordHint.Text = isEditMode
+                ? "Để trống mật khẩu nếu bạn không muốn đổi."
+                : "Tên đăng nhập và mật khẩu sẽ được dùng để tạo tài khoản cho nhân viên mới.";
         }
 
         private void LoadLookupData()
@@ -208,12 +219,12 @@ namespace demo
                 if (isEditMode)
                 {
                     employeeService.Update(model, updatePassword);
-                    MessageBox.Show("Cap nhat nhan vien thanh cong.", "Thong bao", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MessageBox.Show("Cập nhật nhân viên thành công.", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
                 else
                 {
                     employeeService.Add(model);
-                    MessageBox.Show("Them nhan vien va tao tai khoan thanh cong.", "Thong bao", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MessageBox.Show("Thêm nhân viên và tạo tài khoản thành công.", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
 
                 DialogResult = DialogResult.OK;
@@ -221,7 +232,7 @@ namespace demo
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message, "Khong the luu nhan vien", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show(ex.Message, "Không thể lưu nhân viên", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
         }
 
@@ -237,13 +248,13 @@ namespace demo
             {
                 if (string.IsNullOrWhiteSpace(txtMatKhau.Text) || string.IsNullOrWhiteSpace(txtXacNhanMatKhau.Text))
                 {
-                    MessageBox.Show("Vui long nhap day du mat khau va xac nhan mat khau.", "Thong bao", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    MessageBox.Show("Vui lòng nhập đầy đủ mật khẩu và xác nhận mật khẩu.", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return false;
                 }
 
                 if (!string.Equals(txtMatKhau.Text, txtXacNhanMatKhau.Text, StringComparison.Ordinal))
                 {
-                    MessageBox.Show("Mat khau xac nhan khong khop.", "Thong bao", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    MessageBox.Show("Mật khẩu xác nhận không khớp.", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return false;
                 }
             }

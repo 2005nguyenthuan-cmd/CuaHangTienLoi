@@ -33,18 +33,18 @@ namespace demo.Control
             lblSubtitle.AutoSize = true;
             lblSubtitle.Font = new Font("Segoe UI", 9.5F, FontStyle.Regular);
             lblSubtitle.ForeColor = Color.FromArgb(107, 114, 128);
-            lblSubtitle.Text = "Theo doi so luong san pham, ton kho va danh muc du lieu ngay tren mot man hinh.";
+            lblSubtitle.Text = "Theo dõi số lượng sản phẩm, tồn kho và danh mục dữ liệu ngay trên một màn hình.";
             Controls.Add(lblSubtitle);
             lblSubtitle.BringToFront();
 
             label1.Font = new Font("Segoe UI Semibold", 22F, FontStyle.Bold);
             label1.ForeColor = Color.FromArgb(17, 24, 39);
-            label1.Text = "Quan ly san pham";
+            label1.Text = "Quản lý sản phẩm";
 
-            ConfigureStatCard(panelTongSP, label2, label3, pictureBox1, "Tong san pham", Color.FromArgb(219, 234, 254));
-            ConfigureStatCard(panel1, label4, label5, pictureBox2, "Con hang", Color.FromArgb(220, 252, 231));
-            ConfigureStatCard(panel2, label7, label6, pictureBox3, "Danh muc", Color.FromArgb(254, 243, 199));
-            ConfigureStatCard(panel3, label9, label8, pictureBox4, "Tong ton kho", Color.FromArgb(255, 237, 213));
+            ConfigureStatCard(panelTongSP, label2, label3, pictureBox1, "Tổng sản phẩm", Color.FromArgb(219, 234, 254));
+            ConfigureStatCard(panel1, label4, label5, pictureBox2, "Còn hàng", Color.FromArgb(220, 252, 231));
+            ConfigureStatCard(panel2, label7, label6, pictureBox3, "Danh mục", Color.FromArgb(254, 243, 199));
+            ConfigureStatCard(panel3, label9, label8, pictureBox4, "Tổng tồn kho", Color.FromArgb(255, 237, 213));
 
             panel4.BackColor = Color.White;
             panel4.BorderStyle = BorderStyle.FixedSingle;
@@ -62,11 +62,11 @@ namespace demo.Control
             btnThemSanPham.FlatAppearance.BorderSize = 0;
             btnThemSanPham.Font = new Font("Segoe UI Semibold", 9.5F, FontStyle.Bold);
             btnThemSanPham.ForeColor = Color.White;
-            btnThemSanPham.Text = "Them san pham";
+            btnThemSanPham.Text = "Thêm sản phẩm";
 
             label10.Font = new Font("Segoe UI Semibold", 12.5F, FontStyle.Bold);
             label10.ForeColor = Color.FromArgb(31, 41, 55);
-            label10.Text = "Danh sach san pham";
+            label10.Text = "Danh sách sản phẩm";
 
             dgvSanPham.AllowUserToAddRows = false;
             dgvSanPham.AllowUserToDeleteRows = false;
@@ -207,7 +207,7 @@ namespace demo.Control
                 dgvSanPham.Rows.Add(
                     sp.MaSanPham,
                     sp.TenSanPham,
-                    sp.DANH_MUC != null ? sp.DANH_MUC.TenDanhMuc : "Chua phan loai",
+                    sp.DANH_MUC != null ? sp.DANH_MUC.TenDanhMuc : "Chưa phân loại",
                     string.Format(CultureInfo.InvariantCulture, "{0:N0} VND", sp.GiaBan),
                     (sp.SoLuongTon ?? 0).ToString("N0", CultureInfo.InvariantCulture)
                 );
@@ -237,7 +237,7 @@ namespace demo.Control
                 list.Insert(0, new DANH_MUC
                 {
                     MaDanhMuc = 0,
-                    TenDanhMuc = "Tat ca"
+                    TenDanhMuc = "Tất cả"
                 });
 
                 isBindingDanhMuc = true;
@@ -298,8 +298,8 @@ namespace demo.Control
             if (dgvSanPham.Columns[e.ColumnIndex].Name == "btnDelete")
             {
                 DialogResult confirm = MessageBox.Show(
-                    "Ban co chac muon xoa san pham?",
-                    "Xac nhan",
+                    "Bạn có chắc muốn xóa sản phẩm?",
+                    "Xác nhận",
                     MessageBoxButtons.YesNo,
                     MessageBoxIcon.Question);
 
@@ -316,7 +316,7 @@ namespace demo.Control
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show(GetInnermostMessage(ex), "Khong the xoa san pham", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    MessageBox.Show(GetInnermostMessage(ex), "Không thể xóa sản phẩm", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 }
             }
         }

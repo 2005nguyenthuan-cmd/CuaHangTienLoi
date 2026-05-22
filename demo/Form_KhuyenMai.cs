@@ -5,12 +5,15 @@ using System.Windows.Forms;
 
 namespace demo
 {
-    public class Form_KhuyenMai : Form
+    public partial class Form_KhuyenMai : Form
     {
         private readonly PromotionService promotionService = new PromotionService();
         private readonly int maKhuyenMai;
         private readonly bool isEditMode;
 
+        private Label lblTitle;
+        private Label lblDescription;
+        private Label lblHint;
         private TextBox txtMaKhuyenMai;
         private NumericUpDown nudPhanTramGiam;
         private DateTimePicker dtpNgayBatDau;
@@ -31,6 +34,7 @@ namespace demo
             isEditMode = maKhuyenMai > 0;
 
             InitializeComponent();
+            ApplyModeText();
 
             if (isEditMode)
             {
@@ -40,7 +44,7 @@ namespace demo
 
         private void InitializeComponent()
         {
-            Text = isEditMode ? "Sua ma khuyen mai" : "Them ma khuyen mai";
+            Text = "Khuyến mãi";
             StartPosition = FormStartPosition.CenterParent;
             FormBorderStyle = FormBorderStyle.FixedDialog;
             MaximizeBox = false;
@@ -49,18 +53,18 @@ namespace demo
             ClientSize = new Size(560, 340);
             BackColor = Color.White;
 
-            Label lblTitle = new Label();
+            lblTitle = new Label();
             lblTitle.AutoSize = true;
             lblTitle.Font = new Font("Segoe UI Semibold", 16F, FontStyle.Bold);
             lblTitle.ForeColor = Color.FromArgb(17, 24, 39);
-            lblTitle.Text = isEditMode ? "Cap nhat ma khuyen mai" : "Tao ma khuyen mai moi";
+            lblTitle.Text = "Mã khuyến mãi";
 
-            Label lblDescription = new Label();
+            lblDescription = new Label();
             lblDescription.AutoSize = true;
             lblDescription.Font = new Font("Segoe UI", 9.5F, FontStyle.Regular);
             lblDescription.ForeColor = Color.FromArgb(75, 85, 99);
             lblDescription.Margin = new Padding(0, 6, 0, 0);
-            lblDescription.Text = "Nhan vien co the nhap ma nay trong POS de giam gia cho toan bo hoa don.";
+            lblDescription.Text = "Nhân viên có thể nhập mã này trong POS để giảm giá cho toàn bộ hóa đơn.";
 
             TableLayoutPanel formTable = new TableLayoutPanel();
             formTable.ColumnCount = 2;
@@ -85,17 +89,17 @@ namespace demo
             dtpNgayBatDau = CreateDatePicker();
             dtpNgayKetThuc = CreateDatePicker();
 
-            AddField(formTable, 0, "Ma khuyen mai", txtMaKhuyenMai);
-            AddField(formTable, 1, "Phan tram giam", nudPhanTramGiam);
-            AddField(formTable, 2, "Ngay bat dau", dtpNgayBatDau);
-            AddField(formTable, 3, "Ngay ket thuc", dtpNgayKetThuc);
+            AddField(formTable, 0, "Mã khuyến mãi", txtMaKhuyenMai);
+            AddField(formTable, 1, "Phần trăm giảm", nudPhanTramGiam);
+            AddField(formTable, 2, "Ngày bắt đầu", dtpNgayBatDau);
+            AddField(formTable, 3, "Ngày kết thúc", dtpNgayKetThuc);
 
-            Label lblHint = new Label();
+            lblHint = new Label();
             lblHint.AutoSize = true;
             lblHint.Font = new Font("Segoe UI", 9F, FontStyle.Italic);
             lblHint.ForeColor = Color.FromArgb(107, 114, 128);
             lblHint.Margin = new Padding(0, 12, 0, 0);
-            lblHint.Text = "Goi y: nhap ma ngan gon de thu ngan de nhap o man hinh thanh toan POS.";
+            lblHint.Text = "Gợi ý: nhập mã ngắn gọn để thu ngân dễ nhập ở màn hình thanh toán POS.";
 
             FlowLayoutPanel actionPanel = new FlowLayoutPanel();
             actionPanel.Dock = DockStyle.Fill;
@@ -111,7 +115,7 @@ namespace demo
             btnLuu.Font = new Font("Segoe UI Semibold", 9.5F, FontStyle.Bold);
             btnLuu.ForeColor = Color.White;
             btnLuu.Size = new Size(130, 38);
-            btnLuu.Text = isEditMode ? "Luu thay doi" : "Them ma";
+            btnLuu.Text = "Lưu";
             btnLuu.UseVisualStyleBackColor = false;
             btnLuu.Click += btnLuu_Click;
 
@@ -122,7 +126,7 @@ namespace demo
             btnHuy.Font = new Font("Segoe UI", 9.5F, FontStyle.Regular);
             btnHuy.ForeColor = Color.FromArgb(55, 65, 81);
             btnHuy.Size = new Size(100, 38);
-            btnHuy.Text = "Huy";
+            btnHuy.Text = "Hủy";
             btnHuy.UseVisualStyleBackColor = false;
             btnHuy.Click += btnHuy_Click;
 
@@ -153,6 +157,13 @@ namespace demo
             CancelButton = btnHuy;
         }
 
+        private void ApplyModeText()
+        {
+            Text = isEditMode ? "Sửa mã khuyến mãi" : "Thêm mã khuyến mãi";
+            lblTitle.Text = isEditMode ? "Cập nhật mã khuyến mãi" : "Tạo mã khuyến mãi mới";
+            btnLuu.Text = isEditMode ? "Lưu thay đổi" : "Thêm mã";
+        }
+
         private void LoadPromotionData()
         {
             PromotionEditItem promotion = promotionService.GetById(maKhuyenMai);
@@ -180,12 +191,12 @@ namespace demo
                 {
                     promotionService.Update(model);
                     SavedPromotionId = maKhuyenMai;
-                    MessageBox.Show("Cap nhat ma khuyen mai thanh cong.", "Thong bao", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MessageBox.Show("Cập nhật mã khuyến mãi thành công.", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
                 else
                 {
                     SavedPromotionId = promotionService.Add(model);
-                    MessageBox.Show("Them ma khuyen mai thanh cong.", "Thong bao", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MessageBox.Show("Thêm mã khuyến mãi thành công.", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
 
                 DialogResult = DialogResult.OK;
@@ -193,7 +204,7 @@ namespace demo
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message, "Khong the luu ma khuyen mai", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show(ex.Message, "Không thể lưu mã khuyến mãi", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
         }
 

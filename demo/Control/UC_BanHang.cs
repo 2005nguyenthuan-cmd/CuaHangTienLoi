@@ -7,8 +7,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Configuration;
 using System.Data.SqlClient;
-using System.Xml.Linq;
+using System.Data.Entity.Core.EntityClient;
 
 namespace demo.Control
 {
@@ -17,12 +18,12 @@ namespace demo.Control
         [System.Runtime.InteropServices.DllImport("user32.dll", CharSet = System.Runtime.InteropServices.CharSet.Auto)]
         private static extern Int32 SendMessage(IntPtr hWnd, int msg, int wParam, [System.Runtime.InteropServices.MarshalAs(System.Runtime.InteropServices.UnmanagedType.LPWStr)] string lParam);
 
-        // Chuỗi kết nối Database dùng chung cho toàn màn hình
-        private string strConn = @"Data Source=PC-ADMIN\SQLEXPRESS;Initial Catalog=CUA_HANG_TIEN_LOI;Integrated Security=True";
+        private readonly string strConn;
 
         public UC_BanHang()
         {
             InitializeComponent();
+            strConn = GetProviderConnectionString();
             SendMessage(txtTimKiem.Handle, 0x1501, 1, "Nhập danh mục (VD: Nước ngọt)");
             LoadSanPhamTuDatabase();
             TrangDiemGiaoDien(); // Gọi hàm làm đẹp giao diện
@@ -288,92 +289,18 @@ namespace demo.Control
 
         private static string GetProviderConnectionString()
         {
-            string configPath = System.IO.Path.Combine(Application.StartupPath, "db.config");
-            if (!System.IO.File.Exists(configPath))
+            ConnectionStringSettings connectionSettings = ConfigurationManager.ConnectionStrings["CUA_HANG_TIEN_LOI_Entities"];
+            if (connectionSettings == null || string.IsNullOrWhiteSpace(connectionSettings.ConnectionString))
             {
-                throw new InvalidOperationException("Không tìm thấy file db.config trong thư mục chạy ứng dụng.");
+                throw new InvalidOperationException("Không tìm thấy connection string CUA_HANG_TIEN_LOI_Entities trong cấu hình ứng dụng.");
             }
 
-            XDocument document = XDocument.Load(configPath);
-            XElement addElement = document.Descendants("add")
-                .FirstOrDefault(x => string.Equals((string)x.Attribute("name"), "CUA_HANG_TIEN_LOI_Entities", StringComparison.OrdinalIgnoreCase));
-
-            if (addElement == null)
-            {
-                throw new InvalidOperationException("Không tìm thấy connection string CUA_HANG_TIEN_LOI_Entities trong db.config.");
-            }
-
-            string entityConnectionString = (string)addElement.Attribute("connectionString");
-            if (string.IsNullOrWhiteSpace(entityConnectionString))
-            {
-                throw new InvalidOperationException("Connection string trong db.config đang rỗng.");
-            }
-
-            const string marker = "provider connection string=\"";
-            int startIndex = entityConnectionString.IndexOf(marker, StringComparison.OrdinalIgnoreCase);
-            if (startIndex < 0)
-            {
-                throw new InvalidOperationException("Không đọc được provider connection string từ db.config.");
-            }
-
-            startIndex += marker.Length;
-            int endIndex = entityConnectionString.IndexOf("\"", startIndex, StringComparison.Ordinal);
-            if (endIndex < 0)
-            {
-                throw new InvalidOperationException("Provider connection string trong db.config không hợp lệ.");
-            }
-
-            string providerConnectionString = entityConnectionString.Substring(startIndex, endIndex - startIndex);
-            SqlConnectionStringBuilder builder = new SqlConnectionStringBuilder(providerConnectionString);
+            EntityConnectionStringBuilder entityBuilder = new EntityConnectionStringBuilder(connectionSettings.ConnectionString);
+            SqlConnectionStringBuilder builder = new SqlConnectionStringBuilder(entityBuilder.ProviderConnectionString);
             builder.TrustServerCertificate = true;
             builder.Encrypt = false;
 
             return builder.ConnectionString;
-        }
-
-        private static SqlConnection OpenConfiguredConnection()
-        {
-            SqlConnectionStringBuilder baseBuilder = new SqlConnectionStringBuilder(GetProviderConnectionString());
-            string[] serverCandidates = new[]
-            {
-                baseBuilder.DataSource,
-                @".\SQLEXPRESS",
-                @"(local)\SQLEXPRESS",
-                Environment.MachineName + @"\SQLEXPRESS",
-                @"localhost\SQLEXPRESS"
-            }
-            .Where(x => !string.IsNullOrWhiteSpace(x))
-            .Distinct(StringComparer.OrdinalIgnoreCase)
-            .ToArray();
-
-            Exception lastException = null;
-
-            foreach (string serverName in serverCandidates)
-            {
-                SqlConnectionStringBuilder builder = new SqlConnectionStringBuilder(baseBuilder.ConnectionString)
-                {
-                    DataSource = serverName,
-                    TrustServerCertificate = true,
-                    Encrypt = false
-                };
-
-                SqlConnection connection = new SqlConnection(builder.ConnectionString);
-
-                try
-                {
-                    connection.Open();
-                    return connection;
-                }
-                catch (Exception ex)
-                {
-                    lastException = ex;
-                    connection.Dispose();
-                }
-            }
-
-            throw new InvalidOperationException(
-                "Không thể kết nối tới cơ sở dữ liệu. Hãy kiểm tra db.config và instance SQL Server SQLEXPRESS trên máy này.",
-                lastException);
         }
 
         private void btnXoaSanPham_Click(object sender, EventArgs e)

@@ -8,7 +8,7 @@ using System.Windows.Forms;
 
 namespace demo
 {
-    public class Form_ChinhSuaLichLam : Form
+    public partial class Form_ChinhSuaLichLam : Form
     {
         private sealed class ScheduleModeOption
         {
@@ -49,7 +49,7 @@ namespace demo
 
         private void InitializeComponent()
         {
-            Text = "Chinh sua lich lam";
+            Text = "Chỉnh sửa lịch làm";
             StartPosition = FormStartPosition.CenterParent;
             FormBorderStyle = FormBorderStyle.FixedDialog;
             MaximizeBox = false;
@@ -62,20 +62,20 @@ namespace demo
             lblTitle.AutoSize = true;
             lblTitle.Font = new Font("Segoe UI Semibold", 16F, FontStyle.Bold);
             lblTitle.ForeColor = Color.FromArgb(17, 24, 39);
-            lblTitle.Text = "Cap nhat lich lam trong ngay";
+            lblTitle.Text = "Cập nhật lịch làm trong ngày";
 
             Label lblDescription = new Label();
             lblDescription.AutoSize = true;
             lblDescription.Font = new Font("Segoe UI", 9.5F, FontStyle.Regular);
             lblDescription.ForeColor = Color.FromArgb(75, 85, 99);
             lblDescription.Margin = new Padding(0, 6, 0, 0);
-            lblDescription.Text = "Ban co the chuyen sang ngay nghi, giu theo ca co san hoac dieu chinh tang ca cho nhan vien.";
+            lblDescription.Text = "Bạn có thể chuyển sang ngày nghỉ, giữ theo ca có sẵn hoặc điều chỉnh tăng ca cho nhân viên.";
 
             TableLayoutPanel infoTable = CreateTableLayout();
             lblNhanVienValue = CreateValueLabel();
             lblNgayValue = CreateValueLabel();
-            AddField(infoTable, 0, "Nhan vien", lblNhanVienValue);
-            AddField(infoTable, 1, "Ngay lam", lblNgayValue);
+            AddField(infoTable, 0, "Nhân viên", lblNhanVienValue);
+            AddField(infoTable, 1, "Ngày làm", lblNgayValue);
 
             TableLayoutPanel formTable = CreateTableLayout();
 
@@ -91,12 +91,12 @@ namespace demo
             txtLyDo = CreateMultilineTextBox(66);
             txtGhiChu = CreateMultilineTextBox(90);
 
-            AddField(formTable, 0, "Che do lich", cboCheDo);
-            AddField(formTable, 1, "Ca lam", cboCaLam);
-            AddField(formTable, 2, "Gio bat dau", dtpGioBatDau);
-            AddField(formTable, 3, "Gio ket thuc", dtpGioKetThuc);
-            AddField(formTable, 4, "Ly do dieu chinh", txtLyDo);
-            AddField(formTable, 5, "Ghi chu", txtGhiChu);
+            AddField(formTable, 0, "Chế độ lịch", cboCheDo);
+            AddField(formTable, 1, "Ca làm", cboCaLam);
+            AddField(formTable, 2, "Giờ bắt đầu", dtpGioBatDau);
+            AddField(formTable, 3, "Giờ kết thúc", dtpGioKetThuc);
+            AddField(formTable, 4, "Lý do điều chỉnh", txtLyDo);
+            AddField(formTable, 5, "Ghi chú", txtGhiChu);
 
             lblHint = new Label();
             lblHint.AutoSize = true;
@@ -118,7 +118,7 @@ namespace demo
             btnLuu.Font = new Font("Segoe UI Semibold", 9.5F, FontStyle.Bold);
             btnLuu.ForeColor = Color.White;
             btnLuu.Size = new Size(130, 38);
-            btnLuu.Text = "Luu thay doi";
+            btnLuu.Text = "Lưu thay đổi";
             btnLuu.UseVisualStyleBackColor = false;
             btnLuu.Click += btnLuu_Click;
 
@@ -129,7 +129,7 @@ namespace demo
             btnHuy.Font = new Font("Segoe UI", 9.5F, FontStyle.Regular);
             btnHuy.ForeColor = Color.FromArgb(55, 65, 81);
             btnHuy.Size = new Size(100, 38);
-            btnHuy.Text = "Huy";
+            btnHuy.Text = "Hủy";
             btnHuy.UseVisualStyleBackColor = false;
             btnHuy.Click += btnHuy_Click;
 
@@ -173,17 +173,17 @@ namespace demo
                 new ScheduleModeOption
                 {
                     Id = ScheduleService.CheDoTheoCa,
-                    Ten = "Theo ca mac dinh"
+                    Ten = "Theo ca mặc định"
                 },
                 new ScheduleModeOption
                 {
                     Id = ScheduleService.CheDoTangCa,
-                    Ten = "Tang ca trong ngay"
+                    Ten = "Tăng ca trong ngày"
                 },
                 new ScheduleModeOption
                 {
                     Id = ScheduleService.CheDoNghi,
-                    Ten = "Cho nghi ngay nay"
+                    Ten = "Cho nghỉ ngày này"
                 }
             };
 
@@ -258,19 +258,19 @@ namespace demo
 
             if (isRestMode)
             {
-                lblHint.Text = "Ngay nghi se xoa phan cong cong viec cua ngay nay. Neu muon giao viec lai, hay doi che do ve theo ca hoac tang ca.";
+                lblHint.Text = "Ngày nghỉ sẽ xóa phân công công việc của ngày này. Nếu muốn giao việc lại, hãy đổi chế độ về theo ca hoặc tăng ca.";
                 lblHint.ForeColor = Color.FromArgb(107, 114, 128);
                 return;
             }
 
             if (isOvertimeMode)
             {
-                lblHint.Text = "Ban co the doi gio bat dau hoac gio ket thuc. Neu ngay nay dang hien trong bang tuan, du lieu se duoc refresh ngay sau khi luu.";
+                lblHint.Text = "Bạn có thể đổi giờ bắt đầu hoặc giờ kết thúc. Nếu ngày này đang hiện trong bảng tuần, dữ liệu sẽ được làm mới ngay sau khi lưu.";
                 lblHint.ForeColor = Color.FromArgb(107, 114, 128);
                 return;
             }
 
-            lblHint.Text = "Che do theo ca se lay gio lam tu ca dang chon. Neu doi sang tang ca, ban co the sua khung gio theo thuc te.";
+            lblHint.Text = "Chế độ theo ca sẽ lấy giờ làm từ ca đang chọn. Nếu đổi sang tăng ca, bạn có thể sửa khung giờ theo thực tế.";
             lblHint.ForeColor = Color.FromArgb(107, 114, 128);
         }
 
@@ -281,7 +281,7 @@ namespace demo
 
             if (selectedMode != ScheduleService.CheDoNghi && selectedShift == null)
             {
-                MessageBox.Show("Vui long chon ca lam truoc khi luu.", "Thong bao", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Vui lòng chọn ca làm trước khi lưu.", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
@@ -315,13 +315,13 @@ namespace demo
             try
             {
                 SavedScheduleId = scheduleService.SaveScheduleEdit(model);
-                MessageBox.Show("Cap nhat lich lam thanh cong.", "Thong bao", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("Cập nhật lịch làm thành công.", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 DialogResult = DialogResult.OK;
                 Close();
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message, "Khong the luu lich lam", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show(ex.Message, "Không thể lưu lịch làm", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
         }
 

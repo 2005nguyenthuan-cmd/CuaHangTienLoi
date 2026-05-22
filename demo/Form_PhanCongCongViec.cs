@@ -7,7 +7,7 @@ using System.Windows.Forms;
 
 namespace demo
 {
-    public class Form_PhanCongCongViec : Form
+    public partial class Form_PhanCongCongViec : Form
     {
         private sealed class TaskListItem
         {
@@ -46,7 +46,7 @@ namespace demo
 
         private void InitializeComponent()
         {
-            Text = "Phan cong cong viec";
+            Text = "Phân công công việc";
             StartPosition = FormStartPosition.CenterParent;
             FormBorderStyle = FormBorderStyle.FixedDialog;
             MaximizeBox = false;
@@ -59,31 +59,31 @@ namespace demo
             lblTitle.AutoSize = true;
             lblTitle.Font = new Font("Segoe UI Semibold", 16F, FontStyle.Bold);
             lblTitle.ForeColor = Color.FromArgb(17, 24, 39);
-            lblTitle.Text = "Phan cong cong viec trong ca";
+            lblTitle.Text = "Phân công công việc trong ca";
 
             Label lblDescription = new Label();
             lblDescription.AutoSize = true;
             lblDescription.Font = new Font("Segoe UI", 9.5F, FontStyle.Regular);
             lblDescription.ForeColor = Color.FromArgb(75, 85, 99);
             lblDescription.Margin = new Padding(0, 6, 0, 0);
-            lblDescription.Text = "Nhan vien co the dam nhan nhieu cong viec trong cung mot ngay lam viec.";
+            lblDescription.Text = "Nhân viên có thể đảm nhận nhiều công việc trong cùng một ngày làm việc.";
 
             TableLayoutPanel infoTable = CreateTableLayout();
             lblNhanVienValue = CreateValueLabel();
             lblNgayValue = CreateValueLabel();
             lblCaValue = CreateValueLabel();
             lblGioValue = CreateValueLabel();
-            AddField(infoTable, 0, "Nhan vien", lblNhanVienValue);
-            AddField(infoTable, 1, "Ngay lam", lblNgayValue);
-            AddField(infoTable, 2, "Ca hien tai", lblCaValue);
-            AddField(infoTable, 3, "Khung gio", lblGioValue);
+            AddField(infoTable, 0, "Nhân viên", lblNhanVienValue);
+            AddField(infoTable, 1, "Ngày làm", lblNgayValue);
+            AddField(infoTable, 2, "Ca hiện tại", lblCaValue);
+            AddField(infoTable, 3, "Khung giờ", lblGioValue);
 
             Label lblTaskTitle = new Label();
             lblTaskTitle.AutoSize = true;
             lblTaskTitle.Font = new Font("Segoe UI Semibold", 10F, FontStyle.Bold);
             lblTaskTitle.ForeColor = Color.FromArgb(55, 65, 81);
             lblTaskTitle.Margin = new Padding(0, 18, 0, 8);
-            lblTaskTitle.Text = "Chon cong viec cho nhan vien";
+            lblTaskTitle.Text = "Chọn công việc cho nhân viên";
 
             clbCongViec = new CheckedListBox();
             clbCongViec.BorderStyle = BorderStyle.FixedSingle;
@@ -123,7 +123,7 @@ namespace demo
             btnLuu.Font = new Font("Segoe UI Semibold", 9.5F, FontStyle.Bold);
             btnLuu.ForeColor = Color.White;
             btnLuu.Size = new Size(150, 38);
-            btnLuu.Text = "Luu phan cong";
+            btnLuu.Text = "Lưu phân công";
             btnLuu.UseVisualStyleBackColor = false;
             btnLuu.Click += btnLuu_Click;
 
@@ -134,7 +134,7 @@ namespace demo
             btnHuy.Font = new Font("Segoe UI", 9.5F, FontStyle.Regular);
             btnHuy.ForeColor = Color.FromArgb(55, 65, 81);
             btnHuy.Size = new Size(100, 38);
-            btnHuy.Text = "Huy";
+            btnHuy.Text = "Hủy";
             btnHuy.UseVisualStyleBackColor = false;
             btnHuy.Click += btnHuy_Click;
 
@@ -180,7 +180,7 @@ namespace demo
             lblCaValue.Text = item.CaHienTai;
             lblGioValue.Text = item.GioBatDau.HasValue && item.GioKetThuc.HasValue
                 ? string.Format(CultureInfo.InvariantCulture, "{0:hh\\:mm} - {1:hh\\:mm}", item.GioBatDau.Value, item.GioKetThuc.Value)
-                : "Khong co khung gio";
+                : "Không có khung giờ";
 
             clbCongViec.Items.Clear();
 
@@ -205,12 +205,12 @@ namespace demo
             {
                 clbCongViec.Enabled = false;
                 btnLuu.Enabled = false;
-                lblHint.Text = "Ngay nay dang de nghi. Hay chinh sua lich lam truoc, sau do quay lai de phan cong cong viec.";
+                lblHint.Text = "Ngày này đang để nghỉ. Hãy chỉnh sửa lịch làm trước, sau đó quay lại để phân công công việc.";
                 lblHint.ForeColor = Color.FromArgb(220, 38, 38);
             }
             else
             {
-                lblHint.Text = "Moi cong viec duoc luu theo ca hien tai. Neu ban sua tang ca o man hinh truoc, khung gio tren lich se doi theo ngay sau khi luu.";
+                lblHint.Text = "Mỗi công việc được lưu theo ca hiện tại. Nếu bạn sửa tăng ca ở màn hình trước, khung giờ trên lịch sẽ đổi theo ngay sau khi lưu.";
                 lblHint.ForeColor = Color.FromArgb(107, 114, 128);
             }
 
@@ -230,7 +230,7 @@ namespace demo
         {
             TaskListItem selectedTask = clbCongViec.SelectedItem as TaskListItem;
             lblMoTaCongViec.Text = selectedTask == null || string.IsNullOrWhiteSpace(selectedTask.MoTa)
-                ? "Chon mot cong viec de xem mo ta ngan."
+                ? "Chọn một công việc để xem mô tả ngắn."
                 : selectedTask.MoTa;
         }
 
@@ -249,13 +249,13 @@ namespace demo
             try
             {
                 scheduleService.SaveTaskAssignments(model);
-                MessageBox.Show("Cap nhat cong viec thanh cong.", "Thong bao", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("Cập nhật công việc thành công.", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 DialogResult = DialogResult.OK;
                 Close();
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message, "Khong the luu cong viec", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show(ex.Message, "Không thể lưu công việc", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
         }
 
