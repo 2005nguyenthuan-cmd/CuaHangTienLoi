@@ -1,9 +1,5 @@
-﻿using ClosedXML.Excel;
+using ClosedXML.Excel;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace demo.BLL.Service
 {
@@ -13,205 +9,281 @@ namespace demo.BLL.Service
         {
             using (var wb = new XLWorkbook())
             {
-                // ========================= TT ===========================
-                var ws = wb.Worksheets.Add("ThongTin");
-                ws.Cell("A2").Value = "Cửa hàng:";
-                ws.Cell("B2").Value = "Mini Store ABC";
+                var wsInfo = wb.Worksheets.Add("ThongTin");
+                BuildInfoSheet(wsInfo, data, from, to);
 
-                ws.Cell("C2").Value = "Ngày xuất:";
-                ws.Cell("D2").Value = DateTime.Now.ToString("dd/MM/yyyy HH:mm");
+                var wsOverview = wb.Worksheets.Add("TongQuan");
+                BuildOverviewSheet(wsOverview, data, from, to);
 
-                // =========================
-                // SHEET 1: TỔNG QUAN
-                // =========================
-                var ws1 = wb.Worksheets.Add("TongQuan");
+                var wsTopProducts = wb.Worksheets.Add("TopSanPham");
+                BuildTopProductsSheet(wsTopProducts, data);
 
-                ws1.Cell(1, 1).Value = "BÁO CÁO TỔNG QUAN";
-                ws1.Range(1, 1, 1, 4).Merge().Style
-                    .Font.SetBold().Font.SetFontSize(16)
-                    .Alignment.SetHorizontal(XLAlignmentHorizontalValues.Center);
+                var wsLowStocks = wb.Worksheets.Add("TonThap");
+                BuildLowStocksSheet(wsLowStocks, data);
 
-                ws1.Cell(3, 1).Value = "Từ ngày:";
-                ws1.Cell(3, 2).Value = from.ToString("dd/MM/yyyy");
+                var wsExpiry = wb.Worksheets.Add("SapHetHan");
+                BuildExpirySheet(wsExpiry, data);
 
-                ws1.Cell(4, 1).Value = "Đến ngày:";
-                ws1.Cell(4, 2).Value = to.ToString("dd/MM/yyyy");
+                var wsRevenueByDate = wb.Worksheets.Add("DoanhThuNgay");
+                BuildRevenueByDateSheet(wsRevenueByDate, data);
 
-                ws1.Cell(6, 1).Value = "Doanh thu";
-                ws1.Cell(6, 2).Value = data.TotalRevenue;
+                var wsCategories = wb.Worksheets.Add("DanhMuc");
+                BuildCategorySheet(wsCategories, data);
 
-                ws1.Cell(7, 1).Value = "Đơn hàng";
-                ws1.Cell(7, 2).Value = data.TotalOrders;
-
-                ws1.Cell(8, 1).Value = "Lợi nhuận";
-                ws1.Cell(8, 2).Value = data.TotalProfit;
-
-                ws1.Cell(9, 1).Value = "Tồn kho";
-                ws1.Cell(9, 2).Value = data.TotalProducts;
-
-                ws1.Range(6, 2, 9, 2).Style.NumberFormat.Format = "#,##0";
-
-                ws1.Columns().AdjustToContents();
-
-                // =========================
-                // SHEET 2: TOP SẢN PHẨM
-                // =========================
-                var ws2 = wb.Worksheets.Add("TopSanPham");
-
-                ws2.Cell(1, 1).Value = "Tên sản phẩm";
-                ws2.Cell(1, 2).Value = "Số lượng bán";
-                ws2.Cell(1, 3).Value = "Doanh thu";
-
-                int row = 2;
-                foreach (var item in data.TopProducts)
-                {
-                    ws2.Cell(row, 1).Value = item.TenSanPham;
-                    ws2.Cell(row, 2).Value = item.SoLuongBan;
-                    ws2.Cell(row, 3).Value = item.DoanhThu;
-                    row++;
-                }
-
-                // Style header
-                var header2 = ws2.Range(1, 1, 1, 3);
-                header2.Style.Font.Bold = true;
-                header2.Style.Fill.BackgroundColor = XLColor.LightGray;
-                header2.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
-
-                ws2.Column(3).Style.NumberFormat.Format = "#,##0";
-                ws2.Columns().AdjustToContents();
-
-                // =========================
-                // SHEET 3: TỒN THẤP
-                // =========================
-                var ws3 = wb.Worksheets.Add("TonThap");
-
-                ws3.Cell(1, 1).Value = "Tên sản phẩm";
-                ws3.Cell(1, 2).Value = "Số lượng tồn";
-
-                row = 2;
-                foreach (var item in data.LowStocks)
-                {
-                    ws3.Cell(row, 1).Value = item.TenSanPham;
-                    ws3.Cell(row, 2).Value = item.SoLuongTon;
-
-                    // Highlight giống UI
-                    if (item.SoLuongTon <= 5)
-                        ws3.Row(row).Style.Fill.BackgroundColor = XLColor.LightCoral;
-                    else if (item.SoLuongTon <= 10)
-                        ws3.Row(row).Style.Fill.BackgroundColor = XLColor.LightPink;
-                    else if (item.SoLuongTon <= 20)
-                        ws3.Row(row).Style.Fill.BackgroundColor = XLColor.LightYellow;
-
-                    row++;
-                }
-
-                var header3 = ws3.Range(1, 1, 1, 2);
-                header3.Style.Font.Bold = true;
-                header3.Style.Fill.BackgroundColor = XLColor.LightGray;
-
-                ws3.Columns().AdjustToContents();
-
-                // =========================
-                // SHEET 4: SẮP HẾT HẠN
-                // =========================
-                var ws4 = wb.Worksheets.Add("SapHetHan");
-
-                ws4.Cell(1, 1).Value = "Tên sản phẩm";
-                ws4.Cell(1, 2).Value = "Hạn sử dụng";
-
-                row = 2;
-                foreach (var item in data.Expiries)
-                {
-                    ws4.Cell(row, 1).Value = item.TenSanPham;
-                    ws4.Cell(row, 2).Value = item.HanSuDung;
-
-                    int days = (item.HanSuDung - DateTime.Now).Days;
-
-                    if (days <= 3)
-                        ws4.Row(row).Style.Fill.BackgroundColor = XLColor.LightCoral;
-                    else if (days <= 7)
-                        ws4.Row(row).Style.Fill.BackgroundColor = XLColor.Khaki;
-                    else if (days <= 30)
-                        ws4.Row(row).Style.Fill.BackgroundColor = XLColor.LightYellow;
-
-                    row++;
-                }
-
-                ws4.Column(2).Style.DateFormat.Format = "dd/MM/yyyy";
-
-                var header4 = ws4.Range(1, 1, 1, 2);
-                header4.Style.Font.Bold = true;
-                header4.Style.Fill.BackgroundColor = XLColor.LightGray;
-
-                ws4.Columns().AdjustToContents();
-
-                // =========================
-                // SHEET 5: DOANH THU THEO NGÀY
-                // =========================
-                var ws5 = wb.Worksheets.Add("DoanhThuNgay");
-
-                ws5.Cell(1, 1).Value = "Ngày";
-                ws5.Cell(1, 2).Value = "Doanh thu";
-
-                row = 2;
-                foreach (var item in data.RevenueByDates)
-                {
-                    ws5.Cell(row, 1).Value = item.Ngay;
-                    ws5.Cell(row, 2).Value = item.DoanhThu;
-                    row++;
-                }
-
-                ws5.Column(1).Style.DateFormat.Format = "dd/MM/yyyy";
-                ws5.Column(2).Style.NumberFormat.Format = "#,##0";
-
-                var header5 = ws5.Range(1, 1, 1, 2);
-                header5.Style.Font.Bold = true;
-                header5.Style.Fill.BackgroundColor = XLColor.LightGray;
-
-                ws5.Columns().AdjustToContents();
-
-                // =========================
-                // SHEET 6: DANH MỤC
-                // =========================
-                var ws6 = wb.Worksheets.Add("DanhMuc");
-
-                ws6.Cell(1, 1).Value = "Danh mục";
-                ws6.Cell(1, 2).Value = "Doanh thu";
-
-                row = 2;
-                foreach (var item in data.Categories)
-                {
-                    ws6.Cell(row, 1).Value = item.TenDanhMuc;
-                    ws6.Cell(row, 2).Value = item.DoanhThu;
-                    row++;
-                }
-
-                ws6.Column(2).Style.NumberFormat.Format = "#,##0";
-
-                var header6 = ws6.Range(1, 1, 1, 2);
-                header6.Style.Font.Bold = true;
-                header6.Style.Fill.BackgroundColor = XLColor.LightGray;
-
-                ws6.Columns().AdjustToContents();
-
-                // =========================
-                // SAVE FILE
-                // =========================
-                wb.SaveAs(filePath);
-                // =========================INSIGHT===========================
                 var wsInsight = wb.Worksheets.Add("Insight");
+                BuildInsightSheet(wsInsight, data);
 
-                wsInsight.Cell(1, 1).Value = "PHÂN TÍCH & NHẬN ĐỊNH";
-                wsInsight.Range("A1:D1").Merge().Style.Font.Bold = true;
-
-                
-                foreach (var item in data.Insights)
-                {
-                    wsInsight.Cell(row, 1).Value = "- " + item;
-                    row++;
-                }
+                wb.SaveAs(filePath);
             }
         }
 
+        private static void BuildInfoSheet(IXLWorksheet ws, DashboardDTO data, DateTime from, DateTime to)
+        {
+            ws.Cell("A1").Value = "BÁO CÁO DASHBOARD";
+            ws.Range("A1:D1").Merge().Style.Font.SetBold().Font.SetFontSize(16)
+                .Alignment.SetHorizontal(XLAlignmentHorizontalValues.Center);
+
+            ws.Cell("A2").Value = "Cửa hàng:";
+            ws.Cell("B2").Value = "Mini Store ABC";
+            ws.Cell("C2").Value = "Ngày xuất:";
+            ws.Cell("D2").Value = DateTime.Now.ToString("dd/MM/yyyy HH:mm");
+
+            ws.Cell("A3").Value = "Từ ngày:";
+            ws.Cell("B3").Value = from.ToString("dd/MM/yyyy");
+            ws.Cell("C3").Value = "Đến ngày:";
+            ws.Cell("D3").Value = to.ToString("dd/MM/yyyy");
+
+            ws.Cell("A5").Value = "Tổng doanh thu";
+            ws.Cell("B5").Value = data.TotalRevenue;
+            ws.Cell("A6").Value = "Tổng đơn hàng";
+            ws.Cell("B6").Value = data.TotalOrders;
+            ws.Cell("A7").Value = "Lợi nhuận";
+            ws.Cell("B7").Value = data.TotalProfit;
+            ws.Cell("A8").Value = "Tổng tồn kho";
+            ws.Cell("B8").Value = data.TotalProducts;
+            ws.Range("B5:B8").Style.NumberFormat.Format = "#,##0";
+
+            ws.Cell("A10").Value = "Số dòng dữ liệu";
+            ws.Cell("A11").Value = "Top sản phẩm";
+            ws.Cell("B11").Value = data.TopProducts.Count;
+            ws.Cell("A12").Value = "Tồn thấp";
+            ws.Cell("B12").Value = data.LowStocks.Count;
+            ws.Cell("A13").Value = "Sắp hết hạn";
+            ws.Cell("B13").Value = data.Expiries.Count;
+            ws.Cell("A14").Value = "Doanh thu theo ngày";
+            ws.Cell("B14").Value = data.RevenueByDates.Count;
+            ws.Cell("A15").Value = "Danh mục";
+            ws.Cell("B15").Value = data.Categories.Count;
+
+            ws.Columns().AdjustToContents();
+        }
+
+        private static void BuildOverviewSheet(IXLWorksheet ws, DashboardDTO data, DateTime from, DateTime to)
+        {
+            ws.Cell(1, 1).Value = "BÁO CÁO TỔNG QUAN";
+            ws.Range(1, 1, 1, 4).Merge().Style
+                .Font.SetBold().Font.SetFontSize(16)
+                .Alignment.SetHorizontal(XLAlignmentHorizontalValues.Center);
+
+            ws.Cell(3, 1).Value = "Từ ngày:";
+            ws.Cell(3, 2).Value = from.ToString("dd/MM/yyyy");
+            ws.Cell(4, 1).Value = "Đến ngày:";
+            ws.Cell(4, 2).Value = to.ToString("dd/MM/yyyy");
+
+            ws.Cell(6, 1).Value = "Doanh thu";
+            ws.Cell(6, 2).Value = data.TotalRevenue;
+            ws.Cell(7, 1).Value = "Đơn hàng";
+            ws.Cell(7, 2).Value = data.TotalOrders;
+            ws.Cell(8, 1).Value = "Lợi nhuận";
+            ws.Cell(8, 2).Value = data.TotalProfit;
+            ws.Cell(9, 1).Value = "Tồn kho";
+            ws.Cell(9, 2).Value = data.TotalProducts;
+
+            ws.Range(6, 2, 9, 2).Style.NumberFormat.Format = "#,##0";
+            ws.Columns().AdjustToContents();
+        }
+
+        private static void BuildTopProductsSheet(IXLWorksheet ws, DashboardDTO data)
+        {
+            ws.Cell(1, 1).Value = "Tên sản phẩm";
+            ws.Cell(1, 2).Value = "Số lượng bán";
+            ws.Cell(1, 3).Value = "Doanh thu";
+
+            int row = 2;
+            foreach (var item in data.TopProducts)
+            {
+                ws.Cell(row, 1).Value = item.TenSanPham;
+                ws.Cell(row, 2).Value = item.SoLuongBan;
+                ws.Cell(row, 3).Value = item.DoanhThu;
+                row++;
+            }
+
+            if (data.TopProducts.Count == 0)
+            {
+                WriteNoDataMessage(ws, 2, 3);
+            }
+
+            StyleHeader(ws, 1, 3);
+            ws.Column(3).Style.NumberFormat.Format = "#,##0";
+            ws.Columns().AdjustToContents();
+        }
+
+        private static void BuildLowStocksSheet(IXLWorksheet ws, DashboardDTO data)
+        {
+            ws.Cell(1, 1).Value = "Tên sản phẩm";
+            ws.Cell(1, 2).Value = "Số lượng tồn";
+
+            int row = 2;
+            foreach (var item in data.LowStocks)
+            {
+                ws.Cell(row, 1).Value = item.TenSanPham;
+                ws.Cell(row, 2).Value = item.SoLuongTon;
+
+                if (item.SoLuongTon <= 5)
+                {
+                    ws.Row(row).Style.Fill.BackgroundColor = XLColor.LightCoral;
+                }
+                else if (item.SoLuongTon <= 10)
+                {
+                    ws.Row(row).Style.Fill.BackgroundColor = XLColor.LightPink;
+                }
+                else if (item.SoLuongTon <= 20)
+                {
+                    ws.Row(row).Style.Fill.BackgroundColor = XLColor.LightYellow;
+                }
+
+                row++;
+            }
+
+            if (data.LowStocks.Count == 0)
+            {
+                WriteNoDataMessage(ws, 2, 2);
+            }
+
+            StyleHeader(ws, 1, 2);
+            ws.Columns().AdjustToContents();
+        }
+
+        private static void BuildExpirySheet(IXLWorksheet ws, DashboardDTO data)
+        {
+            ws.Cell(1, 1).Value = "Tên sản phẩm";
+            ws.Cell(1, 2).Value = "Hạn sử dụng";
+
+            int row = 2;
+            foreach (var item in data.Expiries)
+            {
+                ws.Cell(row, 1).Value = item.TenSanPham;
+                ws.Cell(row, 2).Value = item.HanSuDung;
+
+                int days = (item.HanSuDung - DateTime.Now).Days;
+                if (days <= 3)
+                {
+                    ws.Row(row).Style.Fill.BackgroundColor = XLColor.LightCoral;
+                }
+                else if (days <= 7)
+                {
+                    ws.Row(row).Style.Fill.BackgroundColor = XLColor.Khaki;
+                }
+                else if (days <= 30)
+                {
+                    ws.Row(row).Style.Fill.BackgroundColor = XLColor.LightYellow;
+                }
+
+                row++;
+            }
+
+            if (data.Expiries.Count == 0)
+            {
+                WriteNoDataMessage(ws, 2, 2);
+            }
+
+            StyleHeader(ws, 1, 2);
+            ws.Column(2).Style.DateFormat.Format = "dd/MM/yyyy";
+            ws.Columns().AdjustToContents();
+        }
+
+        private static void BuildRevenueByDateSheet(IXLWorksheet ws, DashboardDTO data)
+        {
+            ws.Cell(1, 1).Value = "Ngày";
+            ws.Cell(1, 2).Value = "Doanh thu";
+
+            int row = 2;
+            foreach (var item in data.RevenueByDates)
+            {
+                ws.Cell(row, 1).Value = item.Ngay;
+                ws.Cell(row, 2).Value = item.DoanhThu;
+                row++;
+            }
+
+            if (data.RevenueByDates.Count == 0)
+            {
+                WriteNoDataMessage(ws, 2, 2);
+            }
+
+            StyleHeader(ws, 1, 2);
+            ws.Column(1).Style.DateFormat.Format = "dd/MM/yyyy";
+            ws.Column(2).Style.NumberFormat.Format = "#,##0";
+            ws.Columns().AdjustToContents();
+        }
+
+        private static void BuildCategorySheet(IXLWorksheet ws, DashboardDTO data)
+        {
+            ws.Cell(1, 1).Value = "Danh mục";
+            ws.Cell(1, 2).Value = "Doanh thu";
+
+            int row = 2;
+            foreach (var item in data.Categories)
+            {
+                ws.Cell(row, 1).Value = item.TenDanhMuc;
+                ws.Cell(row, 2).Value = item.DoanhThu;
+                row++;
+            }
+
+            if (data.Categories.Count == 0)
+            {
+                WriteNoDataMessage(ws, 2, 2);
+            }
+
+            StyleHeader(ws, 1, 2);
+            ws.Column(2).Style.NumberFormat.Format = "#,##0";
+            ws.Columns().AdjustToContents();
+        }
+
+        private static void BuildInsightSheet(IXLWorksheet ws, DashboardDTO data)
+        {
+            ws.Cell(1, 1).Value = "PHÂN TÍCH & NHẬN ĐỊNH";
+            ws.Range("A1:D1").Merge().Style.Font.Bold = true;
+
+            int row = 3;
+            foreach (var item in data.Insights)
+            {
+                ws.Cell(row, 1).Value = "- " + item;
+                row++;
+            }
+
+            if (data.Insights.Count == 0)
+            {
+                WriteNoDataMessage(ws, 3, 4);
+            }
+
+            ws.Columns().AdjustToContents();
+        }
+
+        private static void StyleHeader(IXLWorksheet ws, int row, int lastColumn)
+        {
+            var header = ws.Range(row, 1, row, lastColumn);
+            header.Style.Font.Bold = true;
+            header.Style.Fill.BackgroundColor = XLColor.LightGray;
+            header.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+        }
+
+        private static void WriteNoDataMessage(IXLWorksheet worksheet, int row, int lastColumn)
+        {
+            worksheet.Cell(row, 1).Value = "Không có dữ liệu trong khoảng thời gian đã chọn.";
+            worksheet.Range(row, 1, row, lastColumn).Merge();
+            worksheet.Range(row, 1, row, lastColumn).Style.Alignment.SetHorizontal(XLAlignmentHorizontalValues.Center);
+            worksheet.Range(row, 1, row, lastColumn).Style.Font.SetItalic();
+            worksheet.Range(row, 1, row, lastColumn).Style.Font.FontColor = XLColor.Gray;
+        }
     }
 }

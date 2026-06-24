@@ -44,7 +44,7 @@ namespace demo.Control
         private void LoadDashboard()
         {
             DateTime from = dtFrom.Value.Date;
-            DateTime to = dtTo.Value.Date.AddDays(1).AddTicks(-1);
+            DateTime to = dtTo.Value.Date;
 
             var data = dashboardService.GetDashboard(from, to);
 
@@ -191,7 +191,7 @@ namespace demo.Control
         private void btnExport_Click(object sender, EventArgs e)
         {
             DateTime from = dtFrom.Value.Date;
-            DateTime to = dtTo.Value.Date.AddDays(1).AddTicks(-1);
+            DateTime to = dtTo.Value.Date;
 
             SaveFileDialog sfd = new SaveFileDialog();
             sfd.Filter = "Excel Files (*.xlsx)|*.xlsx";
@@ -199,12 +199,19 @@ namespace demo.Control
 
             if (sfd.ShowDialog() == DialogResult.OK)
             {
-                var data = dashboardService.GetDashboard(dtFrom.Value, dtTo.Value);
+                try
+                {
+                    var data = dashboardService.GetDashboard(from, to);
 
-                ReportService reportService = new ReportService();
-                reportService.ExportDashboard(data, sfd.FileName, from, to);
+                    ReportService reportService = new ReportService();
+                    reportService.ExportDashboard(data, sfd.FileName, from, to);
 
-                MessageBox.Show("Xuất báo cáo thành công!");
+                    MessageBox.Show("Xuất báo cáo thành công!");
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Không thể xuất báo cáo.\n\n" + ex.Message, "Lỗi xuất báo cáo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                }
             }
         }
 
