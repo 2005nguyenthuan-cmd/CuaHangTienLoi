@@ -505,16 +505,16 @@ SET IDENTITY_INSERT [dbo].[PHIEU_NHAP] OFF
 GO
 SET IDENTITY_INSERT [dbo].[SAN_PHAM] ON 
 
-INSERT [dbo].[SAN_PHAM] ([MaSanPham], [TenSanPham], [GiaBan], [SoLuongTon], [MaDanhMuc], [MoTa], [HinhAnh]) VALUES (1, N'Coca Cola', CAST(10000.00 AS Decimal(10, 2)), 50, 1, N'Nước ngọt', NULL)
-INSERT [dbo].[SAN_PHAM] ([MaSanPham], [TenSanPham], [GiaBan], [SoLuongTon], [MaDanhMuc], [MoTa], [HinhAnh]) VALUES (2, N'Pepsi', CAST(10000.00 AS Decimal(10, 2)), 60, 1, N'Nước ngọt', NULL)
-INSERT [dbo].[SAN_PHAM] ([MaSanPham], [TenSanPham], [GiaBan], [SoLuongTon], [MaDanhMuc], [MoTa], [HinhAnh]) VALUES (3, N'Sting', CAST(9000.00 AS Decimal(10, 2)), 70, 1, N'Nước tăng lực', NULL)
-INSERT [dbo].[SAN_PHAM] ([MaSanPham], [TenSanPham], [GiaBan], [SoLuongTon], [MaDanhMuc], [MoTa], [HinhAnh]) VALUES (4, N'Mì Hảo Hảo', CAST(5000.00 AS Decimal(10, 2)), 100, 3, N'Mì ăn liền', NULL)
-INSERT [dbo].[SAN_PHAM] ([MaSanPham], [TenSanPham], [GiaBan], [SoLuongTon], [MaDanhMuc], [MoTa], [HinhAnh]) VALUES (5, N'Sữa Vinamilk', CAST(8000.00 AS Decimal(10, 2)), 80, 4, N'Sữa tươi', NULL)
-INSERT [dbo].[SAN_PHAM] ([MaSanPham], [TenSanPham], [GiaBan], [SoLuongTon], [MaDanhMuc], [MoTa], [HinhAnh]) VALUES (6, N'Bánh Chocopie', CAST(15000.00 AS Decimal(10, 2)), 40, 2, N'Bánh ngọt', NULL)
-INSERT [dbo].[SAN_PHAM] ([MaSanPham], [TenSanPham], [GiaBan], [SoLuongTon], [MaDanhMuc], [MoTa], [HinhAnh]) VALUES (7, N'Snack khoai tây', CAST(12000.00 AS Decimal(10, 2)), 55, 6, N'Snack', NULL)
-INSERT [dbo].[SAN_PHAM] ([MaSanPham], [TenSanPham], [GiaBan], [SoLuongTon], [MaDanhMuc], [MoTa], [HinhAnh]) VALUES (8, N'Kem Merino', CAST(7000.00 AS Decimal(10, 2)), 30, 7, N'Kem', NULL)
-INSERT [dbo].[SAN_PHAM] ([MaSanPham], [TenSanPham], [GiaBan], [SoLuongTon], [MaDanhMuc], [MoTa], [HinhAnh]) VALUES (9, N'Nước mắm', CAST(20000.00 AS Decimal(10, 2)), 20, 8, N'Gia vị', NULL)
-INSERT [dbo].[SAN_PHAM] ([MaSanPham], [TenSanPham], [GiaBan], [SoLuongTon], [MaDanhMuc], [MoTa], [HinhAnh]) VALUES (10, N'Trà xanh', CAST(11000.00 AS Decimal(10, 2)), 45, 10, N'Nước trà', NULL)
+INSERT [dbo].[SAN_PHAM] ([MaSanPham], [TenSanPham], [GiaBan], [SoLuongTon], [MaDanhMuc], [MoTa], [HinhAnh]) VALUES (1, N'Coca Cola', CAST(10000.00 AS Decimal(10, 2)), 50, 1, N'Nước ngọt', N'product-coca-cola.png')
+INSERT [dbo].[SAN_PHAM] ([MaSanPham], [TenSanPham], [GiaBan], [SoLuongTon], [MaDanhMuc], [MoTa], [HinhAnh]) VALUES (2, N'Pepsi', CAST(10000.00 AS Decimal(10, 2)), 60, 1, N'Nước ngọt', N'product-pepsi.png')
+INSERT [dbo].[SAN_PHAM] ([MaSanPham], [TenSanPham], [GiaBan], [SoLuongTon], [MaDanhMuc], [MoTa], [HinhAnh]) VALUES (3, N'Sting', CAST(9000.00 AS Decimal(10, 2)), 70, 1, N'Nước tăng lực', N'product-sting.png')
+INSERT [dbo].[SAN_PHAM] ([MaSanPham], [TenSanPham], [GiaBan], [SoLuongTon], [MaDanhMuc], [MoTa], [HinhAnh]) VALUES (4, N'Mì Hảo Hảo', CAST(5000.00 AS Decimal(10, 2)), 100, 3, N'Mì ăn liền', N'product-mi-hao-hao.png')
+INSERT [dbo].[SAN_PHAM] ([MaSanPham], [TenSanPham], [GiaBan], [SoLuongTon], [MaDanhMuc], [MoTa], [HinhAnh]) VALUES (5, N'Sữa Vinamilk', CAST(8000.00 AS Decimal(10, 2)), 80, 4, N'Sữa tươi', N'product-sua-vinamilk.png')
+INSERT [dbo].[SAN_PHAM] ([MaSanPham], [TenSanPham], [GiaBan], [SoLuongTon], [MaDanhMuc], [MoTa], [HinhAnh]) VALUES (6, N'Bánh Chocopie', CAST(15000.00 AS Decimal(10, 2)), 40, 2, N'Bánh ngọt', N'product-banh-chocopie.png')
+INSERT [dbo].[SAN_PHAM] ([MaSanPham], [TenSanPham], [GiaBan], [SoLuongTon], [MaDanhMuc], [MoTa], [HinhAnh]) VALUES (7, N'Snack khoai tây', CAST(12000.00 AS Decimal(10, 2)), 55, 6, N'Snack', N'product-snack-khoai-tay.png')
+INSERT [dbo].[SAN_PHAM] ([MaSanPham], [TenSanPham], [GiaBan], [SoLuongTon], [MaDanhMuc], [MoTa], [HinhAnh]) VALUES (8, N'Kem Merino', CAST(7000.00 AS Decimal(10, 2)), 30, 7, N'Kem', N'product-kem-merino.png')
+INSERT [dbo].[SAN_PHAM] ([MaSanPham], [TenSanPham], [GiaBan], [SoLuongTon], [MaDanhMuc], [MoTa], [HinhAnh]) VALUES (9, N'Nước mắm', CAST(20000.00 AS Decimal(10, 2)), 20, 8, N'Gia vị', N'product-nuoc-mam.png')
+INSERT [dbo].[SAN_PHAM] ([MaSanPham], [TenSanPham], [GiaBan], [SoLuongTon], [MaDanhMuc], [MoTa], [HinhAnh]) VALUES (10, N'Trà xanh', CAST(11000.00 AS Decimal(10, 2)), 45, 10, N'Nước trà', N'product-tra-xanh.png')
 SET IDENTITY_INSERT [dbo].[SAN_PHAM] OFF
 GO
 INSERT [dbo].[SAN_PHAM_KHUYEN_MAI] ([MaSanPham], [MaKhuyenMai]) VALUES (2, 2)

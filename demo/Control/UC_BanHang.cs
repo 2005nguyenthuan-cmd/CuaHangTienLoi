@@ -10,6 +10,7 @@ using System.Windows.Forms;
 using System.Configuration;
 using System.Data.SqlClient;
 using System.Data.Entity.Core.EntityClient;
+using System.IO;
 
 namespace demo.Control
 {
@@ -130,25 +131,7 @@ namespace demo.Control
             card.Controls.Add(lblDM);
             card.Controls.Add(lblGia);
 
-            try
-            {
-                if (!string.IsNullOrEmpty(duongDanHinh))
-                {
-                    string path = System.IO.Path.Combine(Application.StartupPath, "Resources", duongDanHinh);
-                    if (System.IO.File.Exists(path))
-                    {
-                        pic.Image = Image.FromFile(path);
-                    }
-                    else
-                    {
-                        pic.BackColor = Color.FromArgb(240, 240, 240); // Nền xám nhạt nếu ko có ảnh
-                    }
-                }
-            }
-            catch (Exception)
-            {
-                pic.BackColor = Color.WhiteSmoke;
-            }
+            LoadProductImage(pic, ten, duongDanHinh);
 
             card.Tag = new string[] { ten, gia };
 
@@ -301,6 +284,143 @@ namespace demo.Control
             builder.Encrypt = false;
 
             return builder.ConnectionString;
+        }
+
+        private static void LoadProductImage(PictureBox pictureBox, string tenSanPham, string hinhAnh)
+        {
+            string imagePath = ResolveProductImagePath(tenSanPham, hinhAnh);
+
+            if (string.IsNullOrWhiteSpace(imagePath) || !File.Exists(imagePath))
+            {
+                pictureBox.BackColor = Color.FromArgb(240, 240, 240);
+                return;
+            }
+
+            try
+            {
+                using (FileStream stream = new FileStream(imagePath, FileMode.Open, FileAccess.Read))
+                using (Image image = Image.FromStream(stream))
+                {
+                    pictureBox.Image = new Bitmap(image);
+                }
+            }
+            catch
+            {
+                pictureBox.BackColor = Color.WhiteSmoke;
+            }
+        }
+
+        private static string ResolveProductImagePath(string tenSanPham, string hinhAnh)
+        {
+            string fileName = NormalizeImageFileName(hinhAnh);
+
+            if (string.IsNullOrWhiteSpace(fileName))
+            {
+                fileName = GetDefaultProductImageName(tenSanPham);
+            }
+
+            foreach (string folder in GetResourceFolders())
+            {
+                string candidate = Path.Combine(folder, fileName);
+                if (File.Exists(candidate))
+                {
+                    return candidate;
+                }
+            }
+
+            foreach (string folder in GetResourceFolders())
+            {
+                string fallback = Path.Combine(folder, "no-image.png");
+                if (File.Exists(fallback))
+                {
+                    return fallback;
+                }
+            }
+
+            return null;
+        }
+
+        private static string NormalizeImageFileName(string hinhAnh)
+        {
+            if (string.IsNullOrWhiteSpace(hinhAnh))
+            {
+                return string.Empty;
+            }
+
+            return Path.GetFileName(hinhAnh.Trim());
+        }
+
+        private static string[] GetResourceFolders()
+        {
+            string runtimeFolder = Path.Combine(Application.StartupPath, "Resources");
+            string projectFolder = Path.GetFullPath(Path.Combine(Application.StartupPath, @"..\..\Resources"));
+
+            return new[] { runtimeFolder, projectFolder }
+                .Where(x => !string.IsNullOrWhiteSpace(x))
+                .Distinct(StringComparer.OrdinalIgnoreCase)
+                .ToArray();
+        }
+
+        private static string GetDefaultProductImageName(string tenSanPham)
+        {
+            if (string.IsNullOrWhiteSpace(tenSanPham))
+            {
+                return string.Empty;
+            }
+
+            string normalizedName = tenSanPham.Trim().ToLowerInvariant();
+
+            if (normalizedName.Contains("coca"))
+            {
+                return "product-coca-cola.png";
+            }
+
+            if (normalizedName.Contains("pepsi"))
+            {
+                return "product-pepsi.png";
+            }
+
+            if (normalizedName.Contains("sting"))
+            {
+                return "product-sting.png";
+            }
+
+            if (normalizedName.Contains("hảo hảo") || normalizedName.Contains("hao hao"))
+            {
+                return "product-mi-hao-hao.png";
+            }
+
+            if (normalizedName.Contains("vinamilk") || normalizedName.Contains("sữa"))
+            {
+                return "product-sua-vinamilk.png";
+            }
+
+            if (normalizedName.Contains("chocopie"))
+            {
+                return "product-banh-chocopie.png";
+            }
+
+            if (normalizedName.Contains("snack"))
+            {
+                return "product-snack-khoai-tay.png";
+            }
+
+            if (normalizedName.Contains("merino") || normalizedName.Contains("kem"))
+            {
+                return "product-kem-merino.png";
+            }
+
+            if (normalizedName.Contains("nước mắm") || normalizedName.Contains("nuoc mam"))
+            {
+                return "product-nuoc-mam.png";
+            }
+
+            if (normalizedName.Contains("trà xanh") || normalizedName.Contains("tra xanh"))
+            {
+                return "product-tra-xanh.png";
+            }
+
+            return string.Empty;
         }
 
         private void btnXoaSanPham_Click(object sender, EventArgs e)
