@@ -424,13 +424,13 @@ SET IDENTITY_INSERT [dbo].[HOA_DON] ON
 INSERT [dbo].[HOA_DON] ([MaHoaDon], [NgayLap], [MaNhanVien], [MaKhachHang], [TongTien]) VALUES (1, CAST(N'2026-03-01T00:00:00.000' AS DateTime), 1, 1, CAST(20000.00 AS Decimal(12, 2)))
 INSERT [dbo].[HOA_DON] ([MaHoaDon], [NgayLap], [MaNhanVien], [MaKhachHang], [TongTien]) VALUES (2, CAST(N'2026-03-02T00:00:00.000' AS DateTime), 2, 2, CAST(30000.00 AS Decimal(12, 2)))
 INSERT [dbo].[HOA_DON] ([MaHoaDon], [NgayLap], [MaNhanVien], [MaKhachHang], [TongTien]) VALUES (3, CAST(N'2026-03-03T00:00:00.000' AS DateTime), 3, 3, CAST(15000.00 AS Decimal(12, 2)))
-INSERT [dbo].[HOA_DON] ([MaHoaDon], [NgayLap], [MaNhanVien], [MaKhachHang], [TongTien]) VALUES (4, CAST(N'2026-03-04T00:00:00.000' AS DateTime), 4, 4, CAST(50000.00 AS Decimal(12, 2)))
-INSERT [dbo].[HOA_DON] ([MaHoaDon], [NgayLap], [MaNhanVien], [MaKhachHang], [TongTien]) VALUES (5, CAST(N'2026-03-05T00:00:00.000' AS DateTime), 5, 5, CAST(22000.00 AS Decimal(12, 2)))
+INSERT [dbo].[HOA_DON] ([MaHoaDon], [NgayLap], [MaNhanVien], [MaKhachHang], [TongTien]) VALUES (4, CAST(N'2026-03-04T00:00:00.000' AS DateTime), 4, 4, CAST(30000.00 AS Decimal(12, 2)))
+INSERT [dbo].[HOA_DON] ([MaHoaDon], [NgayLap], [MaNhanVien], [MaKhachHang], [TongTien]) VALUES (5, CAST(N'2026-03-05T00:00:00.000' AS DateTime), 5, 5, CAST(16000.00 AS Decimal(12, 2)))
 INSERT [dbo].[HOA_DON] ([MaHoaDon], [NgayLap], [MaNhanVien], [MaKhachHang], [TongTien]) VALUES (6, CAST(N'2026-03-06T00:00:00.000' AS DateTime), 6, 6, CAST(18000.00 AS Decimal(12, 2)))
-INSERT [dbo].[HOA_DON] ([MaHoaDon], [NgayLap], [MaNhanVien], [MaKhachHang], [TongTien]) VALUES (7, CAST(N'2026-03-07T00:00:00.000' AS DateTime), 7, 7, CAST(26000.00 AS Decimal(12, 2)))
-INSERT [dbo].[HOA_DON] ([MaHoaDon], [NgayLap], [MaNhanVien], [MaKhachHang], [TongTien]) VALUES (8, CAST(N'2026-03-08T00:00:00.000' AS DateTime), 8, 8, CAST(34000.00 AS Decimal(12, 2)))
-INSERT [dbo].[HOA_DON] ([MaHoaDon], [NgayLap], [MaNhanVien], [MaKhachHang], [TongTien]) VALUES (9, CAST(N'2026-03-09T00:00:00.000' AS DateTime), 9, 9, CAST(41000.00 AS Decimal(12, 2)))
-INSERT [dbo].[HOA_DON] ([MaHoaDon], [NgayLap], [MaNhanVien], [MaKhachHang], [TongTien]) VALUES (10, CAST(N'2026-03-10T00:00:00.000' AS DateTime), 10, 10, CAST(12000.00 AS Decimal(12, 2)))
+INSERT [dbo].[HOA_DON] ([MaHoaDon], [NgayLap], [MaNhanVien], [MaKhachHang], [TongTien]) VALUES (7, CAST(N'2026-03-07T00:00:00.000' AS DateTime), 7, 7, CAST(24000.00 AS Decimal(12, 2)))
+INSERT [dbo].[HOA_DON] ([MaHoaDon], [NgayLap], [MaNhanVien], [MaKhachHang], [TongTien]) VALUES (8, CAST(N'2026-03-08T00:00:00.000' AS DateTime), 8, 8, CAST(28000.00 AS Decimal(12, 2)))
+INSERT [dbo].[HOA_DON] ([MaHoaDon], [NgayLap], [MaNhanVien], [MaKhachHang], [TongTien]) VALUES (9, CAST(N'2026-03-09T00:00:00.000' AS DateTime), 9, 9, CAST(40000.00 AS Decimal(12, 2)))
+INSERT [dbo].[HOA_DON] ([MaHoaDon], [NgayLap], [MaNhanVien], [MaKhachHang], [TongTien]) VALUES (10, CAST(N'2026-03-10T00:00:00.000' AS DateTime), 10, 10, CAST(11000.00 AS Decimal(12, 2)))
 SET IDENTITY_INSERT [dbo].[HOA_DON] OFF
 GO
 SET IDENTITY_INSERT [dbo].[KHACH_HANG] ON 

@@ -21,6 +21,15 @@ namespace demo.Control
 
         private readonly string strConn;
 
+        private class PosOrderLine
+        {
+            public string TenSanPham { get; set; }
+            public int SoLuong { get; set; }
+            public decimal DonGia { get; set; }
+            public decimal ThanhTienGoc { get; set; }
+            public decimal ThanhTienSauGiam { get; set; }
+        }
+
         public UC_BanHang()
         {
             InitializeComponent();
@@ -458,29 +467,89 @@ namespace demo.Control
 
         private void TinhTongTien()
         {
-            decimal tamTinh = 0;
-
-            foreach (DataGridViewRow row in dgvDonHang.Rows)
-            {
-                if (!row.IsNewRow && row.Cells[3].Value != null)
-                {
-                    string chuoiTien = row.Cells[3].Value.ToString();
-                    chuoiTien = chuoiTien.Replace(" đ", "").Replace(".", "").Replace(",", "").Trim();
-
-                    if (decimal.TryParse(chuoiTien, out decimal tienMonNay))
-                    {
-                        tamTinh += tienMonNay;
-                    }
-                }
-            }
-
-            decimal phanTramGiam = txtMaGiamGia.Tag != null ? Convert.ToDecimal(txtMaGiamGia.Tag) : 0;
-            decimal giamGia = tamTinh * phanTramGiam;
-            decimal tongCong = tamTinh - giamGia;
+            List<PosOrderLine> orderLines = BuildOrderLines();
+            decimal tamTinh = orderLines.Sum(x => x.ThanhTienGoc);
+            decimal phanTramGiam = GetAppliedDiscountPercent();
+            decimal giamGia = RoundMoney(tamTinh * phanTramGiam);
+            decimal tongCong = Math.Max(0, tamTinh - giamGia);
 
             lbl_TamTinh.Text = tamTinh.ToString("N0") + " đ";
             lblGiamGia.Text = "-" + giamGia.ToString("N0") + " đ";
             lbl_Sum.Text = tongCong.ToString("N0") + " đ";
+        }
+
+        private List<PosOrderLine> BuildOrderLines()
+        {
+            List<PosOrderLine> orderLines = new List<PosOrderLine>();
+
+            foreach (DataGridViewRow row in dgvDonHang.Rows)
+            {
+                if (row.IsNewRow || row.Cells[0].Value == null || row.Cells[1].Value == null || row.Cells[2].Value == null)
+                {
+                    continue;
+                }
+
+                string tenSanPham = row.Cells[0].Value.ToString();
+                int soLuong = Convert.ToInt32(row.Cells[1].Value);
+                decimal donGia = ParseMoney(row.Cells[2].Value.ToString());
+
+                orderLines.Add(new PosOrderLine
+                {
+                    TenSanPham = tenSanPham,
+                    SoLuong = soLuong,
+                    DonGia = donGia,
+                    ThanhTienGoc = soLuong * donGia
+                });
+            }
+
+            return orderLines;
+        }
+
+        private static decimal ParseMoney(string value)
+        {
+            string normalized = (value ?? string.Empty)
+                .Replace("đ", string.Empty)
+                .Replace(".", string.Empty)
+                .Replace(",", string.Empty)
+                .Trim();
+
+            decimal.TryParse(normalized, out decimal amount);
+            return amount;
+        }
+
+        private decimal GetAppliedDiscountPercent()
+        {
+            return txtMaGiamGia.Tag != null ? Convert.ToDecimal(txtMaGiamGia.Tag) : 0m;
+        }
+
+        private static decimal RoundMoney(decimal value)
+        {
+            return Math.Round(value, 0, MidpointRounding.AwayFromZero);
+        }
+
+        private static decimal ApplyDiscountToOrderLines(List<PosOrderLine> orderLines, decimal phanTramGiam)
+        {
+            decimal tamTinh = orderLines.Sum(x => x.ThanhTienGoc);
+            decimal giamGia = RoundMoney(tamTinh * phanTramGiam);
+            decimal tongCong = Math.Max(0, tamTinh - giamGia);
+            decimal tongDaPhanBo = 0;
+
+            for (int i = 0; i < orderLines.Count; i++)
+            {
+                PosOrderLine line = orderLines[i];
+
+                if (i == orderLines.Count - 1)
+                {
+                    line.ThanhTienSauGiam = tongCong - tongDaPhanBo;
+                }
+                else
+                {
+                    line.ThanhTienSauGiam = Math.Max(0, RoundMoney(line.ThanhTienGoc * (1 - phanTramGiam)));
+                    tongDaPhanBo += line.ThanhTienSauGiam;
+                }
+            }
+
+            return tongCong;
         }
 
         // =================================================================
@@ -619,9 +688,10 @@ namespace demo.Control
                 }
             }
 
-            string soTienCanThu = lbl_Sum.Text;
-            string tongTienStr = soTienCanThu.Replace("đ", "").Replace(".", "").Replace(",", "").Trim();
-            if (!decimal.TryParse(tongTienStr, out decimal tongTienThucTe))
+            List<PosOrderLine> orderLines = BuildOrderLines();
+            decimal tongTienThucTe = ApplyDiscountToOrderLines(orderLines, GetAppliedDiscountPercent());
+
+            if (orderLines.Count == 0 || tongTienThucTe < 0)
             {
                 MessageBox.Show("Lỗi định dạng số tiền!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
@@ -654,35 +724,26 @@ namespace demo.Control
                                 maHoaDonMoi = Convert.ToInt32(cmdHD.ExecuteScalar());
                             }
 
-                            foreach (DataGridViewRow row in dgvDonHang.Rows)
+                            foreach (PosOrderLine line in orderLines)
                             {
-                                if (!row.IsNewRow && row.Cells[0].Value != null)
-                                {
-                                    string tenSP = row.Cells[0].Value.ToString();
-                                    int soLuongMua = Convert.ToInt32(row.Cells[1].Value);
-                                    string giaStr = row.Cells[2].Value.ToString().Replace("đ", "").Replace(".", "").Replace(",", "").Trim();
-                                    decimal donGia = Convert.ToDecimal(giaStr);
-                                    decimal thanhTienCT = soLuongMua * donGia;
-
-                                    string sqlInsertChiTiet = @"INSERT INTO CHI_TIET_HOA_DON (MaHoaDon, MaSanPham, SoLuong, DonGia, ThanhTien) 
+                                string sqlInsertChiTiet = @"INSERT INTO CHI_TIET_HOA_DON (MaHoaDon, MaSanPham, SoLuong, DonGia, ThanhTien) 
                                                                 VALUES (@MaHD, (SELECT TOP 1 MaSanPham FROM SAN_PHAM WHERE TenSanPham = @TenSP), @SL, @Gia, @ThanhTienCT)";
-                                    using (SqlCommand cmdCT = new SqlCommand(sqlInsertChiTiet, conn, transaction))
-                                    {
-                                        cmdCT.Parameters.Add("@MaHD", SqlDbType.Int).Value = maHoaDonMoi;
-                                        cmdCT.Parameters.Add("@TenSP", SqlDbType.NVarChar).Value = tenSP;
-                                        cmdCT.Parameters.Add("@SL", SqlDbType.Int).Value = soLuongMua;
-                                        cmdCT.Parameters.Add("@Gia", SqlDbType.Decimal).Value = donGia;
-                                        cmdCT.Parameters.Add("@ThanhTienCT", SqlDbType.Decimal).Value = thanhTienCT;
-                                        cmdCT.ExecuteNonQuery();
-                                    }
+                                using (SqlCommand cmdCT = new SqlCommand(sqlInsertChiTiet, conn, transaction))
+                                {
+                                    cmdCT.Parameters.Add("@MaHD", SqlDbType.Int).Value = maHoaDonMoi;
+                                    cmdCT.Parameters.Add("@TenSP", SqlDbType.NVarChar).Value = line.TenSanPham;
+                                    cmdCT.Parameters.Add("@SL", SqlDbType.Int).Value = line.SoLuong;
+                                    cmdCT.Parameters.Add("@Gia", SqlDbType.Decimal).Value = line.DonGia;
+                                    cmdCT.Parameters.Add("@ThanhTienCT", SqlDbType.Decimal).Value = line.ThanhTienSauGiam;
+                                    cmdCT.ExecuteNonQuery();
+                                }
 
-                                    string sqlUpdateKho = "UPDATE SAN_PHAM SET SoLuongTon = SoLuongTon - @SLMua WHERE TenSanPham = @TenSPKho";
-                                    using (SqlCommand cmdKho = new SqlCommand(sqlUpdateKho, conn, transaction))
-                                    {
-                                        cmdKho.Parameters.Add("@SLMua", SqlDbType.Int).Value = soLuongMua;
-                                        cmdKho.Parameters.Add("@TenSPKho", SqlDbType.NVarChar).Value = tenSP;
-                                        cmdKho.ExecuteNonQuery();
-                                    }
+                                string sqlUpdateKho = "UPDATE SAN_PHAM SET SoLuongTon = SoLuongTon - @SLMua WHERE TenSanPham = @TenSPKho";
+                                using (SqlCommand cmdKho = new SqlCommand(sqlUpdateKho, conn, transaction))
+                                {
+                                    cmdKho.Parameters.Add("@SLMua", SqlDbType.Int).Value = line.SoLuong;
+                                    cmdKho.Parameters.Add("@TenSPKho", SqlDbType.NVarChar).Value = line.TenSanPham;
+                                    cmdKho.ExecuteNonQuery();
                                 }
                             }
 
