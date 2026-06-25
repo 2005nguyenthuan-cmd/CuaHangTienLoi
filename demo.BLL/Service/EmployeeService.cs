@@ -196,7 +196,7 @@ namespace demo.BLL.Service
                     SoDienThoai = NormalizeRequired(model.SoDienThoai, "So dien thoai"),
                     Email = NormalizeOptional(model.Email),
                     TenDangNhap = normalizedUsername,
-                    MatKhau = NormalizeRequired(model.MatKhau, "Mat khau"),
+                    MatKhau = PasswordHasher.HashPassword(NormalizeRequired(model.MatKhau, "Mat khau")),
                     MaVaiTro = model.MaVaiTro,
                     MaCa = model.CapNhatCaLam ? model.MaCa : null
                 };
@@ -245,7 +245,7 @@ namespace demo.BLL.Service
 
                 if (updatePassword)
                 {
-                    employee.MatKhau = NormalizeRequired(model.MatKhau, "Mat khau");
+                    employee.MatKhau = PasswordHasher.HashPassword(NormalizeRequired(model.MatKhau, "Mat khau"));
                 }
 
                 db.SaveChanges();

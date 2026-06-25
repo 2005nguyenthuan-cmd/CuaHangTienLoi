@@ -204,6 +204,7 @@
     <Compile Include="Service\DashboardService.cs" />
     <Compile Include="Service\ImportService.cs" />
     <Compile Include="Service\InventoryService.cs" />
+    <Compile Include="Service\PasswordHasher.cs" />
     <Compile Include="Service\ReportService.cs" />
     <Compile Include="Service\CaLamViecDTO.cs" />
     <Compile Include="Service\CaLamViecService.cs" />

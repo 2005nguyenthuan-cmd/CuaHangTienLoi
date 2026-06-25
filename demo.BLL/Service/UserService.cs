@@ -14,7 +14,26 @@ namespace demo.BLL.Service
 
         public NHAN_VIEN Login(string username, string password)
         {
-            var user = db.NHAN_VIEN.FirstOrDefault(x => x.TenDangNhap == username && x.MatKhau == password);
+            string normalizedUsername = username == null ? null : username.Trim();
+            string normalizedPassword = password == null ? null : password.Trim();
+
+            if (string.IsNullOrEmpty(normalizedUsername) || string.IsNullOrEmpty(normalizedPassword))
+            {
+                return null;
+            }
+
+            var user = db.NHAN_VIEN.FirstOrDefault(x => x.TenDangNhap == normalizedUsername);
+
+            if (user == null || !PasswordHasher.VerifyPassword(normalizedPassword, user.MatKhau))
+            {
+                return null;
+            }
+
+            if (!PasswordHasher.IsHashedPassword(user.MatKhau))
+            {
+                user.MatKhau = PasswordHasher.HashPassword(normalizedPassword);
+                db.SaveChanges();
+            }
 
             return user;
         }
