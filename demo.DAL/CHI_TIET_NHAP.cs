@@ -19,7 +19,6 @@ namespace demo.DAL
         public Nullable<int> SoLuong { get; set; }
         public Nullable<decimal> GiaNhap { get; set; }
         public Nullable<System.DateTime> HanSuDung { get; set; }
-        public int SoLuongCon { get; set; }
     
         public virtual PHIEU_NHAP PHIEU_NHAP { get; set; }
         public virtual SAN_PHAM SAN_PHAM { get; set; }

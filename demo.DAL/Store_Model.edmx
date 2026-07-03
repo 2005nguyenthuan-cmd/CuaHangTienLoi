@@ -48,7 +48,6 @@
           <Property Name="SoLuong" Type="int" />
           <Property Name="GiaNhap" Type="decimal" Precision="10" Scale="2" />
           <Property Name="HanSuDung" Type="datetime" />
-          <Property Name="SoLuongCon" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="CONG_VIEC">
           <Key>
@@ -677,7 +676,6 @@
 					<Property Name="SoLuong" Type="Int32" />
 					<Property Name="GiaNhap" Type="Decimal" Precision="10" Scale="2" />
 					<Property Name="HanSuDung" Type="DateTime" Precision="3" />
-					<Property Name="SoLuongCon" Type="Int32" Nullable="false" />
 					<NavigationProperty Name="PHIEU_NHAP" Relationship="CUA_HANG_TIEN_LOIModel.FK__CHI_TIET___MaPhi__7A672E12" FromRole="CHI_TIET_NHAP" ToRole="PHIEU_NHAP" />
           <NavigationProperty Name="SAN_PHAM" Relationship="CUA_HANG_TIEN_LOIModel.FK__CHI_TIET___MaSan__7B5B524B" FromRole="CHI_TIET_NHAP" ToRole="SAN_PHAM" />
 				</EntityType>
@@ -1120,7 +1118,6 @@
 					<EntitySetMapping Name="CHI_TIET_NHAP">
 						<EntityTypeMapping TypeName="CUA_HANG_TIEN_LOIModel.CHI_TIET_NHAP">
 							<MappingFragment StoreEntitySet="CHI_TIET_NHAP">
-								<ScalarProperty Name="SoLuongCon" ColumnName="SoLuongCon" />
 								<ScalarProperty Name="HanSuDung" ColumnName="HanSuDung" />
 								<ScalarProperty Name="GiaNhap" ColumnName="GiaNhap" />
 								<ScalarProperty Name="SoLuong" ColumnName="SoLuong" />

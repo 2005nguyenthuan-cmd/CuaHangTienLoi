@@ -8,18 +8,75 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using demo.DAL;
+using System.Data.Entity;
 
 namespace demo.Control
 {
     public partial class UC_LSHoaDon : UserControl
     {
         CUA_HANG_TIEN_LOI_Entities db = new CUA_HANG_TIEN_LOI_Entities();
+        private DataGridView dgvChiTietHoaDon;
+        private Label lblChiTietHoaDon;
 
         public UC_LSHoaDon()
         {
             InitializeComponent();
+            SetupChiTietHoaDonView();
             LoadHoaDon();
             TrangDiemGiaoDien(); // Gọi hàm làm đẹp khi vừa mở Form
+        }
+
+        private void SetupChiTietHoaDonView()
+        {
+            var splitContainer = new SplitContainer
+            {
+                Dock = DockStyle.Fill,
+                Orientation = Orientation.Horizontal,
+                SplitterDistance = 250,
+                Panel1MinSize = 160,
+                Panel2MinSize = 120
+            };
+
+            panelTable.Controls.Remove(dgvHoaDon);
+            panelTable.Controls.Remove(label8);
+
+            dgvHoaDon.Dock = DockStyle.Fill;
+            dgvHoaDon.SelectionChanged += dgvHoaDon_SelectionChanged;
+            splitContainer.Panel1.Controls.Add(dgvHoaDon);
+
+            var panelChiTiet = new Panel
+            {
+                Dock = DockStyle.Fill,
+                BackColor = Color.White,
+                Padding = new Padding(0)
+            };
+
+            lblChiTietHoaDon = new Label
+            {
+                Dock = DockStyle.Top,
+                Height = 32,
+                Text = "Chi tiết hóa đơn",
+                Font = new Font("Segoe UI", 10, FontStyle.Bold),
+                TextAlign = ContentAlignment.MiddleLeft,
+                Padding = new Padding(8, 0, 0, 0)
+            };
+
+            dgvChiTietHoaDon = new DataGridView
+            {
+                Dock = DockStyle.Fill,
+                AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill,
+                AllowUserToAddRows = false,
+                ReadOnly = true,
+                RowHeadersVisible = false,
+                BackgroundColor = Color.White,
+                BorderStyle = BorderStyle.None
+            };
+
+            panelChiTiet.Controls.Add(dgvChiTietHoaDon);
+            panelChiTiet.Controls.Add(lblChiTietHoaDon);
+            splitContainer.Panel2.Controls.Add(panelChiTiet);
+
+            panelTable.Controls.Add(splitContainer);
         }
 
         // =================================================================
@@ -55,6 +112,24 @@ namespace demo.Control
 
                 // Tự động kéo dãn các cột cho lấp đầy khoảng trống
                 dgvHoaDon.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            }
+
+            if (dgvChiTietHoaDon != null)
+            {
+                dgvChiTietHoaDon.BackgroundColor = Color.White;
+                dgvChiTietHoaDon.BorderStyle = BorderStyle.None;
+                dgvChiTietHoaDon.CellBorderStyle = DataGridViewCellBorderStyle.SingleHorizontal;
+                dgvChiTietHoaDon.GridColor = Color.FromArgb(230, 230, 230);
+                dgvChiTietHoaDon.EnableHeadersVisualStyles = false;
+                dgvChiTietHoaDon.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.None;
+                dgvChiTietHoaDon.ColumnHeadersDefaultCellStyle.BackColor = Color.FromArgb(43, 45, 66);
+                dgvChiTietHoaDon.ColumnHeadersDefaultCellStyle.ForeColor = Color.White;
+                dgvChiTietHoaDon.ColumnHeadersDefaultCellStyle.Font = new Font("Segoe UI", 10, FontStyle.Bold);
+                dgvChiTietHoaDon.ColumnHeadersHeight = 34;
+                dgvChiTietHoaDon.DefaultCellStyle.SelectionBackColor = Color.FromArgb(231, 238, 246);
+                dgvChiTietHoaDon.DefaultCellStyle.SelectionForeColor = Color.Black;
+                dgvChiTietHoaDon.DefaultCellStyle.Font = new Font("Segoe UI", 10);
+                dgvChiTietHoaDon.RowTemplate.Height = 30;
             }
         }
 
@@ -102,6 +177,7 @@ namespace demo.Control
 
             dgvHoaDon.DataSource = data;
             FormatCotDataGridView(); // Gọi hàm dịch tiếng Việt
+            LoadChiTietHoaDonDangChon();
         }
 
         private void UC_LSHoaDon_Load(object sender, EventArgs e)
@@ -133,6 +209,7 @@ namespace demo.Control
 
             dgvHoaDon.DataSource = data;
             FormatCotDataGridView();
+            LoadChiTietHoaDonDangChon();
         }
 
         private void btn_XoaLoc_Click(object sender, EventArgs e)
@@ -173,7 +250,81 @@ namespace demo.Control
 
                 dgvHoaDon.DataSource = data;
                 FormatCotDataGridView();
+                LoadChiTietHoaDonDangChon();
             }
+        }
+
+        private void dgvHoaDon_SelectionChanged(object sender, EventArgs e)
+        {
+            LoadChiTietHoaDonDangChon();
+        }
+
+        private void LoadChiTietHoaDonDangChon()
+        {
+            if (dgvChiTietHoaDon == null || dgvHoaDon.CurrentRow == null)
+            {
+                if (dgvChiTietHoaDon != null)
+                {
+                    dgvChiTietHoaDon.DataSource = null;
+                }
+                if (lblChiTietHoaDon != null)
+                {
+                    lblChiTietHoaDon.Text = "Chi tiết hóa đơn";
+                }
+                return;
+            }
+
+            object value = dgvHoaDon.CurrentRow.Cells["MaHoaDon"].Value;
+            if (value == null || value == DBNull.Value)
+            {
+                dgvChiTietHoaDon.DataSource = null;
+                lblChiTietHoaDon.Text = "Chi tiết hóa đơn";
+                return;
+            }
+
+            int maHoaDon = Convert.ToInt32(value);
+            LoadChiTietHoaDon(maHoaDon);
+        }
+
+        private void LoadChiTietHoaDon(int maHoaDon)
+        {
+            var data = db.CHI_TIET_HOA_DON
+                .AsNoTracking()
+                .Where(ct => ct.MaHoaDon == maHoaDon)
+                .Select(ct => new
+                {
+                    ct.MaSanPham,
+                    TenSanPham = ct.SAN_PHAM.TenSanPham,
+                    SoLuong = ct.SoLuong ?? 0,
+                    DonGia = ct.DonGia ?? 0,
+                    ThanhTien = ct.ThanhTien ?? 0
+                })
+                .OrderBy(x => x.TenSanPham)
+                .ToList();
+
+            dgvChiTietHoaDon.DataSource = data;
+            lblChiTietHoaDon.Text = $"Chi tiết hóa đơn #{maHoaDon}";
+            FormatCotChiTietHoaDon();
+        }
+
+        private void FormatCotChiTietHoaDon()
+        {
+            if (dgvChiTietHoaDon.Columns.Count == 0)
+            {
+                return;
+            }
+
+            dgvChiTietHoaDon.Columns["MaSanPham"].HeaderText = "Mã SP";
+            dgvChiTietHoaDon.Columns["TenSanPham"].HeaderText = "Tên sản phẩm";
+            dgvChiTietHoaDon.Columns["SoLuong"].HeaderText = "Số lượng";
+            dgvChiTietHoaDon.Columns["DonGia"].HeaderText = "Đơn giá";
+            dgvChiTietHoaDon.Columns["ThanhTien"].HeaderText = "Thành tiền";
+
+            dgvChiTietHoaDon.Columns["SoLuong"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            dgvChiTietHoaDon.Columns["DonGia"].DefaultCellStyle.Format = "N0";
+            dgvChiTietHoaDon.Columns["ThanhTien"].DefaultCellStyle.Format = "N0";
+            dgvChiTietHoaDon.Columns["DonGia"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
+            dgvChiTietHoaDon.Columns["ThanhTien"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
         }
     }
 }

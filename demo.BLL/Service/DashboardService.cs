@@ -25,19 +25,42 @@ namespace demo.BLL.Service
             to = to.AddDays(1);
 
             var hoaDons = db.HOA_DON
+                .AsNoTracking()
                 .Where(x => x.NgayLap >= from && x.NgayLap < to);
 
             data.TotalRevenue = hoaDons.Sum(x => (decimal?)x.TongTien) ?? 0;
             data.TotalOrders = hoaDons.Count();
 
-            // 2. Lợi nhuận (tạm tính = doanh thu * 20%)
-            data.TotalProfit = data.TotalRevenue * 0.2m;
+            // 2. Giá vốn + lợi nhuận theo giá nhập bình quân
+            var averageImportCosts = GetAverageImportCosts(to);
+            var saleLines = db.CHI_TIET_HOA_DON
+                .AsNoTracking()
+                .Where(x => x.HOA_DON.NgayLap >= from && x.HOA_DON.NgayLap < to)
+                .Select(x => new
+                {
+                    x.MaSanPham,
+                    SoLuong = x.SoLuong ?? 0
+                })
+                .ToList();
+
+            data.TotalCost = 0;
+            foreach (var line in saleLines)
+            {
+                decimal averageCost;
+                if (averageImportCosts.TryGetValue(line.MaSanPham, out averageCost))
+                {
+                    data.TotalCost += line.SoLuong * averageCost;
+                }
+            }
+
+            data.TotalProfit = data.TotalRevenue - data.TotalCost;
 
             // 3. Tổng sản phẩm tồn
-            data.TotalProducts = db.SAN_PHAM.Sum(x => (int?)x.SoLuongTon) ?? 0;
+            data.TotalProducts = db.SAN_PHAM.AsNoTracking().Sum(x => (int?)x.SoLuongTon) ?? 0;
 
             // 4. Top sản phẩm
             data.TopProducts = db.CHI_TIET_HOA_DON
+                .AsNoTracking()
                 .Where(x => x.HOA_DON.NgayLap >= from && x.HOA_DON.NgayLap < to)
                 .GroupBy(x => x.SAN_PHAM.TenSanPham)
                 .Select(g => new TopProductDTO
@@ -52,6 +75,7 @@ namespace demo.BLL.Service
 
             // 5. Tồn thấp
             data.LowStocks = db.SAN_PHAM
+                .AsNoTracking()
                 .Where(x => (x.SoLuongTon ?? 0) <= 10)
                 .Select(x => new LowStockDTO
                 {
@@ -66,6 +90,7 @@ namespace demo.BLL.Service
             DateTime future = now.AddDays(30);
 
             data.Expiries = db.CHI_TIET_NHAP
+                .AsNoTracking()
                 .Where(x => x.HanSuDung != null
                     && (x.SAN_PHAM.SoLuongTon ?? 0) > 0
                     && x.HanSuDung >= now
@@ -81,6 +106,7 @@ namespace demo.BLL.Service
 
             // 7. Doanh thu theo ngày
             data.RevenueByDates = db.HOA_DON
+            .AsNoTracking()
             .Where(x => x.NgayLap >= from && x.NgayLap < to)
             .GroupBy(x => DbFunctions.TruncateTime(x.NgayLap))
             .Select(g => new RevenueByDateDTO
@@ -93,6 +119,7 @@ namespace demo.BLL.Service
 
             // 8. Doanh thu theo danh mục
             data.Categories = db.CHI_TIET_HOA_DON
+            .AsNoTracking()
             .Where(x => x.HOA_DON.NgayLap >= from && x.HOA_DON.NgayLap < to)
             .GroupBy(x => x.SAN_PHAM.DANH_MUC.TenDanhMuc)
             .Select(g => new CategoryDTO
@@ -110,6 +137,7 @@ namespace demo.BLL.Service
             var prevTo = from;
 
             var prevRevenue = db.HOA_DON
+                .AsNoTracking()
                 .Where(x => x.NgayLap >= prevFrom && x.NgayLap < prevTo)
                 .Sum(x => (decimal?)x.TongTien) ?? 0;
 
@@ -121,10 +149,6 @@ namespace demo.BLL.Service
                 data.GrowthRevenuePercent =
                     (double)((data.TotalRevenue - prevRevenue) / prevRevenue * 100);
             }
-
-            data.TotalCost = db.CHI_TIET_HOA_DON
-            .Where(x => x.HOA_DON.NgayLap >= from && x.HOA_DON.NgayLap < to)
-            .Sum(x => (decimal?)x.SoLuong * x.SAN_PHAM.GiaBan) ?? 0;
 
             // 11. Biên lợi nhuận
             if (data.TotalRevenue > 0)
@@ -158,6 +182,30 @@ namespace demo.BLL.Service
             }
 
             return data;
+        }
+
+        private Dictionary<int, decimal> GetAverageImportCosts(DateTime to)
+        {
+            var importLines = db.CHI_TIET_NHAP
+                .AsNoTracking()
+                .Where(x => x.SoLuong != null
+                    && x.SoLuong > 0
+                    && x.GiaNhap != null
+                    && x.GiaNhap > 0
+                    && (x.PHIEU_NHAP.NgayNhap == null || x.PHIEU_NHAP.NgayNhap < to))
+                .Select(x => new
+                {
+                    x.MaSanPham,
+                    SoLuong = x.SoLuong.Value,
+                    GiaNhap = x.GiaNhap.Value
+                })
+                .ToList();
+
+            return importLines
+                .GroupBy(x => x.MaSanPham)
+                .ToDictionary(
+                    g => g.Key,
+                    g => g.Sum(x => x.SoLuong * x.GiaNhap) / g.Sum(x => x.SoLuong));
         }
 
     }

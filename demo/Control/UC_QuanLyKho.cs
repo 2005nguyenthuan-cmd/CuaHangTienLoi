@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -19,13 +20,95 @@ namespace demo.Control
         //  giỏ nhập
         private List<ChiTietNhapDTO> gioNhap;
         private List<KiemKeDTO> dsKiemKe;
+        private TabPage tabLichSuNhap;
+        private DataGridView dgvPhieuNhap;
+        private DataGridView dgvChiTietPhieuNhap;
+        private Label lblChiTietPhieuNhap;
 
         public UC_QuanLyKho()
         {
             InitializeComponent();
+            SetupLichSuNhapTab();
             service = new InventoryService();
             importService = new ImportService();
             gioNhap = new List<ChiTietNhapDTO>();
+            numSoLuong.Minimum = 1;
+            numSoLuong.Value = 1;
+        }
+
+        private void SetupLichSuNhapTab()
+        {
+            if (tabLichSuNhap != null)
+            {
+                return;
+            }
+
+            tabLichSuNhap = new TabPage
+            {
+                Text = "Lịch sử nhập",
+                UseVisualStyleBackColor = true
+            };
+
+            var split = new SplitContainer
+            {
+                Dock = DockStyle.Fill,
+                Orientation = Orientation.Horizontal,
+                SplitterDistance = 250,
+                Panel1MinSize = 150,
+                Panel2MinSize = 120
+            };
+
+            var lblPhieuNhap = new Label
+            {
+                Dock = DockStyle.Top,
+                Height = 30,
+                Text = "Danh sách phiếu nhập",
+                Font = new Font("Segoe UI", 10, FontStyle.Bold),
+                TextAlign = ContentAlignment.MiddleLeft,
+                Padding = new Padding(8, 0, 0, 0)
+            };
+
+            dgvPhieuNhap = CreateReadOnlyGrid();
+            dgvPhieuNhap.SelectionChanged += dgvPhieuNhap_SelectionChanged;
+
+            var panelPhieu = new Panel { Dock = DockStyle.Fill };
+            panelPhieu.Controls.Add(dgvPhieuNhap);
+            panelPhieu.Controls.Add(lblPhieuNhap);
+
+            lblChiTietPhieuNhap = new Label
+            {
+                Dock = DockStyle.Top,
+                Height = 30,
+                Text = "Chi tiết phiếu nhập",
+                Font = new Font("Segoe UI", 10, FontStyle.Bold),
+                TextAlign = ContentAlignment.MiddleLeft,
+                Padding = new Padding(8, 0, 0, 0)
+            };
+
+            dgvChiTietPhieuNhap = CreateReadOnlyGrid();
+
+            var panelChiTiet = new Panel { Dock = DockStyle.Fill };
+            panelChiTiet.Controls.Add(dgvChiTietPhieuNhap);
+            panelChiTiet.Controls.Add(lblChiTietPhieuNhap);
+
+            split.Panel1.Controls.Add(panelPhieu);
+            split.Panel2.Controls.Add(panelChiTiet);
+            tabLichSuNhap.Controls.Add(split);
+            tabControl1.Controls.Add(tabLichSuNhap);
+        }
+
+        private DataGridView CreateReadOnlyGrid()
+        {
+            return new DataGridView
+            {
+                Dock = DockStyle.Fill,
+                AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill,
+                AllowUserToAddRows = false,
+                ReadOnly = true,
+                RowHeadersVisible = false,
+                BackgroundColor = Color.White,
+                BorderStyle = BorderStyle.None
+            };
         }
 
         private void UC_QuanLyKho_Load(object sender, EventArgs e)
@@ -52,6 +135,7 @@ namespace demo.Control
             dgvCanhBao.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             dgvCanhBao.ReadOnly = true;
             LoadCanhBao();
+            LoadLichSuNhap();
 
         }
 
@@ -121,7 +205,11 @@ namespace demo.Control
         //  Thêm vào giỏ
         private void btnThem_Click(object sender, EventArgs e)
         {
-            if (dgvSanPham.CurrentRow == null) return;
+            if (dgvSanPham.CurrentRow == null)
+            {
+                MessageBox.Show("Vui lòng chọn sản phẩm cần nhập!");
+                return;
+            }
 
             int maSP = (int)dgvSanPham.CurrentRow.Cells["MaSanPham"].Value;
             string tenSP = dgvSanPham.CurrentRow.Cells["TenSanPham"].Value.ToString();
@@ -129,7 +217,7 @@ namespace demo.Control
             int soLuong = (int)numSoLuong.Value;
             decimal giaNhap;
 
-            if (!decimal.TryParse(txtGiaNhap.Text, out giaNhap))
+            if (!TryParseMoney(txtGiaNhap.Text, out giaNhap))
             {
                 MessageBox.Show("Giá nhập không hợp lệ!");
                 return;
@@ -162,6 +250,8 @@ namespace demo.Control
             }
 
             LoadGioNhap();
+            numSoLuong.Value = 1;
+            txtGiaNhap.Clear();
         }
 
         //  Xóa dòng
@@ -184,18 +274,29 @@ namespace demo.Control
                 return;
             }
 
-            int maNCC = (int)cbNhaCungCap.SelectedValue;
+            try
+            {
+                int maNCC = (int)cbNhaCungCap.SelectedValue;
 
-            int maPhieu = importService.CreatePhieuNhap(maNCC, gioNhap);
+                int maPhieu = importService.CreatePhieuNhap(maNCC, dtNgayNhap.Value, gioNhap);
 
-            MessageBox.Show("Tạo phiếu thành công! Mã: " + maPhieu);
+                MessageBox.Show("Tạo phiếu thành công! Mã: " + maPhieu);
 
-            gioNhap.Clear();
-            LoadGioNhap();
+                gioNhap.Clear();
+                LoadGioNhap();
 
-            // reload lại kho + dashboard
-            LoadTonKho();
-            LoadDashboard();
+                // reload lại kho + dashboard
+                LoadSanPham();
+                LoadTonKho();
+                LoadDashboard();
+                LoadCanhBao();
+                LoadLichSuNhap();
+            }
+            catch (Exception ex)
+            {
+                string errorMessage = ex.GetBaseException()?.Message ?? ex.Message;
+                MessageBox.Show("Không thể lưu phiếu nhập.\n\n" + errorMessage, "Lỗi nhập hàng", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
         }
 
         //================= KIỂM KÊ =================
@@ -296,9 +397,111 @@ namespace demo.Control
         {
             string keyword = txtSearchSP.Text.Trim();
             if (string.IsNullOrEmpty(keyword))
+            {
                 LoadSanPham();
+                return;
+            }
 
             dgvSanPham.DataSource = importService.SearchProducts(keyword);
+        }
+
+        private bool TryParseMoney(string input, out decimal value)
+        {
+            input = (input ?? string.Empty).Trim();
+
+            return decimal.TryParse(input, NumberStyles.Number, CultureInfo.CurrentCulture, out value)
+                || decimal.TryParse(input, NumberStyles.Number, CultureInfo.InvariantCulture, out value);
+        }
+
+        //=================== LỊCH SỬ NHẬP HÀNG ===================
+        private void LoadLichSuNhap()
+        {
+            if (dgvPhieuNhap == null)
+            {
+                return;
+            }
+
+            dgvPhieuNhap.DataSource = importService.GetImportReceipts();
+            FormatPhieuNhapGrid();
+            LoadChiTietPhieuNhapDangChon();
+        }
+
+        private void dgvPhieuNhap_SelectionChanged(object sender, EventArgs e)
+        {
+            LoadChiTietPhieuNhapDangChon();
+        }
+
+        private void LoadChiTietPhieuNhapDangChon()
+        {
+            if (dgvChiTietPhieuNhap == null || dgvPhieuNhap == null || dgvPhieuNhap.CurrentRow == null)
+            {
+                if (dgvChiTietPhieuNhap != null)
+                {
+                    dgvChiTietPhieuNhap.DataSource = null;
+                }
+                if (lblChiTietPhieuNhap != null)
+                {
+                    lblChiTietPhieuNhap.Text = "Chi tiết phiếu nhập";
+                }
+                return;
+            }
+
+            object value = dgvPhieuNhap.CurrentRow.Cells["MaPhieuNhap"].Value;
+            if (value == null || value == DBNull.Value)
+            {
+                dgvChiTietPhieuNhap.DataSource = null;
+                lblChiTietPhieuNhap.Text = "Chi tiết phiếu nhập";
+                return;
+            }
+
+            int maPhieuNhap = Convert.ToInt32(value);
+            dgvChiTietPhieuNhap.DataSource = importService.GetImportDetails(maPhieuNhap);
+            lblChiTietPhieuNhap.Text = $"Chi tiết phiếu nhập #{maPhieuNhap}";
+            FormatChiTietPhieuNhapGrid();
+        }
+
+        private void FormatPhieuNhapGrid()
+        {
+            if (dgvPhieuNhap.Columns.Count == 0)
+            {
+                return;
+            }
+
+            dgvPhieuNhap.Columns["MaPhieuNhap"].HeaderText = "Mã phiếu";
+            dgvPhieuNhap.Columns["NgayNhap"].HeaderText = "Ngày nhập";
+            dgvPhieuNhap.Columns["NhaCungCap"].HeaderText = "Nhà cung cấp";
+            dgvPhieuNhap.Columns["NhanVien"].HeaderText = "Nhân viên";
+            dgvPhieuNhap.Columns["SoLuongMatHang"].HeaderText = "Số mặt hàng";
+            dgvPhieuNhap.Columns["TongSoLuong"].HeaderText = "Tổng SL";
+            dgvPhieuNhap.Columns["TongTien"].HeaderText = "Tổng tiền";
+
+            dgvPhieuNhap.Columns["NgayNhap"].DefaultCellStyle.Format = "dd/MM/yyyy HH:mm";
+            dgvPhieuNhap.Columns["TongTien"].DefaultCellStyle.Format = "N0";
+            dgvPhieuNhap.Columns["TongTien"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
+            dgvPhieuNhap.Columns["SoLuongMatHang"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            dgvPhieuNhap.Columns["TongSoLuong"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
+        }
+
+        private void FormatChiTietPhieuNhapGrid()
+        {
+            if (dgvChiTietPhieuNhap.Columns.Count == 0)
+            {
+                return;
+            }
+
+            dgvChiTietPhieuNhap.Columns["MaSanPham"].HeaderText = "Mã SP";
+            dgvChiTietPhieuNhap.Columns["TenSanPham"].HeaderText = "Tên sản phẩm";
+            dgvChiTietPhieuNhap.Columns["SoLuong"].HeaderText = "Số lượng";
+            dgvChiTietPhieuNhap.Columns["GiaNhap"].HeaderText = "Giá nhập";
+            dgvChiTietPhieuNhap.Columns["HanSuDung"].HeaderText = "HSD";
+            dgvChiTietPhieuNhap.Columns["ThanhTien"].HeaderText = "Thành tiền";
+
+            dgvChiTietPhieuNhap.Columns["GiaNhap"].DefaultCellStyle.Format = "N0";
+            dgvChiTietPhieuNhap.Columns["ThanhTien"].DefaultCellStyle.Format = "N0";
+            dgvChiTietPhieuNhap.Columns["HanSuDung"].DefaultCellStyle.Format = "dd/MM/yyyy";
+            dgvChiTietPhieuNhap.Columns["SoLuong"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            dgvChiTietPhieuNhap.Columns["GiaNhap"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
+            dgvChiTietPhieuNhap.Columns["ThanhTien"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
         }
 
         private void dgvChiTietNhap_CellClick(object sender, DataGridViewCellEventArgs e)

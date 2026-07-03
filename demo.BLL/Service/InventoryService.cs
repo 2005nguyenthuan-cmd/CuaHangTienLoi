@@ -1,6 +1,7 @@
 ﻿using demo.DAL;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 
 namespace demo.BLL.Service
@@ -28,13 +29,23 @@ namespace demo.BLL.Service
 
         public int GetSapHetHan()
         {
-            // Tạm thời chưa có HSD
-            return 0;
+            DateTime now = DateTime.Now;
+            DateTime canhBaoHSD = now.AddDays(7);
+
+            return db.CHI_TIET_NHAP
+                .AsNoTracking()
+                .Where(x => x.HanSuDung != null
+                    && x.HanSuDung >= now
+                    && x.HanSuDung <= canhBaoHSD)
+                .Select(x => x.MaSanPham)
+                .Distinct()
+                .Count();
         }
 
         public decimal GetGiaTriKho()
         {
             return db.SAN_PHAM
+                .AsNoTracking()
                 .Sum(x => (decimal?)(x.SoLuongTon * x.GiaBan)) ?? 0;
         }
 
@@ -42,7 +53,7 @@ namespace demo.BLL.Service
 
         public List<InventoryDTO> GetTonKho(string keyword = "", string trangThai = "")
         {
-            var query = db.SAN_PHAM.AsQueryable();
+            var query = db.SAN_PHAM.AsNoTracking().AsQueryable();
 
             //  tìm kiếm
             if (!string.IsNullOrEmpty(keyword))
@@ -105,25 +116,27 @@ namespace demo.BLL.Service
             db.SaveChanges();
         }
         public List<ProductDTO> SearchProducts(string keyword)
-{
-    return db.SAN_PHAM
-        .Where(x => x.TenSanPham.Contains(keyword) 
-                 || x.MaSanPham.ToString().Contains(keyword))
-        .Select(x => new ProductDTO
         {
-            MaSanPham = x.MaSanPham,
-            TenSanPham = x.TenSanPham,
-            GiaBan = x.GiaBan,
-            TenDanhMuc = x.DANH_MUC.TenDanhMuc
-        })
-        .ToList();
-}
+            return db.SAN_PHAM
+                .AsNoTracking()
+                .Where(x => x.TenSanPham.Contains(keyword)
+                         || x.MaSanPham.ToString().Contains(keyword))
+                .Select(x => new ProductDTO
+                {
+                    MaSanPham = x.MaSanPham,
+                    TenSanPham = x.TenSanPham,
+                    GiaBan = x.GiaBan,
+                    TenDanhMuc = x.DANH_MUC.TenDanhMuc
+                })
+                .ToList();
+        }
 
         // ===== KIỂM KÊ =====
 
         public List<KiemKeDTO> GetDataKiemKe()
         {
             return db.SAN_PHAM
+                .AsNoTracking()
                 .Select(x => new KiemKeDTO
                 {
                     MaSP = x.MaSanPham,
@@ -172,6 +185,7 @@ namespace demo.BLL.Service
 
             // lấy từ nhập hàng vì có HSD
             var data = db.CHI_TIET_NHAP
+                .AsNoTracking()
                 .Select(x => new
                 {
                     x.MaSanPham,
